@@ -1,32 +1,46 @@
 body {font-family: Arial, Helvetica, sans-serif;}
 * {box-sizing: border-box;}
-
+#header .container {
+    position: relative;
+    width: 60vw;
+    border-radius: 10px;
+    background-color: #be5f5f;
+    
+    padding: 10px 10px;
+}
+#form .container {
+    position: relative;
+    top: 10vh;
+    width: 60vw;
+    border-radius: 10px;
+    background-color: #eceaea;
+    
+    padding: 10px 10px;
+}
 input[type=text], input[type=date], input[type=number], select, textarea {
-width: 100%;
-padding: 12px;
-border: 1px solid #ccc;
-border-radius: 4px;
-box-sizing: border-box;
-margin-top: 6px;
-margin-bottom: 16px;
-resize: vertical;
+    width: 50vw;
+    padding: 5px 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    resize: vertical;
 }
 
 input[type=submit] {
-background-color: #04AA6D;
-color: white;
-padding: 12px 20px;
-border: none;
-border-radius: 4px;
-cursor: pointer;
+    background-color: #04AA6D;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
 input[type=submit]:hover {
-background-color: #45a049;
+    background-color: #45a049;
+    padding: 7px 28px;
+    border-radius: 20px;
+    border: none;
 }
 
-.container {
-border-radius: 5px;
-background-color: #f2f2f2;
-padding: 20px;
-}

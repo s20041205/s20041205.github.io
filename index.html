@@ -3,38 +3,59 @@
 	<head>
 		<meta charset="UTF-8">
 		<link rel="stylesheet" href="css/style.css">
-
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 		<title>2022記帳</title>
 		
 	</head>
 	<body>
-		<h1>2022記帳</h1>
-		<form>
-			<p for="dateinput">日期</p>
-			<input type="date" id="fdate">
+		<header>
 			
-			<p>收支</p>
-			<select id="balance-list" onchange="changeBalance(this.selectedIndex)"></select>
+		</header>
+		<section id="form">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-8">
+						<nav aria-label="breadcrumb">
+							<ol class="breadcrumb">
+							<li class="breadcrumb-item"><a href="#">記帳</a></li>
+							<li class="breadcrumb-item active" aria-current="page">TODO</li>
+						</ol>
+						</nav>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6 offset-md-1 text-left">
+						<div class="row">
+							<form>
+								<p for="dateinput">日期</p>
+								<input type="date" id="fdate">
+								
+								<p>收支</p>
+								<select id="balance-list" onchange="changeBalance(this.selectedIndex)"></select>
 
-            <p>類別</p>
-			<select id="topclass-list" onchange="changetopclass()"></select>
-			
-            <p>細項</p>
-			<select id="subclass-list"></select>
-			
-            <p>金額</p>
-			<input type="number" id="cash-price"></input>
-			
-            <p>內容</p>
-			<input type="text" id="detail"></input>
-			
-            <p>人員</p>
-			<select id="who-list"></select>
-			
-			<p></p>
-            <input type="submit" value="Submit">
-		</form>
-		
+								<p>類別</p>
+								<select id="topclass-list" onchange="changetopclass()"></select>
+								
+								<p>細項</p>
+								<select id="subclass-list"></select>
+								
+								<p>金額</p>
+								<input type="number" id="cash-price"></input>
+								
+								<p>內容</p>
+								<input type="text" id="detail"></input>
+								
+								<p>人員</p>
+								<select id="who-list"></select>
+								
+								<p></p>
+								<input type="submit" value="Submit">
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
 		<script type="text/javascript">
 			var balance=['請選擇', '收入', '支出'];
 			var balanceSelect=document.getElementById("balance-list");
