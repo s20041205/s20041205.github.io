@@ -1,5 +1,5 @@
 <?php
-           $dbhost = 'localhost';  //server
+           $dbhost = 'https://192-168-0-139.hcclst.direct.quickconnect.to/';  //server
            $dbuser = 'root';       //user
            $dbpass = '*AeAc0805*';   //pw
            $dbname = 'hcclst_home';     //db name

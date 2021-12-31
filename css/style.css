@@ -1,93 +1,46 @@
-h1, h2, h3, h4, h5, h6{
-    font-family: 'Cabin Sketch', cursive;
+body {font-family: Arial, Helvetica, sans-serif;}
+* {box-sizing: border-box;}
+#header .container {
+    position: relative;
+    width: 60vw;
+    border-radius: 10px;
+    background-color: #be5f5f;
+    
+    padding: 10px 10px;
 }
-p, a, input, label, textarea, span, ul, li, button{
-    font-family: 'Cabin Sketch', cursive;
+#form .container {
+    position: relative;
+    top: 10vh;
+    width: 80vw;
+    border-radius: 10px;
+    background-color: #eceaea;
+    
+    padding: 10px 10px;
 }
-p{
-    color:darkgrey;
-    line-height: 1.5;
+input[type=text], input[type=date], input[type=number], select, textarea {
+    width: 70vw;
+    padding: 5px 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    resize: vertical;
 }
-img{
-    max-width: 100%;
-}
-.btn{
-    background-color: #dc3545bf;
+
+input[type=submit] {
+    background-color: #04AA6D;
     color: white;
-    padding: 8px 15px;
-    border-radius: 15px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+input[type=submit]:hover {
+    background-color: #45a049;
+    padding: 7px 28px;
+    border-radius: 20px;
     border: none;
 }
 
-#intro .jumbotron{
-    height:30vh;
-}
-
-#intro h1{
-    line-height: 3.5;
-    font-size: 40px;
-    font-weight: 100;
-}
-
-#intro .container{
-    position: relative;
-    top:30%;
-    -webkit-transform: translateY(-50%);
-    -ms-transform: translateY(-50%);
-    transform: translateY(-50%);
-
-}
-
-header nav img{
-    width: 100px;
-}
-header li{
-    margin:0px, 10px;
-}
-
-#second{
-    padding: 80px 0px;
-}
-#second img{
-    width: 100px;
-    border-radius: 100%;
-    margin-bottom: 13px;
-}
-
-#latest {
-	background: rgb(190, 196, 195);
-	padding: 80px 0px;
-}
-#latest .upper{
-	position:relative;
-}
-#latest img{
-    width: 100px;
-    border-radius: 100%;
-    margin-bottom: 13px;
-}
-#latest .innertext{
-	position:absolute;
-	bottom:20px;
-	left:150px;
-}
-#latest .innertext span{
-	background: rgba(255,255,255,0.3);
-    padding: 5px 16px;
-    border-radius: 30px;
-}
-#latest h4{
-	font-size: 24px;
-    margin-top: 20px;
-}
-#latest .lower{
-    padding: 22px;
-}
-footer h4 {
-    font-size: 17px;
-    margin-top: 30px;
-    margin-bottom: 18px;
-}
-#email{
-    padding: 80px 0px;
-}
