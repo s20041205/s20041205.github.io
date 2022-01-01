@@ -27,33 +27,86 @@
 	</script>
 </head>
 <body>
-	<form id="myForm">
+	<header>
+			
+	</header>
+	<section id="form">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-8">
+					<nav aria-label="breadcrumb">
+						<ol class="breadcrumb">
+						<li class="breadcrumb-item"><a href="#">記帳</a></li>
+						<li class="breadcrumb-item active" aria-current="page">TODO</li>
+					</ol>
+					</nav>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6 offset-md-1 text-left">
+					<div class="row">
+						<form 
+							id="frmBookkeepting"
+							method="POST" 
+							action="https://script.google.com/macros/s/AKfycbytxGocsgO3XpuET9MqeLvsmnQRvqV75u_5jm88IzAcqJUpPqlYyNn8DKyXoTYI8qCo/exec"
+						>
+							
+							<p for="dateinput">日期</p>
+							<input name="Date" type="date" id="fdate">
+							<p>收支</p>
+							<select name="Balance" id="balance-list" onchange="changeBalance(this.selectedIndex)"></select>
+
+							<p>類別</p>
+							<select name="Topclass" id="topclass-list" onchange="changetopclass()"></select>
+							
+							<p>細項</p>
+							<select name="Subclass" id="subclass-list"></select>
+							
+							<p>金額</p>
+							<input name="Price" type="number" id="price"></input>
+							
+							<p>內容</p>
+							<input name="Detail" type="text" id="detail"></input>
+							
+							<p>人員</p>
+							<select name="Name" id="who-list"></select>
+							
+							<p></p>
+							<input type="submit" value="Submit">
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!--<form id="myForm">
 		<p for="dateinput">Date</p>
 		<input name="Date" type="date"/>
 		<br/>
-		<label>Balance</label>
+		<p>收支</p>
 		<input name="Balance" />
 		<br/>
-		<label>Topclass</label>
+		<p>類別</p>
 		<input name="Topclass" />
 		<br/>
-		<label>Subclass</label>
+		<p>細項</p>
 		<input name="Subclass" />
 		<br/>
-		<label>Price</label>
-		<input name="Price" />
+		<p>金額</p>
+		<input name="Price" type="number"/>
 		<br/>
-		<label>Detail</label>
-		<input name="Detail" />
+		<p>內容</p>
+		<input name="Detail" type="text"/>
 		<br/>
-		<p>Name</p>
-		<input name="Name"></input>
+		<p>人員</p>
+		<select name="Name" id="who-list"></select>
 		<br/>
 		<label>Update</label>
 		<input name="Update" />
 		<br/>
 	</form>
 	<button onclick='SubForm()'>Submit</button>
+	-->
 	<script type="text/javascript">
 		var balance=['請選擇', '收入', '支出'];
 		var balanceSelect=document.getElementById("balance-list");
@@ -110,7 +163,7 @@
 		
 		
 		var who=['Jerry_Hu', 'Alice_Lin'];
-		var whoSelect=document.getElementsByName("Name");
+		var whoSelect=document.getElementById("who-list");
 		var whoInner="";
 		for(var i=0;i<who.length;i++){
 			whoInner=whoInner+'<option>'+who[i]+'</option>';
