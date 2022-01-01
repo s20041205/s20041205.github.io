@@ -32,27 +32,27 @@
 							>
 								
 								<p for="dateinput">日期</p>
-								<input type="date" id="fdate">
+								<input name="Date" type="date" id="fdate">
 								<input name="Email" type="email" placeholder="Email" required>
-								<input name="Name" type="text" placeholder="Name" required>
+								<input name="Who" type="text" placeholder="Name" required>
 								
 								<p>收支</p>
-								<select id="balance-list" onchange="changeBalance(this.selectedIndex)"></select>
+								<select name="Balance" id="balance-list" onchange="changeBalance(this.selectedIndex)"></select>
 
 								<p>類別</p>
-								<select id="topclass-list" onchange="changetopclass()"></select>
+								<select name="Topclass" id="topclass-list" onchange="changetopclass()"></select>
 								
 								<p>細項</p>
-								<select id="subclass-list"></select>
+								<select name="Subclass" id="subclass-list"></select>
 								
 								<p>金額</p>
-								<input type="number" id="price"></input>
+								<input name="Price" type="number" id="price"></input>
 								
 								<p>內容</p>
-								<input type="text" id="detail"></input>
+								<input name="Detail" type="text" id="detail"></input>
 								
 								<p>人員</p>
-								<select id="who-list"></select>
+								<select name="Name" id="who-list"></select>
 								
 								<p></p>
 								<input type="submit" value="Submit">
