@@ -15,7 +15,7 @@
 			$.ajax({
 				url:"https://api.apispreadsheets.com/data/QZBAW6wop8uzYErv/",
 				type:"post",
-				data:$("#myForm").serializeArray(),
+				data:$("#frmBookkeepting").serializeArray(),
 				success: function(){
 					alert("Form Data Submitted :)")
 				},
@@ -45,11 +45,11 @@
 			<div class="row">
 				<div class="col-md-6 offset-md-1 text-left">
 					<div class="row">
-						<!--<form 
+						<form 
 							id="frmBookkeepting"
 							method="POST" 
 							action="https://script.google.com/macros/s/AKfycbytxGocsgO3XpuET9MqeLvsmnQRvqV75u_5jm88IzAcqJUpPqlYyNn8DKyXoTYI8qCo/exec"
-						>-->
+						>
 							
 							<p for="dateinput">日期</p>
 							<input name="Date" type="date" id="fdate">
