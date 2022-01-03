@@ -70,7 +70,7 @@
 							<select name="Name" id="who-list"></select>
 							
 							<p></p>
-							<input type="button" onclick="SubForm()" value="Submit">
+							<input type="submit" onclick="SubForm()" value="Submit">
 						</form>
 					</div>
 				</div>
@@ -130,7 +130,23 @@
 			var subclassSelect=document.getElementById("subclass-list");
 			subclassSelect.innerHTML=subclassInner;
 		}
-		
+		/*function changetopclass(){
+			var index = document.getElementById("topclass-list").selectedIndex;
+			var bindex = document.getElementById("balance-list").selectedIndex;
+			var subclassInner="";
+			if(bindex < 2)
+			{
+				subclassInner="";
+			}
+			else
+			{
+				for(var i=0;i<subclass[index].length;i++){
+					subclassInner=subclassInner+'<option>'+subclass[index][i]+'</option>';
+				}
+			}
+			var subclassSelect=document.getElementById("subclass-list");
+			subclassSelect.innerHTML=subclassInner;
+		}*/
 		
 		var who=['Jerry_Hu', 'Alice_Lin'];
 		var whoSelect=document.getElementById("who-list");
