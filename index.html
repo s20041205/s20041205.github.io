@@ -19,7 +19,7 @@
 				type:"post",
 				data:$("#myForm").serializeArray(),
 				success: function(){
-					alert("Form Data Submitted :)")
+					alert("Submitted :)")
 				},
 				error: function(){
 					alert("There was an error :(")
@@ -69,7 +69,7 @@
 							<p>人員</p>
 							<select name="Name" id="who-list"></select>
 							
-							<input name="Update" type="tel" id="dtCur" disabled>
+							<input name="Update" type="tel" id="dtCur">
 							
 							<p></p>
 							<input type="button" onclick="SubForm()" value="Submit">
