@@ -19,7 +19,7 @@
 				type:"post",
 				data:$("#myForm").serializeArray(),
 				success: function(){
-					alert("Form Data Submitted :)")
+					alert("Submitted :)")
 				},
 				error: function(){
 					alert("There was an error :(")
@@ -39,7 +39,7 @@
 					<nav aria-label="breadcrumb">
 						<ol class="breadcrumb">
 						<li class="breadcrumb-item"><a href="#">記帳</a></li>
-						<li class="breadcrumb-item active" aria-current="page">v1.0.2</li>
+						<li class="breadcrumb-item active" aria-current="page">v1.0.3</li>
 					</ol>
 					</nav>
 				</div>
@@ -70,7 +70,7 @@
 							<select name="Name" id="who-list"></select>
 							
 							<p></p>
-							<input name="Update" type="tel" id="dtCur">
+							<input name="Update" type="tel" id="dtCur" readonly="readonly">
 							<input type="button" onclick="SubForm()" value="Submit">
 							
 						</form>
