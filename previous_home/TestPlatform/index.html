@@ -1,13 +1,18 @@
 
 <form name="submit-to-google-sheet">
-    <input name="email" type="email" placeholder="Email" required>
-    <input name="firstName" type="text" placeholder="First Name">
-    <input name="lastName" type="text" placeholder="Last Name">
+    <input name="Date" type="datetime" placeholder="Date" required>
+    <input name="Balance" type="text" placeholder="Income/ Outcome">
+    <input name="Topclass" type="text" placeholder="Category">
+    <input name="Subclass" type="text" placeholder="Sub-Category">
+    <input name="Price" type="number" placeholder="Price">
+    <input name="Detail" type="text" placeholder="Detail">
+    <input name="Name" type="text" placeholder="Name">
+    <input name="Update" type="text" placeholder="Time">
     <button type="submit">Send</button>
 </form>
 
 <script>
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbyOwSql_FQNu2S5sgMnRy8Rb7f0xg52D784kVy8OjtQuEKmIakSLKyWwzrnJ9IJZM7t/exec'
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbyRzF1UnMw4TNyLl46lWCwnt_PWtVOgqvGWxpp8yxzGvCZu1sC0r5MpD0Knl_5x3bRp/exec'
     const form = document.forms['submit-to-google-sheet']
 
     form.addEventListener('submit', e => {
