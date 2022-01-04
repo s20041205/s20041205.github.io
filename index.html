@@ -39,7 +39,7 @@
 					<nav aria-label="breadcrumb">
 						<ol class="breadcrumb">
 						<li class="breadcrumb-item"><a href="#">記帳</a></li>
-						<li class="breadcrumb-item active" aria-current="page">TODO</li>
+						<li class="breadcrumb-item active" aria-current="page">v1.0.1</li>
 					</ol>
 					</nav>
 				</div>
@@ -69,12 +69,9 @@
 							<p>人員</p>
 							<select name="Name" id="who-list"></select>
 							
-							<input name="Update" type="tel" id="currentDateTime">
-							
 							<p></p>
 							<input type="button" onclick="SubForm()" value="Submit">
-							
-							
+							<input name="Update" type="url" id="dtCurrent" disabled>
 							
 						</form>
 					</div>
@@ -88,7 +85,8 @@
 		var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
 		var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
 		var dateTime = date+' '+time;
-		document.getElementById("currentDateTime").value = dateTime;
+		document.getElementById("fdate").valueAsDate = today;
+		document.getElementById("dtCurrent").value = dateTime;
 		</script>
 	<script type="text/javascript">
 		var balance=['請選擇', '收入', '支出'];

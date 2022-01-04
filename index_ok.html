@@ -69,14 +69,27 @@
 							<p>人員</p>
 							<select name="Name" id="who-list"></select>
 							
+							<input name="Update" type="tel" id="currentDateTime">
+							
 							<p></p>
 							<input type="button" onclick="SubForm()" value="Submit">
+							
+							
+							
 						</form>
 					</div>
 				</div>
 			</div>
 		</div>
 	</section>
+
+	<script>
+		var today = new Date();
+		var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+		var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+		var dateTime = date+' '+time;
+		document.getElementById("currentDateTime").value = dateTime;
+		</script>
 	<script type="text/javascript">
 		var balance=['請選擇', '收入', '支出'];
 		var balanceSelect=document.getElementById("balance-list");
@@ -130,7 +143,23 @@
 			var subclassSelect=document.getElementById("subclass-list");
 			subclassSelect.innerHTML=subclassInner;
 		}
-		
+		/*function changetopclass(){
+			var index = document.getElementById("topclass-list").selectedIndex;
+			var bindex = document.getElementById("balance-list").selectedIndex;
+			var subclassInner="";
+			if(bindex < 2)
+			{
+				subclassInner="";
+			}
+			else
+			{
+				for(var i=0;i<subclass[index].length;i++){
+					subclassInner=subclassInner+'<option>'+subclass[index][i]+'</option>';
+				}
+			}
+			var subclassSelect=document.getElementById("subclass-list");
+			subclassSelect.innerHTML=subclassInner;
+		}*/
 		
 		var who=['Jerry_Hu', 'Alice_Lin'];
 		var whoSelect=document.getElementById("who-list");
