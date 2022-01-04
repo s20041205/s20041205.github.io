@@ -8,7 +8,7 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	
 	<title>2022記帳</title>
-	<script
+	<script+
 		src="https://code.jquery.com/jquery-3.4.1.js"
 		integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
 		crossorigin="anonymous"></script>
@@ -19,7 +19,7 @@
 				type:"post",
 				data:$("#myForm").serializeArray(),
 				success: function(){
-					alert("Form Data Submitted :)")
+					alert("Submitted :)")
 				},
 				error: function(){
 					alert("There was an error :(")
@@ -71,7 +71,7 @@
 							
 							<p></p>
 							<input type="button" onclick="SubForm()" value="Submit">
-							<input name="Update" type="url" id="dtCurrent" disabled>
+							<input name="Update" type="url" id="dtCurrent">
 							
 						</form>
 					</div>
