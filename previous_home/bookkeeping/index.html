@@ -28,7 +28,7 @@
 				<div class="col-md-6 offset-md-1 text-left">
 					<div class="row">
 						<form name="submit-to-google-sheet">
-							<input name="Date" type="datetime" placeholder="Date" required>
+							<input name="Date" type="date" id="fdate" required>
 							<input name="Balance" type="text" placeholder="Income/ Outcome">
 							<input name="Topclass" type="text" placeholder="Category">
 							<input name="Subclass" type="text" placeholder="Sub-Category">
@@ -42,6 +42,13 @@
 				</div>
 			</div>
 			<script>
+				var today = new Date();
+				var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+				var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+				var dateTime = date+' '+time;
+				document.getElementById("fdate").valueAsDate = today;
+
+				//[Section submit to google sheet]
 				/*//implement url
 				const scriptURL = 'https://script.google.com/macros/s/AKfycbxOZyPupkM8WF1nMu4PlMEBLdjJSpNu_7zupR5P4kVbcDU7PMyomxLmjQzn7QFO2rJb/exec'*/
 				//url for test
@@ -55,6 +62,7 @@
 					.catch(error => console.error('Error!', error.message))
 				})
 			</script>
+
 		</div>
 	</section>
 </body>
