@@ -8,7 +8,7 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	
 	<title>2022記帳</title>
-	<script+
+	<script
 		src="https://code.jquery.com/jquery-3.4.1.js"
 		integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
 		crossorigin="anonymous"></script>
@@ -19,7 +19,7 @@
 				type:"post",
 				data:$("#myForm").serializeArray(),
 				success: function(){
-					alert("Submitted :)")
+					alert("Form Data Submitted :)")
 				},
 				error: function(){
 					alert("There was an error :(")
@@ -39,7 +39,7 @@
 					<nav aria-label="breadcrumb">
 						<ol class="breadcrumb">
 						<li class="breadcrumb-item"><a href="#">記帳</a></li>
-						<li class="breadcrumb-item active" aria-current="page">v1.0.2</li>
+						<li class="breadcrumb-item active" aria-current="page">v1.0.0</li>
 					</ol>
 					</nav>
 				</div>
@@ -69,10 +69,11 @@
 							<p>人員</p>
 							<select name="Name" id="who-list"></select>
 							
-							<input name="Update" type="url" id="dtCurrent" disabled>
-
+							<input name="Update" type="tel" id="currentDateTime">
+							
 							<p></p>
 							<input type="button" onclick="SubForm()" value="Submit">
+							
 							
 							
 						</form>
@@ -87,8 +88,7 @@
 		var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
 		var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
 		var dateTime = date+' '+time;
-		document.getElementById("fdate").valueAsDate = today;
-		document.getElementById("dtCurrent").value = dateTime;
+		document.getElementById("currentDateTime").value = dateTime;
 		</script>
 	<script type="text/javascript">
 		var balance=['請選擇', '收入', '支出'];
