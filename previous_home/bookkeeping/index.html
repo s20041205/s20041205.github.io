@@ -39,11 +39,10 @@
 							<!--input name="Subclass" type="text" placeholder="Sub-Category"-->
 							<input name="Price" type="number" placeholder="Price" required>
 							<input name="Detail" type="text" placeholder="Detail">
-							<input name="Name" type="text" placeholder="Name" required>
+							<select name="Name" type="text" id="who-list" required></select>
 							<!--<input name="Update" type="text" placeholder="Time">-->
 
-							<button type="submit">Send</button>
-							<!--button type="submit" onclick="showAlert()">Send</button-->
+							<button type="submit">Send</button>  <button type="reset" onclick="OnReset()">Reset</button>
 						</form>
 					</div>
 				</div>
@@ -57,7 +56,15 @@
 					balanceInner=balanceInner+'<option>'+balance[i]+'</option>';
 				}
 				balanceSelect.innerHTML=balanceInner;
-								
+				//
+				var who=['Jerry_Hu', 'Alice_Lin'];
+				var whoSelect=document.getElementById("who-list");
+				var whoInner="";
+				for(var i=0;i<who.length;i++){
+					whoInner=whoInner+'<option>'+who[i]+'</option>';
+				}
+				whoSelect.innerHTML=whoInner;
+				//			
 				var topclass=new Array();
 				topclass[0]=[];
 				topclass[1]=['薪資', '利息', '獎金', '投資', '販賣'];
@@ -117,13 +124,6 @@
 					subclassSelect.innerHTML=subclassInner;
 				}
 				
-				var who=['Jerry_Hu', 'Alice_Lin'];
-				var whoSelect=document.getElementById("who-list");
-				var whoInner="";
-				for(var i=0;i<who.length;i++){
-					whoInner=whoInner+'<option>'+who[i]+'</option>';
-				}
-				whoSelect.innerHTML=whoInner;
 			</script>
 			<script>
 				var today = new Date();
