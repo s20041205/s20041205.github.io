@@ -38,9 +38,32 @@ input[type=submit] {
 }
 
 input[type=submit]:hover {
+    background-color: #52a056;
+    padding: 7px 28px;
+    border-radius: 20px;
+    border: none;
+}
+button[type=submit]{
+    background-color: #639263;
+    padding: 7px 28px;
+    border-radius: 20px;
+    border: none;
+}
+button[type=submit]:hover{
     background-color: #45a049;
     padding: 7px 28px;
     border-radius: 20px;
     border: none;
 }
-
+button[type=reset]{
+    background-color: #8d4c44;
+    padding: 7px 28px;
+    border-radius: 20px;
+    border: none;
+}
+button[type=reset]:hover{
+    background-color: #d44860;
+    padding: 7px 28px;
+    border-radius: 20px;
+    border: none;
+}
