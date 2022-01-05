@@ -39,7 +39,7 @@
 					<nav aria-label="breadcrumb">
 						<ol class="breadcrumb">
 						<li class="breadcrumb-item"><a href="#">記帳</a></li>
-						<li class="breadcrumb-item active" aria-current="page">v1.0.3</li>
+						<li class="breadcrumb-item active" aria-current="page">v1.0.5</li>
 					</ol>
 					</nav>
 				</div>
@@ -109,8 +109,22 @@
 			}
 			var topclassSelect=document.getElementById("topclass-list");
 			topclassSelect.innerHTML=topclassInner;
-			var subclassSelect=document.getElementById("subclass-list");
-			subclassSelect.innerHTML="";
+
+			var tindex = document.getElementById("topclass-list").selectedIndex;
+					var bindex = document.getElementById("balance-list").selectedIndex;
+					var subclassInner="";
+					if(bindex < 2)
+					{
+						subclassInner="";
+					}
+					else
+					{
+						for(var i=0;i<subclass[tindex].length;i++){
+							subclassInner=subclassInner+'<option>'+subclass[tindex][i]+'</option>';
+						}
+					}
+					var subclassSelect=document.getElementById("subclass-list");
+					subclassSelect.innerHTML=subclassInner;
 		}
 		
 		
