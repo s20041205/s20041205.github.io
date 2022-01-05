@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
 
 	<link rel="stylesheet" href="css/style.css">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -19,7 +19,7 @@
 				type:"post",
 				data:$("#myForm").serializeArray(),
 				success: function(){
-					alert("Form Data Submitted :)")
+					alert("Submitted :)")
 				},
 				error: function(){
 					alert("There was an error :(")
@@ -39,13 +39,13 @@
 					<nav aria-label="breadcrumb">
 						<ol class="breadcrumb">
 						<li class="breadcrumb-item"><a href="#">記帳</a></li>
-						<li class="breadcrumb-item active" aria-current="page">TODO</li>
+						<li class="breadcrumb-item active" aria-current="page">v1.0.5</li>
 					</ol>
 					</nav>
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-6 offset-md-1 text-left">
+				<div class="col-md-6 offset-md-2 text-left">
 					<div class="row">
 						<form id="myForm" >
 							<p for="dateinput">日期</p>
@@ -61,20 +61,17 @@
 							<select name="Subclass" id="subclass-list"></select>
 							
 							<p>金額</p>
-							<input name="Price" type="number" id="price"></input>
+							<input name="Price" type="number" id="price" placeholder="金額"></input>
 							
 							<p>內容</p>
-							<input name="Detail" type="text" id="detail"></input>
+							<input name="Detail" type="text" id="detail" placeholder="內容"></input>
 							
 							<p>人員</p>
 							<select name="Name" id="who-list"></select>
 							
-							<input name="Update" type="tel" id="currentDateTime">
-							
 							<p></p>
+							<input name="Update" type="tel" id="dtCur" readonly="readonly">
 							<input type="button" onclick="SubForm()" value="Submit">
-							
-							
 							
 						</form>
 					</div>
@@ -88,7 +85,8 @@
 		var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
 		var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
 		var dateTime = date+' '+time;
-		document.getElementById("currentDateTime").value = dateTime;
+		document.getElementById("fdate").valueAsDate = today;
+		document.getElementById("dtCur").value = dateTime;
 		</script>
 	<script type="text/javascript">
 		var balance=['請選擇', '收入', '支出'];
@@ -111,8 +109,22 @@
 			}
 			var topclassSelect=document.getElementById("topclass-list");
 			topclassSelect.innerHTML=topclassInner;
-			var subclassSelect=document.getElementById("subclass-list");
-			subclassSelect.innerHTML="";
+
+			var tindex = document.getElementById("topclass-list").selectedIndex;
+					var bindex = document.getElementById("balance-list").selectedIndex;
+					var subclassInner="";
+					if(bindex < 2)
+					{
+						subclassInner="";
+					}
+					else
+					{
+						for(var i=0;i<subclass[tindex].length;i++){
+							subclassInner=subclassInner+'<option>'+subclass[tindex][i]+'</option>';
+						}
+					}
+					var subclassSelect=document.getElementById("subclass-list");
+					subclassSelect.innerHTML=subclassInner;
 		}
 		
 		
