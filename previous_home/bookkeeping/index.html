@@ -19,7 +19,7 @@
 					<nav aria-label="breadcrumb">
 						<ol class="breadcrumb">
 						<li class="breadcrumb-item"><a href="#">記帳 Test</a></li>
-						<li class="breadcrumb-item active" aria-current="page">v2.0.2</li>
+						<li class="breadcrumb-item active" aria-current="page">v2.0.5</li>
 						</ol>
 					</nav>
 				</div>
@@ -29,18 +29,14 @@
 					<div class="row">
 						<form name="submit-to-google-sheet">
 							<input name="Date" type="date" id="fdate" required>
-							
-							<br>收支</br>
+							<p></p>
 							<select name="Balance" id="balance-list" onchange="changeBalance(this.selectedIndex)"></select>
-							<!--input name="Balance" type="text" placeholder="Income/ Outcome"-->
+							
 							<select name="Topclass" id="topclass-list" onchange="changeTopclass()"></select>
-							<!--input name="Topclass" type="text" placeholder="Category"-->
 							<select name="Subclass" id="subclass-list"></select>
-							<!--input name="Subclass" type="text" placeholder="Sub-Category"-->
 							<input name="Price" type="number" placeholder="Price" required>
 							<input name="Detail" type="text" placeholder="Detail">
 							<select name="Name" type="text" id="who-list" required></select>
-							<!--<input name="Update" type="text" placeholder="Time">-->
 
 							<button type="submit">Send</button>  <button type="reset" onclick="OnReset()">Reset</button>
 						</form>
