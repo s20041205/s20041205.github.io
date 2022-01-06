@@ -19,7 +19,7 @@
 					<nav aria-label="breadcrumb">
 						<ol class="breadcrumb">
 						<li class="breadcrumb-item"><a href="#">記帳</a></li>
-						<li class="breadcrumb-item active" aria-current="page">v2.0.8</li>
+						<li class="breadcrumb-item active" aria-current="page">v2.0.9</li>
 						</ol>
 					</nav>
 				</div>
@@ -122,11 +122,13 @@
 				}
 				
 				function OnReset(){
-					alert("OnRest (TODO)");
-
+					//alert("OnRest (TODO)");
 					var today = new Date();
 					document.getElementById("fdate").valueAsDate = today;
-					
+					var topclassSelect=document.getElementById("topclass-list");
+					topclassSelect.innerHTML="";
+					var subclassSelect=document.getElementById("subclass-list");
+					subclassSelect.innerHTML="";
 				}
 			</script>
 			<script>
