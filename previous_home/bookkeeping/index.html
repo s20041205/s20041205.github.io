@@ -15,17 +15,17 @@
 	<section id="form">
 		<div class="container">
 			<div class="row">
-				<div class="col-md-8">
+				<div class="col-md-6">
 					<nav aria-label="breadcrumb">
 						<ol class="breadcrumb">
 						<li class="breadcrumb-item"><a href="#">記帳 Test</a></li>
-						<li class="breadcrumb-item active" aria-current="page">v2.0.6</li>
+						<li class="breadcrumb-item active" aria-current="page">v2.0.9</li>
 						</ol>
 					</nav>
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-5 offset-md-1 text-center">
+				<div class="col-md-6 offset-md-1 text-center">
 					<div class="row">
 						<form name="submit-to-google-sheet">
 							<input name="Date" type="date" id="fdate" required>
@@ -122,11 +122,13 @@
 				}
 				
 				function OnReset(){
-					alert("OnRest (TODO)");
-
+					//alert("OnRest (TODO)");
 					var today = new Date();
 					document.getElementById("fdate").valueAsDate = today;
-					
+					var topclassSelect=document.getElementById("topclass-list");
+					topclassSelect.innerHTML="";
+					var subclassSelect=document.getElementById("subclass-list");
+					subclassSelect.innerHTML="";
 				}
 			</script>
 			<script>
@@ -138,9 +140,9 @@
 
 				//[Section submit to google sheet]
 				//implement url
-				//const scriptURL = 'https://script.google.com/macros/s/AKfycbz1C9SHtWHpbBHGLx2h-Lj8PYPPnDkdj7DhdnOdW0Kj2p6hQhQbJM5cznexZi9p3NEC/exec'
+				const scriptURL = 'https://script.google.com/macros/s/AKfycbz1C9SHtWHpbBHGLx2h-Lj8PYPPnDkdj7DhdnOdW0Kj2p6hQhQbJM5cznexZi9p3NEC/exec'
 				//url for test
-				const scriptURL = 'https://script.google.com/macros/s/AKfycbzdt_vhicpfz1zyCmRfbN4bzLWbUW9g9kKS48rQ3Arkfjtp6yw2xY4SQBmKQBALBGnN/exec'
+				//const scriptURL = 'https://script.google.com/macros/s/AKfycbzdt_vhicpfz1zyCmRfbN4bzLWbUW9g9kKS48rQ3Arkfjtp6yw2xY4SQBmKQBALBGnN/exec'
 				const form = document.forms['submit-to-google-sheet']
 			
 				form.addEventListener('submit', e => {
