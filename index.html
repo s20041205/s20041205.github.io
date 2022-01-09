@@ -50,6 +50,13 @@
 			</div>
 			<!-- Section form items -->
 			<script type="text/javascript">
+				
+				var today = new Date();
+				var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+				var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+				var dateTime = date + ' ' + time;
+				document.getElementById("fdate").valueAsDate = today;
+				//
 				var balance = ['請選擇', '收入', '支出'];
 				var balanceSelect = document.getElementById("balance-list");
 				var balanceInner = "";
@@ -130,14 +137,7 @@
 					var subclassSelect = document.getElementById("subclass-list");
 					subclassSelect.innerHTML = "";
 				}
-			</script>
-			<script>
-				var today = new Date();
-				var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
-				var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-				var dateTime = date + ' ' + time;
-				document.getElementById("fdate").valueAsDate = today;
-
+				
 				//[Section submit to google sheet]
 				//implement url
 				const scriptURL = 'https://script.google.com/macros/s/AKfycbz1C9SHtWHpbBHGLx2h-Lj8PYPPnDkdj7DhdnOdW0Kj2p6hQhQbJM5cznexZi9p3NEC/exec'
