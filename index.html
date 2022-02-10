@@ -23,8 +23,8 @@
 						<ol class="breadcrumb">
 							<li class="breadcrumb-item"><a
 									href="https://docs.google.com/spreadsheets/d/1ZNPbB2IAaM23TGnwfXr4bTbijXXBPwMMNTZa_O5ERhE/edit?usp=sharing"
-									target="_blank">記帳</a></li>
-							<li class="breadcrumb-item active" aria-current="page">v2.1.0</li>
+									target="_self">記帳</a></li>
+							<li class="breadcrumb-item active" aria-current="page">v2.1.1</li>
 						</ol>
 					</nav>
 				</div>
@@ -41,9 +41,27 @@
 							<select name="Topclass" id="topclass-list" onchange="changeTopclass()"></select>
 							<select name="Subclass" id="subclass-list"></select>
 							<input name="Price" type="number" placeholder="Price" required>
-							<input name="Detail" type="text" placeholder="Detail">
-							<select name="Name" type="text" id="who-list" required></select>
-
+							<input name="Detail" type="text" placeholder="Detail" required>
+							<input name="Remark" type="text" placeholder="Remark">
+							<!--<select name="Name" type="text" id="who-list" required></select>-->
+							<!--
+							<div class="toggle-radio">
+								<input type="radio" name="Name" id="who-list" value="Jerry_Hu" checked>
+								<input type="radio" name="Name" id="who-list" value="Alice_Lin">
+								<div class="switch">
+									<label for="a">Jerry_Hu</label>
+									<label for="b">Alice_Lin</label>
+									<span></span>
+								</div>
+							</div>
+							-->
+							<div class="col-md-6 offset-md-3 text-center">
+								<input type="radio" name="Name" id="Jerry_Hu" value="Jerry_Hu" checked>
+								<label for="Jerry_Hu">Jerry_Hu</label>
+							
+								<input type="radio" name="Name" id="Alice_Lin" value="Alice_Lin">
+								<label for="Alice_Lin">Alice_Lin</label>
+							</div>
 							<p></p>
 							<button type="submit">Send</button> <button type="reset" onclick="OnReset()">Reset</button>
 						</form>
@@ -67,13 +85,13 @@
 				}
 				balanceSelect.innerHTML = balanceInner;
 				//
-				var who = ['Jerry_Hu', 'Alice_Lin'];
+				/*var who = ['Jerry_Hu', 'Alice_Lin'];
 				var whoSelect = document.getElementById("who-list");
 				var whoInner = "";
 				for (var i = 0; i < who.length; i++) {
 					whoInner = whoInner + '<option>' + who[i] + '</option>';
 				}
-				whoSelect.innerHTML = whoInner;
+				whoSelect.innerHTML = whoInner;*/
 				//			
 				var topclass = new Array();
 				topclass[0] = [];
