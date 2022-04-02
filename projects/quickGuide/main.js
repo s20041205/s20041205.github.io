@@ -1,6 +1,6 @@
 class QuickGuideHeader extends HTMLElement {
     connectedCallback(){
-        this.innerHTML.load("header.html");
+        this.innerHTML.load(header.html);
         /*this.innerHTML =`
         <div>
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
