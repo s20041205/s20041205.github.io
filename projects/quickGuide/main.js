@@ -1,7 +1,6 @@
 class QuickGuideHeader extends HTMLElement {
     connectedCallback(){
-        this.innerHTML.load(header.html);
-        /*this.innerHTML =`
+        this.innerHTML =`
         <div>
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="container-fluid">
@@ -40,7 +39,7 @@ class QuickGuideHeader extends HTMLElement {
                 </div>
             </nav>
         </div>
-        `*/
+        `
     }
 }
 customElements.define('quick-guide-header', QuickGuideHeader)
