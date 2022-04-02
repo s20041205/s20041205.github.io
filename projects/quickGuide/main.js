@@ -1,7 +1,8 @@
 class QuickGuideHeader extends HTMLElement {
     connectedCallback(){
-        this.innerHTML =`
-        <header>
+        this.innerHTML.load("header.html");
+        /*this.innerHTML =`
+        <div>
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="container-fluid">
                 <a class="navbar-brand" href="#">Instructions</a>
@@ -38,8 +39,8 @@ class QuickGuideHeader extends HTMLElement {
                 </div>
                 </div>
             </nav>
-        </header>
-        `
+        </div>
+        `*/
     }
 }
 customElements.define('quick-guide-header', QuickGuideHeader)
@@ -48,7 +49,7 @@ class QuickGuideFooter extends HTMLElement {
     connectedCallback(){
         this.innerHTML =`
         <div>
-            @2022 Instructions v1.0.4
+            @2022 Instructions v1.0.5
         <div>
         `
     }
