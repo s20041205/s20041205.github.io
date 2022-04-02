@@ -48,7 +48,7 @@ class QuickGuideFooter extends HTMLElement {
     connectedCallback(){
         this.innerHTML =`
         <div>
-            @2022 QuickGuide Test
+            @2022 QuickGuide Test v1.0.3
         <div>
         `
     }
