@@ -49,7 +49,7 @@ class QuickGuideFooter extends HTMLElement {
         this.innerHTML =`
         <nav class="navbar fixed-bottom navbar-light bg-light">
             <div class="container-fluid">
-                @2022 Instructions v1.0.8
+                @2022 Instructions v1.0.9
             </div>
         </nav>
         `
