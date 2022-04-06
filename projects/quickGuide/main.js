@@ -4,7 +4,7 @@ class QuickGuideHeader extends HTMLElement {
         <div>
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <div class="container-fluid">
-                <a class="navbar-brand" href="#">Instructions</a>
+                <a class="navbar-brand" href="index.html">Instructions</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -47,11 +47,11 @@ customElements.define('quick-guide-header', QuickGuideHeader)
 class QuickGuideFooter extends HTMLElement {
     connectedCallback(){
         this.innerHTML =`
-        <div>
-            <br>
-            @2022 Instructions v1.0.7
-            <br>
-        <div>
+        <nav class="navbar fixed-bottom navbar-light bg-light">
+            <div class="container-fluid">
+                @2022 Instructions v1.0.7
+            </div>
+        </nav>
         `
     }
 }
