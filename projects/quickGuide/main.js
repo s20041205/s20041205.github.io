@@ -17,17 +17,17 @@ class QuickGuideHeader extends HTMLElement {
                         <a class="nav-link active" href="overview.html">Real-Time</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="overview.html">Retriever</a>
+                        <a class="nav-link active" href="retriever.html">Retriever</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Others
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
-                        <li><a class="dropdown-item" href="#">Language Pack</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#">Installation</a></li>
                         <li><a class="dropdown-item" href="#">Setup</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Language Pack</a></li>
+                        <li><a class="dropdown-item" href="#">Installation</a></li>
                         </ul>
                     </li>
                     </ul>
