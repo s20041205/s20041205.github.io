@@ -14,7 +14,7 @@ class QuickGuideHeader extends HTMLElement {
                         <a class="nav-link active" aria-current="page" href="overview.html">Overview</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="overview.html">Real-Time</a>
+                        <a class="nav-link active" href="realtime.html">Real-Time</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" href="retriever.html">Retriever</a>
