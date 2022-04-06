@@ -11,7 +11,7 @@ class QuickGuideHeader extends HTMLElement {
                 <div class="collapse navbar-collapse" id="navbarScroll">
                     <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/TX/tx.html">Overview</a>
+                        <a class="nav-link active" aria-current="page" href="/TX/overview.html">Overview</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" href="/TX/realtime.html">Real-Time</a>
@@ -48,7 +48,7 @@ class QuickGuideFooter extends HTMLElement {
     connectedCallback(){
         this.innerHTML =`
         <div>
-            @2022 Instructions v1.0.6
+            @2022 Instructions v1.0.7
         <div>
         `
     }
