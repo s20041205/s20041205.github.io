@@ -29,21 +29,73 @@
                         </div>   
                     </div>
                     <div class="row">
-                        
-                        <p>
-                            <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                              Link with href
-                            </a>
-                            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                              Button with data-bs-target
-                            </button>
-                          </p>
-                          <div class="collapse" id="collapseExample">
-                            <div class="card card-body">
-                              Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
+                        <nav class="navbar navbar-light bg-light">
+                            <div class="container-fluid">
+                                <h4>Realtime <span class="badge bg-secondary">v6.1.15.13</span></h4>
+                                <br><br>
                             </div>
-                          </div>
+                        </nav>
+                        
+                        <div class="accordion" id="steps">
+                            <div class="accordion-item">
+                              <h2 class="accordion-header" id="headingOne">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#realtime" aria-expanded="true" aria-controls="realtime">
+                                  Realtime Mode
+                                </button>
+                              </h2>
+                              <div id="realtime" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#steps">
+                                <div class="accordion-body">
+                                    <span>
+                                        <strong>Admission</strong><br>
+                                        <img src="img/admit.png" alt="Simply Easy Learning"><br><br>
+                                    </span>
+                                    <span>
+                                        <strong>Discharge</strong><br>
+                                        <img src="img/discharge.png" alt="Simply Easy Learning"><br><br>
+                                    </span>
+                                    <span>
+                                        <strong>Transfer</strong><br>
+                                        <img src="img/transfer.png" alt="Simply Easy Learning"><br><br>
+                                    </span>
+                                    <span>
+                                        <strong>Transducer Swap</strong><br>
+                                        <img src="img/swapsensor.png" alt="Simply Easy Learning"><br><br>
+                                    </span>
+                                    <span>
+                                        <strong>Retrieve (Discharged)</strong><br>
+                                        <img src="img/retrieve.png" alt="Simply Easy Learning"><br>
+                                    </span>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="accordion-item">
+                              <h2 class="accordion-header" id="headingTwo">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#retriever" aria-expanded="false" aria-controls="retriever">
+                                  Retriever: Offline Retrieving
+                                </button>
+                              </h2>
+                              <div id="retriever" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#steps">
+                                <div class="accordion-body">
+                                  <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                                </div>
+                              </div>
+                            </div>
+                            <div class="accordion-item">
+                              <h2 class="accordion-header" id="headingThree">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                  Accordion Item #3
+                                </button>
+                              </h2>
+                              <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#steps">
+                                <div class="accordion-body">
+                                  <strong>This is the third item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                                </div>
+                              </div>
+                            </div>
+                        </div>
 
+                    </div>
+                    <div class="row">
                         <div class="col-md-3">
                             <div class="col">
                                 <nav id="navbar-example3" class="navbar navbar-light bg-light flex-column align-items-stretch p-3">
@@ -96,8 +148,43 @@
         </div>
 	</section>
 	<section id="steps">
-
-
+        <body data-bs-spy="scroll" data-bs-target="#navbar-example3">
+        <div class="row">
+            <nav id="navbar-example3" class="navbar navbar-light bg-light flex-column align-items-stretch p-3">
+                <a class="navbar-brand" href="#">Navbar</a>
+                <nav class="nav nav-pills flex-column">
+                <a class="nav-link" href="#item-1">Item 1</a>
+                <nav class="nav nav-pills flex-column">
+                    <a class="nav-link ms-3 my-1" href="#item-1-1">Item 1-1</a>
+                    <a class="nav-link ms-3 my-1" href="#item-1-2">Item 1-2</a>
+                </nav>
+                <a class="nav-link" href="#item-2">Item 2</a>
+                <a class="nav-link" href="#item-3">Item 3</a>
+                <nav class="nav nav-pills flex-column">
+                    <a class="nav-link ms-3 my-1" href="#item-3-1">Item 3-1</a>
+                    <a class="nav-link ms-3 my-1" href="#item-3-2">Item 3-2</a>
+                </nav>
+                </nav>
+            </nav>
+            
+            <div data-bs-spy="scroll" data-bs-target="#navbar-example3" data-bs-offset="0" tabindex="0">
+                <h4 id="item-1">Item 1</h4>
+                <p>...</p>
+                <h5 id="item-1-1">Item 1-1</h5>
+                <p>...</p>
+                <h5 id="item-1-2">Item 1-2</h5>
+                <p>...</p>
+                <h4 id="item-2">Item 2</h4>
+                <p>...</p>
+                <h4 id="item-3">Item 3</h4>
+                <p>...</p>
+                <h5 id="item-3-1">Item 3-1</h5>
+                <p>...</p>
+                <h5 id="item-3-2">Item 3-2</h5>
+                <p>...</p>
+            </div>
+        </div>
+    </body>
 	</section>
 	<footer>
 		<quick-guide-footer></quick-guide-footer>
