@@ -11,13 +11,13 @@ class QuickGuideHeader extends HTMLElement {
                 <div class="collapse navbar-collapse" id="navbarScroll">
                     <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/TX/overview.html">Overview</a>
+                        <a class="nav-link active" aria-current="page" href="TX/overview.html">Overview</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="/TX/realtime.html">Real-Time</a>
+                        <a class="nav-link active" href="TX/overview.html">Real-Time</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="/TX/retriever.html">Retriever</a>
+                        <a class="nav-link active" href="TX/overview.html">Retriever</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -48,7 +48,9 @@ class QuickGuideFooter extends HTMLElement {
     connectedCallback(){
         this.innerHTML =`
         <div>
+            <br>
             @2022 Instructions v1.0.7
+            <br>
         <div>
         `
     }
