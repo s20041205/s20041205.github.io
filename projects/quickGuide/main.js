@@ -50,7 +50,7 @@ class QuickGuideFooter extends HTMLElement {
         <nav class="navbar fixed-bottom navbar-light bg-light">
             <div class="container-fluid">
             Last Modified: Apr. 7, 2022 <br>
-            @2022 Instructions v1.0.11 
+            @2022 Instructions v1.0.12 
             </div>
         </nav>
         `
@@ -79,4 +79,4 @@ class BackToTopButton extends HTMLElement {
         `
     }
 }
-customElements.define('backToTop-btn', BackToTopButton)
+customElements.define('back-to-top-button', BackToTopButton)
