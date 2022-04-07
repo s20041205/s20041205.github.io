@@ -50,7 +50,7 @@ class QuickGuideFooter extends HTMLElement {
         <nav class="navbar fixed-bottom navbar-light bg-light">
             <div class="container-fluid">
             Last Modified: Apr. 7, 2022 <br>
-            @2022 Instructions v1.0.10 
+            @2022 Instructions v1.0.11 
             </div>
         </nav>
         `
@@ -58,18 +58,25 @@ class QuickGuideFooter extends HTMLElement {
 }
 customElements.define('quick-guide-footer', QuickGuideFooter)
 
-var btn = $('#button');
-
-$(window).scroll(function() {
-  if ($(window).scrollTop() > 300) {
-    btn.addClass('show');
-  } else {
-    btn.removeClass('show');
-  }
-});
-
-btn.on('click', function(e) {
-  e.preventDefault();
-  $('html, body').animate({scrollTop:0}, '300');
-});
-
+class QuickGuideFooter extends HTMLElement {
+    connectedCallback(){
+        this.innerHTML =`
+        <button type="button" id="BackTop" class="toTop-arrow"></button>
+        <script>
+        $(function(){
+            $('#BackTop').click(function(){ 
+                $('html,body').animate({scrollTop:0}, 333);
+            });
+            $(window).scroll(function() {
+                if ( $(this).scrollTop() > 300 ){
+                    $('#BackTop').fadeIn(222);
+                } else {
+                    $('#BackTop').stop().fadeOut(222);
+                }
+            }).scroll();
+        });
+        </script>
+        `
+    }
+}
+customElements.define('backToTop-btn', BackToTopButton)
