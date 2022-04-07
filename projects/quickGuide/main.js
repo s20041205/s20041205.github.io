@@ -50,24 +50,9 @@ class QuickGuideFooter extends HTMLElement {
         <nav class="navbar fixed-bottom navbar-light bg-light">
             <div class="container-fluid">
             Last Modified: Apr. 7, 2022 <br>
-            @2022 Instructions v1.0.13 
+            @2022 Instructions v1.0.14 
             </div>
         </nav>
-        <button type="button" id="BackTop" class="toTop-arrow"></button>
-        <script>
-        $(function(){
-            $('#BackTop').click(function(){ 
-                $('html,body').animate({scrollTop:0}, 333);
-            });
-            $(window).scroll(function() {
-                if ( $(this).scrollTop() > 300 ){
-                    $('#BackTop').fadeIn(222);
-                } else {
-                    $('#BackTop').stop().fadeOut(222);
-                }
-            }).scroll();
-        });
-        </script>
         `
     }
 }
