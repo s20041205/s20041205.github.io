@@ -58,7 +58,7 @@ class QuickGuideFooter extends HTMLElement {
 }
 customElements.define('quick-guide-footer', QuickGuideFooter)
 
-class QuickGuideFooter extends HTMLElement {
+class BackToTopButton extends HTMLElement {
     connectedCallback(){
         this.innerHTML =`
         <button type="button" id="BackTop" class="toTop-arrow"></button>
