@@ -79,4 +79,4 @@ class BackToTopButton extends HTMLElement {
         `
     }
 }
-customElements.define('backToTop-btn', BackToTopButton)
+customElements.define('back-to-top-button', BackToTopButton)
