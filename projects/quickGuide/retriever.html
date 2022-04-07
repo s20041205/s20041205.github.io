@@ -99,6 +99,18 @@
 
 	</section>
 	<footer>
+        <button type="button" id="BackTop" class="toTop-arrow"></button>
+        <script>
+        $(function(){
+            $('#BackTop').click(function(){ 
+                $('html,body').animate({scrollTop:0}, 333);
+            });
+            $(window).scroll(function() {
+                $('#BackTop').fadeIn(222);
+            }).scroll();
+        });
+        </script>
+
 		<quick-guide-footer></quick-guide-footer>
         <!--<button type="button" id="BackTop" class="toTop-arrow"></button>
         <script>
@@ -115,23 +127,6 @@
             }).scroll();
         });
         </script>-->
-        <button type="button" id="BackTop" class="toTop-arrow"></button>
-        <script>
-        $(function(){
-            $('#BackTop').click(function(){ 
-                $('html,body').animate({scrollTop:0}, 333);
-            });
-            $(window).scroll(function() {
-                if ( $(this).scrollTop() > 100 ){
-                    $('#BackTop').fadeIn(222);
-                } 
-                else {
-                    $('#BackTop').stop().fadeOut(222);
-                }
-            }).scroll();
-        });
-        </script>
-        
 	</footer>
 </body>
 

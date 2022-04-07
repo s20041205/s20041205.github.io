@@ -167,6 +167,17 @@
 	</section>
 
 	<footer>
+        <button type="button" id="BackTop" class="toTop-arrow"></button>
+        <script>
+        $(function(){
+            $('#BackTop').click(function(){ 
+                $('html,body').animate({scrollTop:0}, 333);
+            });
+            $(window).scroll(function() {
+                $('#BackTop').fadeIn(222);
+            }).scroll();
+        });
+        </script>
 		<quick-guide-footer></quick-guide-footer>
 	</footer>
 </body>
