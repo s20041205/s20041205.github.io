@@ -47,12 +47,34 @@ customElements.define('quick-guide-header', QuickGuideHeader)
 class QuickGuideFooter extends HTMLElement {
     connectedCallback(){
         this.innerHTML =`
-        <nav class="navbar fixed-bottom navbar-light bg-light">
+        /*<nav class="navbar fixed-bottom navbar-light bg-light">
             <div class="container-fluid">
             Last Modified: Apr. 7, 2022 <br>
             @2022 Instructions v1.0.15 
             </div>
-        </nav>
+        </nav>*/
+        <div class="container">
+            <div class="row">
+                <div class='col-md-5 text-left'>
+                </div>
+                <div class='col-md-5 text-left'>
+                    <button type="button" id="BackTop" class="toTop-arrow"></button>
+                    <p>Last Modified: Apr. 8, 2022<br>
+                    @2022 Instructions v1.1.0 </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <script>
+        $(function(){
+            $('#BackTop').click(function(){ 
+                $('html,body').animate({scrollTop:0}, 333);
+            });
+            $(window).scroll(function() {
+                $('#BackTop').fadeIn(222);
+            }).scroll();
+        });
+        </script>
         `
     }
 }
