@@ -50,11 +50,12 @@ class QuickGuideFooter extends HTMLElement {
         <div class="container">
             <div class="row">
                 <div class='col-md-5 text-left'>
+                    <button type="button" id="BackTop" class="toTop-arrow"></button>
                 </div>
                 <div class='col-md-5 text-left'>
                     <button type="button" id="BackTop" class="toTop-arrow"></button>
                     <p>Last Modified: Apr. 8, 2022<br>
-                    @2022 Instructions v1.1.0 </a>
+                    @2022 Instructions v1.1.1 </a>
                     </p>
                 </div>
             </div>
@@ -65,7 +66,11 @@ class QuickGuideFooter extends HTMLElement {
                 $('html,body').animate({scrollTop:0}, 333);
             });
             $(window).scroll(function() {
-                $('#BackTop').fadeIn(222);
+                if ( $(this).scrollTop() > 300 ){
+                    $('#BackTop').fadeIn(222);
+                } else {
+                    $('#BackTop').stop().fadeOut(222);
+                }
             }).scroll();
         });
         </script>
