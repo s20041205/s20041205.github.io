@@ -47,12 +47,6 @@ customElements.define('quick-guide-header', QuickGuideHeader)
 class QuickGuideFooter extends HTMLElement {
     connectedCallback(){
         this.innerHTML =`
-        /*<nav class="navbar fixed-bottom navbar-light bg-light">
-            <div class="container-fluid">
-            Last Modified: Apr. 7, 2022 <br>
-            @2022 Instructions v1.0.15 
-            </div>
-        </nav>*/
         <div class="container">
             <div class="row">
                 <div class='col-md-5 text-left'>
@@ -79,6 +73,12 @@ class QuickGuideFooter extends HTMLElement {
     }
 }
 customElements.define('quick-guide-footer', QuickGuideFooter)
+/*<nav class="navbar fixed-bottom navbar-light bg-light">
+            <div class="container-fluid">
+            Last Modified: Apr. 7, 2022 <br>
+            @2022 Instructions v1.0.15 
+            </div>
+        </nav>*/
 /*
 class BackToTopButton extends HTMLElement {
     connectedCallback(){
