@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link href="https://fonts.googleapis.com/css?family=Merriweather:400,900,900i" rel="stylesheet">
 	<!---->
-	<title>Retriever (TX)</title>
+	<title>Retriever</title>
 
 </head>
 
@@ -73,21 +73,74 @@
 
                                 <h6 id="search-calendar">By Calendar</h6>
                                 <p><strong>Retrieving Current Monitored Patient</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.</p>
+                                
                                 <!---->
-                                <h4 id="ruler">Ruler (Calipers)</h4>
-                                
-                                <h5 id="ruler-add">Adding Rulers</h5>
-                                <p><strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.</p>
-                                <img src="img/ruler-add.gif" alt="retrieve" style='height: 60%; width: 60%; object-fit: contain'><br><br></p>
-                                
-                                <h5 id="ruler-compare">Measuring RRI Variability</h5>
-                                <p><strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.<br><br></p>
+                                <h5 id="search-ext-data">Search External Data in One-Hour View</h5>
+                                <ul>
+                                    <div class="container">
+                                        <li>Mouse <strong>LEFT</strong>-clicked to select the display of SpO2, BP, or both.</li>
+                                        <img src="img/rtv-ext-data-disp.png" alt="print-selector" style='height: 100%; width: 100%; object-fit: contain'><br><br>
+                                    </div>
+                                </ul>
 
+                                <!---->
+                                <h4 id="ruler">Ruler (Calipers) Measurement</h4>
+                                
+                                <h5 id="ruler-add">Add</h5>
+                                <ul><li>This is the demo of adding rulers.</li></ul>
+                                <img src="img/ruler-add.gif" alt="retrieve" style='height: 60%; width: 60%; object-fit: contain'><br><br></p>
+                                <ol>
+                                    <div class="container">
+                                        <li>Mouse moving on standard waveform region. “X” depicts the first point of measurement.</li>
+                                        <img src="img/ruler-add-1.png" alt="ruler-add-1" style='height: 100%; width: 100%; object-fit: contain'><br><br>
+                                        <li>Mouse <strong>LEFT</strong>-clicked to drop the first point and then drag to drop at the second point.</li>
+                                        <p>* Maximum pairs of measurement = 2</p>
+                                        <img src="img/ruler-add-2.png" alt="ruler-add-2" style='height: 80%; width: 80%; object-fit: contain'><br><br>
+                                    </div>
+                                </ol>
+
+                                <h5 id="ruler-delete">Delete</h5>
+                                <ul>
+                                    <div class="container">
+                                        <li>Mouse <strong>LEFT</strong>-clicked to delete certain measurement.</li>
+                                        <img src="img/ruler-delete.png" alt="ruler-delete" style='height: 80%; width: 80%; object-fit: contain'><br><br>
+                                    </div>
+                                </ul>
+                                <h5 id="ruler-compare">Compare RRI Variability</h5>
+                                <ol>
+                                    <div class="container">
+                                        <li>Mouse <strong>RIGHT</strong>-clicked to copy x-axis.</li>
+                                        <img src="img/ruler-compX-1.png" alt="ruler-compX-1" style='height: 80%; width: 80%; object-fit: contain'><br><br>
+                                        <li>Drag the copied x-axis to compare RRIs.</li>
+                                        <img src="img/ruler-compX-2.png" alt="ruler-compX-2" style='height: 30%; width: 30%; object-fit: contain'><br><br>
+                                    </div>
+                                </ol>
                                 <!---->
                                 <h4 id="print">Print</h4>
                                 <h5 id="print-select">Printout Selection</h5>
-                                <p><strong>Left: ECG Waveforms, Right: Statistics Report</strong> 
-                                <img src="img/print-select.png" alt="retrieve" style='height: 60%; width: 60%; object-fit: contain'><br><br></p>
+                                <ol>
+                                    <div class="container">
+                                        <li>Mouse <strong>LEFT</strong>-clicked printer icon to display selector.</li>
+                                        <img src="img/print-selector.png" alt="print-selector" style='height: 80%; width: 80%; object-fit: contain'><br><br>
+                                        <ul>
+                                        <li>Left: ECG Waveforms, Right: Statistics Report</li> 
+                                            <img src="img/print-select.png" alt="retrieve" style='height: 60%; width: 60%; object-fit: contain'><br><br></p>
+                                        </ul>
+                                        <li>Mouse <strong>LEFT</strong>-clicked to select ECG waveforms or statistical report.</li>
+                                        <img src="img/print-select2.png" alt="print-select-2" style='height: 80%; width: 80%; object-fit: contain'><br><br>
+                                    </div>
+                                </ol>
+                                
+
+                                <h5 id="print-region-adjust">Print Region Adjust</h5>
+                                <ol>
+                                    <div class="container">
+                                        <img src="img/print-adjust1.png" alt="print-adjust" style='height: 100%; width: 100%; object-fit: contain'><br><br>
+                                        <li><strong>Double-clicked</strong> green region to start print region adjust function.</li>
+                                        <li>Drop and drag to adjust printout length (white rectangle) of ECG waveforms.</li> 
+                                        <p>*length = 8*n seconds</p>
+                                    </div>
+                                </ol>
                             </div>
                         </div> 
                     </div>
@@ -99,34 +152,7 @@
 
 	</section>
 	<footer>
-        <button type="button" id="BackTop" class="toTop-arrow"></button>
-        <script>
-        $(function(){
-            $('#BackTop').click(function(){ 
-                $('html,body').animate({scrollTop:0}, 333);
-            });
-            $(window).scroll(function() {
-                $('#BackTop').fadeIn(222);
-            }).scroll();
-        });
-        </script>
-
 		<quick-guide-footer></quick-guide-footer>
-        <!--<button type="button" id="BackTop" class="toTop-arrow"></button>
-        <script>
-        $(function(){
-            $('#BackTop').click(function(){ 
-                $('html,body').animate({scrollTop:0}, 333);
-            });
-            $(window).scroll(function() {
-                if ( $(this).scrollTop() > 300 ){
-                    $('#BackTop').fadeIn(222);
-                } else {
-                    $('#BackTop').stop().fadeOut(222);
-                }
-            }).scroll();
-        });
-        </script>-->
 	</footer>
 </body>
 
