@@ -16,7 +16,6 @@
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
 	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css">
 	
-	<?!= include('JavaScript'); ?> <!--INCLUDE JavaScript.html FILE-->
 	<title>2022記帳</title>
 
 </head>
@@ -32,7 +31,7 @@
 							<li class="breadcrumb-item"><a
 									href="https://docs.google.com/spreadsheets/d/1ZNPbB2IAaM23TGnwfXr4bTbijXXBPwMMNTZa_O5ERhE/edit?usp=sharing"
 									target="_self">記帳</a></li>
-							<li class="breadcrumb-item active" aria-current="page">v2.1.3</li>
+							<li class="breadcrumb-item active" aria-current="page">v2.1.4</li>
 						</ol>
 					</nav>
 				</div>
@@ -104,7 +103,7 @@
 				//			
 				var topclass = new Array();
 				topclass[0] = [];
-				topclass[1] = ['薪資', '利息', '獎金', '投資', '販賣', '租金'];
+				topclass[1] = ['薪資', '利息', '獎金', '投資', '販賣', '租金', '還款', '其他'];
 				topclass[2] = ['飲食', '衣裝', '居住', '交通', '教育', '娛樂', '健康', '社交', '其他'];
 
 				var subclass = new Array();
@@ -113,7 +112,7 @@
 				subclass[2] = ['房租', '水費', '電費', '瓦斯費', '網路費', '生活消耗品', '家電', '家具', '生活物品', '維修費'];
 				subclass[3] = ['汽油燃料', '維修保養', '火車高鐵', '捷運', '公車客運', '計程車', '飛機', '公共租借', '停車費', '過路費'];
 				subclass[4] = ['文具', '書籍', '材料', '課程學費'];
-				subclass[5] = ['手機費', '3C產品', '旅宿', '門票', '遊戲', '電影', '數位服務'];
+				subclass[5] = ['手機費', '3C產品', '旅宿', '門票', '遊戲', '電影', '數位服務', '國外旅遊'];
 				subclass[6] = ['門診', '手術', '藥品', '醫療用品', '運動'];
 				subclass[7] = ['捐款', '孝親費', '交際'];
 				subclass[8] = ['貸款', '稅務', '罰單', '保險', '手續費', '其他'];
@@ -181,6 +180,19 @@
 						.catch(error => alert('Error!', error.message))
 				})
 
+				//
+				window.addEventListener('load', populate());
+
+				function populate(){
+					google.script.run.withSuccessHandler(displayValue).fetchValues();
+				}
+
+				function displayValue(data){
+					//document.getElementById("details").value=data[0][0];
+					//document.getElementById("quantity").value=data[0][1];
+					alert(data);
+				}
+				/*
 				var spreadSheetId = "18ZQuXioOWY__ECSDnbbeD4Anui8CgEC2_9MD-yrDOXE";
 				var ranges = "active!E2:I";
 				
@@ -190,7 +202,7 @@
 				}).then((response) => {
 				var result = response.result;
 				console.log(`${result.valueRanges.length} ranges retrieved.`);
-				});
+				});*/
 			</script>
 
 		</div>

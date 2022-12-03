@@ -5,7 +5,9 @@
 
 ## Release History
 ### Bookkeepting
-- Aug 13, 2022 **v2.1.3**
+- Dec 03, 2022  **v2.1.4**
+    - Income & entertainment items added
+- Aug 13, 2022  **v2.1.3**
     - Detail hint description modified
     - New category items added
 - Feb 10, 2022  **v2.1.2**
