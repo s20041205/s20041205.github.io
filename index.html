@@ -31,7 +31,7 @@
 							<li class="breadcrumb-item"><a
 									href="https://docs.google.com/spreadsheets/d/1ZNPbB2IAaM23TGnwfXr4bTbijXXBPwMMNTZa_O5ERhE/edit?usp=sharing"
 									target="_self">記帳</a></li>
-							<li class="breadcrumb-item active" aria-current="page">v2.2.0</li>
+							<li class="breadcrumb-item active" aria-current="page">v2.2.1</li>
 						</ol>
 					</nav>
 				</div>
@@ -141,9 +141,15 @@
 							subclassInner = subclassInner + '<option>' + subclass[tindex][i] + '</option>';
 						}
 					}
-					DisplayBudgetRemain(tindex);
+					
 					var subclassSelect = document.getElementById("subclass-list");
 					subclassSelect.innerHTML = subclassInner;
+					//display budget remain
+					var strBudget = "";
+					if(bindex == 2) {
+						strBudget = DisplayBudgetRemain(tindex);
+					}
+					document.getElementById("budget").innerHTML = strBudget;
 				}
 
 				function changeTopclass() {
@@ -158,10 +164,15 @@
 							subclassInner = subclassInner + '<option>' + subclass[index][i] + '</option>';
 						}
 					}
+					
 					var subclassSelect = document.getElementById("subclass-list");
 					subclassSelect.innerHTML = subclassInner;
 					//display budget remain
-					DisplayBudgetRemain(index);
+					var strBudget = "";
+					if(bindex == 2) {
+						strBudget = DisplayBudgetRemain(index);
+					}
+					document.getElementById("budget").innerHTML = strBudget;
 				}
 
 				function DisplayBudgetRemain(idx) {
@@ -169,7 +180,9 @@
 					var curUsage = arrUsed[idx][1];
 					var yearBudget = arrBudget[idx][1];
 					var remain = yearBudget - curUsage;
-					lblBudget.innerText = "剩餘: " + remain +" (預算: "+ yearBudget +", 已使用: " + curUsage+")";
+					//lblBudget.innerText = "剩餘: " + remain +" (預算: "+ yearBudget +", 已使用: " + curUsage+")";
+					var str = "剩餘: " + remain +" (預算: "+ yearBudget +", 已使用: " + curUsage+")";
+					return str;
 				}
 
 				function OnReset() {
@@ -196,7 +209,7 @@
 						.catch(error => alert('Error!', error.message))
 				})
 				//-------------------------------------------------------------------
-				//2022/12/04 fetch data from google sheet
+				//[2022/12/04 Section to fetch data from google sheet]
 				var arrBudget = [];
 				var arrUsed = [];
 
@@ -242,6 +255,7 @@
 				{
 					alert(str)
 				}
+
 			</script>
 
 		</div>
