@@ -5,6 +5,8 @@
 
 ## Release History
 ### Bookkeepting
+- Dec 10, 2022  **v2.2.2**
+    - Budgets displayed in currency format
 - Dec 10, 2022  **v2.2.1**
     - Budgets display when income items selected bug fixed
 - Dec 10, 2022  **v2.2.0**

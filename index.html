@@ -31,7 +31,7 @@
 							<li class="breadcrumb-item"><a
 									href="https://docs.google.com/spreadsheets/d/1ZNPbB2IAaM23TGnwfXr4bTbijXXBPwMMNTZa_O5ERhE/edit?usp=sharing"
 									target="_self">記帳</a></li>
-							<li class="breadcrumb-item active" aria-current="page">v2.2.1</li>
+							<li class="breadcrumb-item active" aria-current="page">v2.2.2</li>
 						</ol>
 					</nav>
 				</div>
@@ -176,12 +176,12 @@
 				}
 
 				function DisplayBudgetRemain(idx) {
+					const money = new Intl.NumberFormat('tw-TW', { style:'currency', currency: 'NTD', minimumFractionDigits: 0 });
 					var lblBudget = document.getElementById("budget");
 					var curUsage = arrUsed[idx][1];
 					var yearBudget = arrBudget[idx][1];
 					var remain = yearBudget - curUsage;
-					//lblBudget.innerText = "剩餘: " + remain +" (預算: "+ yearBudget +", 已使用: " + curUsage+")";
-					var str = "剩餘: " + remain +" (預算: "+ yearBudget +", 已使用: " + curUsage+")";
+					var str = "剩餘: " + money.format(remain) +" (預算: "+ money.format(yearBudget) +", 已使用: " + money.format(curUsage)+")";
 					return str;
 				}
 
