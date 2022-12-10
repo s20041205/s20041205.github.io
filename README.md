@@ -5,6 +5,8 @@
 
 ## Release History
 ### Bookkeepting
+- Dec 11, 2022  **v2.2.3**
+    - Month added
 - Dec 10, 2022  **v2.2.2**
     - Budgets displayed in currency format
 - Dec 10, 2022  **v2.2.1**
@@ -33,4 +35,4 @@
 ## TODO
 ### Bookkeepting
 - Pull latest details and remark items for combobox items
-- Budgets added and display when related category is chosen
+- Budgets text color changed (depending on value)

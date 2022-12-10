@@ -31,7 +31,7 @@
 							<li class="breadcrumb-item"><a
 									href="https://docs.google.com/spreadsheets/d/1ZNPbB2IAaM23TGnwfXr4bTbijXXBPwMMNTZa_O5ERhE/edit?usp=sharing"
 									target="_self">記帳</a></li>
-							<li class="breadcrumb-item active" aria-current="page">v2.2.2</li>
+							<li class="breadcrumb-item active" aria-current="page">v2.2.3</li>
 						</ol>
 					</nav>
 				</div>
@@ -40,7 +40,8 @@
 				<div class="col-md-6 offset-md-1 text-center">
 					<div class="row">
 						<form name="submit-to-google-sheet">
-							<input name="Date" type="date" id="fdate" required>
+							<input name="Date" type="date" id="fdate" onchange="changeDate()" required>
+							<input name="Month" type="hidden" id="month" value="-1">
 							<p></p>
 							<select name="Balance" id="balance-list"
 								onchange="changeBalance(this.selectedIndex)"></select>
@@ -82,12 +83,13 @@
 			-->
 			<!-- Section form items -->
 			<script type="text/javascript">
-
+				//-------------------------------------------------------------------
 				var today = new Date();
 				var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
 				var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
 				var dateTime = date + ' ' + time;
 				document.getElementById("fdate").valueAsDate = today;
+				changeDate();
 				//
 				var balance = ['請選擇', '收入', '支出'];
 				var balanceSelect = document.getElementById("balance-list");
@@ -105,6 +107,65 @@
 				}
 				whoSelect.innerHTML = whoInner;*/
 				//			
+				
+				//-------------------------------------------------------------------
+				//[Section submit to google sheet]
+				//implement url
+				const scriptWriteUrl = 'https://script.google.com/macros/s/AKfycbz1C9SHtWHpbBHGLx2h-Lj8PYPPnDkdj7DhdnOdW0Kj2p6hQhQbJM5cznexZi9p3NEC/exec'
+				const scriptReadUrl = 'https://script.google.com/macros/s/AKfycbyv-aCa1E1m4cSoJx_1eM-H_tN2Lo1Lt1JGv-3o5Qlpa-uE6OiwAVwRUzKNGLZ1CoTs/exec'
+				//url for test
+				//const scriptWriteUrl = 'https://script.google.com/macros/s/AKfycbzdt_vhicpfz1zyCmRfbN4bzLWbUW9g9kKS48rQ3Arkfjtp6yw2xY4SQBmKQBALBGnN/exec'
+				//
+				const form = document.forms['submit-to-google-sheet']
+				form.addEventListener('submit', e => {
+					e.preventDefault()
+					fetch(scriptWriteUrl, { method: 'POST', body: new FormData(form) })
+						.then(response => alert('Success!', response))
+						.catch(error => alert('Error!', error.message))
+				})
+				//-------------------------------------------------------------------
+				//[Section to fetch data from google sheet]
+				var arrBudget = [];
+				var arrUsed = [];
+
+				$(function(){
+					//var $show = $('#show');
+					//extract annual budgets
+					var budgets = {
+						sheetUrl : 'https://docs.google.com/spreadsheets/d/1ZNPbB2IAaM23TGnwfXr4bTbijXXBPwMMNTZa_O5ERhE/edit?pli=1#gid=1968068763',
+						sheetTag : 'annualBudget',
+						row: 1,
+						col: 1,
+						endRow : 9,
+						endCol : 2
+					};
+					$.get(scriptReadUrl, budgets, function(data){
+						var d = data.split(',');
+						for(var i=0; i<(budgets.endRow-budgets.row+1); i++){
+							arrBudget[i] = d.splice(0, (budgets.endCol-budgets.col+1)); 
+							//$show.append(budget[i]+'<br/>');
+						}
+					});
+					//extract year using until now
+					var tagYear = new Date().getFullYear() 
+					var nowusing = {
+						sheetUrl : 'https://docs.google.com/spreadsheets/d/1ZNPbB2IAaM23TGnwfXr4bTbijXXBPwMMNTZa_O5ERhE/edit?pli=1#gid=1968068763',
+						sheetTag : tagYear,
+						row: 8,
+						col: 2,
+						endRow : 16,
+						endCol : 3
+					};
+					$.get(scriptReadUrl, nowusing, function(data){
+						var d = data.split(',');
+						for(var i=0; i<(nowusing.endRow-nowusing.row+1); i++){
+							arrUsed[i] = d.splice(0, (nowusing.endCol-nowusing.col+1));
+						}
+					});
+					
+				});
+				//-------------------------------------------------------------------
+				//
 				var topclass = new Array();
 				topclass[0] = [];
 				topclass[1] = ['薪資', '利息', '獎金', '投資', '販賣', '租金', '還款', '其他'];
@@ -122,7 +183,6 @@
 				subclass[8] = ['貸款', '稅務', '罰單', '保險', '手續費', '其他'];
 
 				function changeBalance(index) {
-					
 					var topclassInner = "";
 					for (var i = 0; i < topclass[index].length; i++) {
 						topclassInner = topclassInner + '<option>' + topclass[index][i] + '</option>';
@@ -175,6 +235,12 @@
 					document.getElementById("budget").innerHTML = strBudget;
 				}
 
+				function changeDate() {
+					//update month
+					var month = document.getElementById("fdate").valueAsDate.getMonth() + 1;
+					document.getElementById("month").value = month;
+				}
+
 				function DisplayBudgetRemain(idx) {
 					const money = new Intl.NumberFormat('tw-TW', { style:'currency', currency: 'NTD', minimumFractionDigits: 0 });
 					var lblBudget = document.getElementById("budget");
@@ -195,62 +261,6 @@
 					subclassSelect.innerHTML = "";
 				}
 
-				//[Section submit to google sheet]
-				//implement url
-				const scriptWriteUrl = 'https://script.google.com/macros/s/AKfycbz1C9SHtWHpbBHGLx2h-Lj8PYPPnDkdj7DhdnOdW0Kj2p6hQhQbJM5cznexZi9p3NEC/exec'
-				const scriptReadUrl = 'https://script.google.com/macros/s/AKfycbyv-aCa1E1m4cSoJx_1eM-H_tN2Lo1Lt1JGv-3o5Qlpa-uE6OiwAVwRUzKNGLZ1CoTs/exec'
-				//url for test
-				//const scriptWriteUrl = 'https://script.google.com/macros/s/AKfycbzdt_vhicpfz1zyCmRfbN4bzLWbUW9g9kKS48rQ3Arkfjtp6yw2xY4SQBmKQBALBGnN/exec'
-				const form = document.forms['submit-to-google-sheet']
-				form.addEventListener('submit', e => {
-					e.preventDefault()
-					fetch(scriptWriteUrl, { method: 'POST', body: new FormData(form) })
-						.then(response => alert('Success!', response))
-						.catch(error => alert('Error!', error.message))
-				})
-				//-------------------------------------------------------------------
-				//[2022/12/04 Section to fetch data from google sheet]
-				var arrBudget = [];
-				var arrUsed = [];
-
-				$(function(){
-					//var $show = $('#show');
-					//extract annual budgets
-					var budgets = {
-						sheetUrl : 'https://docs.google.com/spreadsheets/d/1ZNPbB2IAaM23TGnwfXr4bTbijXXBPwMMNTZa_O5ERhE/edit?pli=1#gid=1968068763',
-						sheetTag : 'annualBudget',
-						row: 1,
-						col: 1,
-						endRow : 9,
-						endCol : 2
-					};
-					$.get(scriptReadUrl, budgets, function(data){
-						var d = data.split(',');  //把傳出來的字串分割成陣列
-						for(var i=0; i<(budgets.endRow-budgets.row+1); i++){
-							arrBudget[i] = d.splice(0, (budgets.endCol-budgets.col+1)); 
-							//$show.append(budget[i]+'<br/>');
-						}
-						//display_debug(arrBudget);
-					});
-					//extract year using until now
-					var tagYear = new Date().getFullYear() 
-					var nowusing = {
-						sheetUrl : 'https://docs.google.com/spreadsheets/d/1ZNPbB2IAaM23TGnwfXr4bTbijXXBPwMMNTZa_O5ERhE/edit?pli=1#gid=1968068763',
-						sheetTag : tagYear,
-						row: 8,
-						col: 2,
-						endRow : 16,
-						endCol : 3
-					};
-					$.get(scriptReadUrl, nowusing, function(data){
-						var d = data.split(',');  //把傳出來的字串分割成陣列
-						for(var i=0; i<(nowusing.endRow-nowusing.row+1); i++){
-							arrUsed[i] = d.splice(0, (nowusing.endCol-nowusing.col+1));
-						}
-					});
-					
-				});
-				
 				function display_debug(str)
 				{
 					alert(str)
