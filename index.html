@@ -49,8 +49,8 @@
 							<select name="Subclass" id="subclass-list"></select>
 							<label name="Budget" type="text" id="budget"></label>
 							<input name="Price" type="number" id="price" placeholder="Price *" required>
-							
-							<input name="Detail" type="text" id="detail" placeholder="Detail *" required>
+							<input name="Store" type="text" id="store" placeholder="Store">
+							<input name="Detail" type="text" id="detail" placeholder="Detail">
 							<select name="Recommendation" id="star-list"></select>
 							<input name="Remark" type="text" placeholder="Remark (i.e. name of activity)">
 							
@@ -62,7 +62,7 @@
 								<label for="Alice_Lin">Alice_Lin</label>
 							</div>
 							<p></p>
-							<button type="submit">Send</button> <button type="reset" onclick="OnReset()">Reset</button>
+							<button type="submit" onclick="OnSubmit()">Send</button> <button type="reset" onclick="OnReset()">Reset</button>
 						</form>
 					</div>
 				</div>
@@ -118,10 +118,20 @@
 				const form = document.forms['submit-to-google-sheet']
 				form.addEventListener('submit', e => {
 					e.preventDefault()
+
+					var txtStore = document.getElementById("store").value;
+					var txtDetatil = document.getElementById("detail").value;
+					if(!txtStore && !txtDetatil) {
+						alert("請輸入店家/項目內容")
+						e.preventDefault()
+						return;
+					}
+					
 					fetch(scriptWriteUrl, { method: 'POST', body: new FormData(form) })
 						.then(response => alert('Success!', response))
 						.catch(error => alert('Error!', error.message))
 				})
+				
 				//-------------------------------------------------------------------
 				//[Section to fetch data from google sheet]
 				var arrBudget = [];
