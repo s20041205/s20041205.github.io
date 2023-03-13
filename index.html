@@ -49,8 +49,8 @@
 							<select name="Subclass" id="subclass-list"></select>
 							<label name="Budget" type="text" id="budget"></label>
 							<input name="Price" type="number" id="price" placeholder="Price *" required>
-							<input name="Store" type="text" id="store" placeholder="Store">
-							<input name="Detail" type="text" id="detail" placeholder="Detail">
+							<input name="Store" type="text" id="store" placeholder="Store (*)">
+							<input name="Detail" type="text" id="detail" placeholder="Detail (*)">
 							<select name="Recommendation" id="star-list"></select>
 							<input name="Remark" type="text" placeholder="Remark (i.e. name of activity)">
 							
@@ -126,7 +126,7 @@
 						e.preventDefault()
 						return;
 					}
-					
+
 					fetch(scriptWriteUrl, { method: 'POST', body: new FormData(form) })
 						.then(response => alert('Success!', response))
 						.catch(error => alert('Error!', error.message))
