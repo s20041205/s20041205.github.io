@@ -16,8 +16,8 @@
 	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
 	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css">
 	
-	<title>2022記帳</title>
-
+	<title>Home Sweet Home</title>
+	
 </head>
 
 <body>
@@ -25,19 +25,19 @@
 	<section id="form">
 		<div class="container">
 			<div class="row">
-				<div class="col-md-6">
-					<nav aria-label="breadcrumb">
-						<ol class="breadcrumb">
-							<li class="breadcrumb-item"><a
-									href="https://docs.google.com/spreadsheets/d/1ZNPbB2IAaM23TGnwfXr4bTbijXXBPwMMNTZa_O5ERhE/edit?usp=sharing"
-									target="_self">記帳</a></li>
-							<li class="breadcrumb-item active" aria-current="page">v2.2.3</li>
-						</ol>
-					</nav>
+				<div class="col-6 text-left">
+					<a
+					href="https://docs.google.com/spreadsheets/d/1ZNPbB2IAaM23TGnwfXr4bTbijXXBPwMMNTZa_O5ERhE/edit?usp=sharing"
+					target="_self">記帳</a>
+					<a>v2.2.4</a>
+				</div>
+				<div class="col-6 text-right">
+					<i>STLin &copy;
+					<script type="text/javascript">document.write(new Date().getFullYear());</script></i>
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-md-6 offset-md-1 text-center">
+				<div class="col-12 text-center">
 					<div class="row">
 						<form name="submit-to-google-sheet">
 							<input name="Date" type="date" id="fdate" onchange="changeDate()" required>
@@ -45,17 +45,16 @@
 							<p></p>
 							<select name="Balance" id="balance-list"
 								onchange="changeBalance(this.selectedIndex)"></select>
-
 							<select name="Topclass" id="topclass-list" onchange="changeTopclass()"></select>
 							<select name="Subclass" id="subclass-list"></select>
-							
 							<label name="Budget" type="text" id="budget"></label>
 							<input name="Price" type="number" id="price" placeholder="Price *" required>
 							
 							<input name="Detail" type="text" id="detail" placeholder="Detail *" required>
+							<select name="Recommendation" id="star-list"></select>
 							<input name="Remark" type="text" placeholder="Remark (i.e. name of activity)">
 							
-							<div class="col-md-6 offset-md-3 text-center">
+							<div >
 								<input type="radio" name="Name" id="Jerry_Hu" value="Jerry_Hu" checked>
 								<label for="Jerry_Hu">Jerry_Hu</label>
 							
@@ -162,7 +161,6 @@
 							arrUsed[i] = d.splice(0, (nowusing.endCol-nowusing.col+1));
 						}
 					});
-					
 				});
 				//-------------------------------------------------------------------
 				//
@@ -251,6 +249,14 @@
 					return str;
 				}
 
+				var stars = ['', '☆☆☆☆☆', '☆☆☆☆★', '☆☆☆★★', '☆☆★★★', '☆★★★★', '★★★★★'];
+				var starsSelect = document.getElementById("star-list");
+				var starInner = "";
+				for (var i = 0; i < stars.length; i++) {
+					starInner = starInner + '<option>' + stars[i] + '</option>';
+				}
+				starsSelect.innerHTML = starInner;
+
 				function OnReset() {
 					//alert("OnRest (TODO)");
 					var today = new Date();
@@ -271,5 +277,4 @@
 		</div>
 	</section>
 </body>
-
 </html>

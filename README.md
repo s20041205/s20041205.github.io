@@ -5,6 +5,9 @@
 
 ## Release History
 ### Bookkeepting
+- Mar 13, 2023  **v2.2.4**
+    - Restaurant recommendations (start 0 to 5)
+    - Adjust latout
 - Dec 11, 2022  **v2.2.3**
     - Month added
 - Dec 10, 2022  **v2.2.2**
