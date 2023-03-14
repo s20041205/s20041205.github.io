@@ -1,8 +1,5 @@
 # README
 
-
-
-
 ## Release History
 ### Bookkeepting
 - Mar 13, 2023  **v2.2.4**
