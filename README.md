@@ -2,6 +2,8 @@
 
 ## Release History
 ### Bookkeepting
+- Mar 15, 2023  **v2.2.5**
+    - Budget retrieve column bug fixed
 - Mar 13, 2023  **v2.2.4**
     - Restaurant recommendations (start 0 to 5)
     - Store column added

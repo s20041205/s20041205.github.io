@@ -29,7 +29,7 @@
 					<a
 					href="https://docs.google.com/spreadsheets/d/1ZNPbB2IAaM23TGnwfXr4bTbijXXBPwMMNTZa_O5ERhE/edit?usp=sharing"
 					target="_self">記帳</a> / 
-					<a>v2.2.4</a>
+					<a>v2.2.5</a>
 				</div>
 				<div class="col-6 text-right">
 					<i>STLin &copy;
@@ -160,15 +160,16 @@
 					var nowusing = {
 						sheetUrl : 'https://docs.google.com/spreadsheets/d/1ZNPbB2IAaM23TGnwfXr4bTbijXXBPwMMNTZa_O5ERhE/edit?pli=1#gid=1968068763',
 						sheetTag : tagYear,
-						row: 8,
+						row: 11,
 						col: 2,
-						endRow : 16,
+						endRow : 19,
 						endCol : 3
 					};
 					$.get(scriptReadUrl, nowusing, function(data){
 						var d = data.split(',');
 						for(var i=0; i<(nowusing.endRow-nowusing.row+1); i++){
 							arrUsed[i] = d.splice(0, (nowusing.endCol-nowusing.col+1));
+							//console.log(arrUsed[i]);
 						}
 					});
 				});
@@ -256,6 +257,12 @@
 					var yearBudget = arrBudget[idx][1];
 					var remain = yearBudget - curUsage;
 					var str = "剩餘: " + money.format(remain) +" (預算: "+ money.format(yearBudget) +", 已使用: " + money.format(curUsage)+")";
+					if(remain <= 0) {
+						document.getElementById("budget").style.color = "red";
+					}
+					else {
+						document.getElementById("budget").style.color = "green";
+					}
 					return str;
 				}
 
