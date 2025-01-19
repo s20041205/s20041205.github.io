@@ -17,6 +17,7 @@
 	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css">
 	
 	<title>Home Sweet Home</title>
+	<script src="script.js" defer></script>
 	
 </head>
 
@@ -29,7 +30,7 @@
 					<a
 					href="https://docs.google.com/spreadsheets/d/1ZNPbB2IAaM23TGnwfXr4bTbijXXBPwMMNTZa_O5ERhE/edit?usp=sharing"
 					target="_self">記帳</a> / 
-					<a>v2.2.5</a>
+					<a>v2.3.0</a>
 				</div>
 				<div class="col-6 text-right">
 					<i>STLin &copy;
@@ -81,7 +82,7 @@
 			</div>  
 			-->
 			<!-- Section form items -->
-			<script type="text/javascript">
+			<script>
 				//-------------------------------------------------------------------
 				var today = new Date();
 				var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
@@ -184,11 +185,11 @@
 				subclass[0] = ['早餐', '午餐', '晚餐', '食材', '水果', '零食', '飲料'];
 				subclass[1] = ['衣服', '鞋子', '包包', '配件', '理髮', '美容'];
 				subclass[2] = ['房租', '水費', '電費', '瓦斯費', '網路費', '生活消耗品', '家電', '家具', '生活物品', '維修費'];
-				subclass[3] = ['汽油燃料', '維修保養', '火車高鐵', '捷運', '公車', '客運', '計程車', '飛機', '公共租借', '停車費', '過路費'];
-				subclass[4] = ['文具', '書籍', '材料', '課程學費'];
-				subclass[5] = ['手機費', '3C產品', '旅宿', '門票', '遊戲', '電影', '數位服務', '國外旅遊'];
-				subclass[6] = ['門診', '手術', '藥品', '醫療用品', '運動'];
-				subclass[7] = ['捐款', '孝親費', '交際'];
+				subclass[3] = ['汽油燃料', '維修保養', '火車高鐵', '捷運', '公車/客運', '計程車', '飛機', '公共租借', '停車費', '過路費', '汽車用品', '交通卡'];
+				subclass[4] = ['文具', '書籍', '材料', '課程學費', '教具'];
+				subclass[5] = ['手機費', '3C產品', '旅宿', '門票', '遊戲', '電影', '數位服務', '國外旅遊','飾品'];
+				subclass[6] = ['門診', '手術', '藥品', '醫療用品', '運動', '保健食品', '自費項目'];
+				subclass[7] = ['捐款', '孝親費', '交際', '貸出'];
 				subclass[8] = ['貸款', '稅務', '罰單', '保險', '手續費', '其他'];
 
 				function changeBalance(index) {
@@ -282,11 +283,6 @@
 					topclassSelect.innerHTML = "";
 					var subclassSelect = document.getElementById("subclass-list");
 					subclassSelect.innerHTML = "";
-				}
-
-				function display_debug(str)
-				{
-					alert(str)
 				}
 
 			</script>

@@ -2,6 +2,9 @@
 
 ## Release History
 ### Bookkeepting
+//TODO: refactored (moving script codes to script.js)
+- Jan 19, 2025  **v2.3.0**
+    - Items added
 - Mar 15, 2023  **v2.2.5**
     - Budget retrieve column bug fixed
 - Mar 13, 2023  **v2.2.4**
