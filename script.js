@@ -187,39 +187,39 @@ form.addEventListener('submit', e => {
 });
 
 // Fetch budget data from Google Sheets
-$(function () {
-    var budgets = {
-        sheetUrl: 'https://docs.google.com/spreadsheets/d/1ZNPbB2IAaM23TGnwfXr4bTbijXXBPwMMNTZa_O5ERhE/edit?pli=1#gid=1968068763',
-        sheetTag: 'annualBudget',
-        row: 1, col: 1, endRow: 9, endCol: 2
-    };
-    var req1 = $.get(scriptReadUrl, budgets, function (data) {
-        var d = data.split(',');
-        for (var i = 0; i < (budgets.endRow - budgets.row + 1); i++) {
-            arrBudget[i] = d.splice(0, budgets.endCol - budgets.col + 1);
-        }
-    });
+const budgets = {
+    sheetUrl: 'https://docs.google.com/spreadsheets/d/1ZNPbB2IAaM23TGnwfXr4bTbijXXBPwMMNTZa_O5ERhE/edit?pli=1#gid=1968068763',
+    sheetTag: 'annualBudget',
+    row: 1, col: 1, endRow: 9, endCol: 2
+};
+const nowusing = {
+    sheetUrl: 'https://docs.google.com/spreadsheets/d/1ZNPbB2IAaM23TGnwfXr4bTbijXXBPwMMNTZa_O5ERhE/edit?pli=1#gid=1968068763',
+    sheetTag: new Date().getFullYear(),
+    row: 11, col: 2, endRow: 19, endCol: 3
+};
 
-    var nowusing = {
-        sheetUrl: 'https://docs.google.com/spreadsheets/d/1ZNPbB2IAaM23TGnwfXr4bTbijXXBPwMMNTZa_O5ERhE/edit?pli=1#gid=1968068763',
-        sheetTag: new Date().getFullYear(),
-        row: 11, col: 2, endRow: 19, endCol: 3
-    };
-    var req2 = $.get(scriptReadUrl, nowusing, function (data) {
-        var d = data.split(',');
-        for (var i = 0; i < (nowusing.endRow - nowusing.row + 1); i++) {
-            arrUsed[i] = d.splice(0, nowusing.endCol - nowusing.col + 1);
-        }
-    });
+function fetchSheet(params) {
+    const url = new URL(scriptReadUrl);
+    Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
+    return fetch(url).then(r => r.text());
+}
 
-    $.when(req1, req2)
-        .then(function () {
-            budgetReady = true;
-            refreshBudgetDisplay();
-        })
-        .fail(function () {
-            var el = document.getElementById('budget');
-            el.style.color = 'gray';
-            el.innerHTML = '預算資料載入失敗';
-        });
-});
+(async () => {
+    try {
+        const [d1, d2] = await Promise.all([fetchSheet(budgets), fetchSheet(nowusing)]);
+        const a1 = d1.split(',');
+        for (let i = 0; i < (budgets.endRow - budgets.row + 1); i++) {
+            arrBudget[i] = a1.splice(0, budgets.endCol - budgets.col + 1);
+        }
+        const a2 = d2.split(',');
+        for (let i = 0; i < (nowusing.endRow - nowusing.row + 1); i++) {
+            arrUsed[i] = a2.splice(0, nowusing.endCol - nowusing.col + 1);
+        }
+        budgetReady = true;
+        refreshBudgetDisplay();
+    } catch {
+        const el = document.getElementById('budget');
+        el.style.color = 'gray';
+        el.innerHTML = '預算資料載入失敗';
+    }
+})();

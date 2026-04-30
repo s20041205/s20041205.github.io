@@ -251,6 +251,13 @@ button[type=button]:hover {
 }
 button[type=button]:active { transform: translateY(0); }
 
+/* ── Alert utilities (replaces Bootstrap) ────────────────────────────────── */
+.d-none        { display: none !important; }
+.alert         { border: 1px solid transparent; }
+.alert-success { color: #155724; background: #d4edda; border-color: #c3e6cb; }
+.alert-warning { color: #856404; background: #fff3cd; border-color: #ffc107; }
+.alert-danger  { color: #721c24; background: #f8d7da; border-color: #f5c6cb; }
+
 /* ── Alert message ────────────────────────────────────────────────────────── */
 #msg-alert {
     margin-top: 14px;
