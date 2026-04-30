@@ -53,6 +53,12 @@ function saveAutocomplete(store, detail) {
     loadAutocomplete();
 }
 
+function clearAutocomplete() {
+    localStorage.removeItem(AC_KEY);
+    loadAutocomplete();
+    showMessage('已清除店家／項目建議記錄', 'success');
+}
+
 function showMessage(msg, type) {
     var el = document.getElementById('msg-alert');
     el.className = 'alert alert-' + type;

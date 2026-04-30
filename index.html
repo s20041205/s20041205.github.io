@@ -5,6 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+    <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4a7c4e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="記帳">
+    <link rel="apple-touch-icon" href="icons/icon.svg">
+
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600&display=swap" rel="stylesheet">
     <!-- Bootstrap 4.3.1 (kept for .alert utility classes) -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -62,6 +70,9 @@
                         <input name="Detail" type="text" id="detail" placeholder="Detail (*)" list="detail-suggestions" autocomplete="off">
                         <datalist id="store-suggestions"></datalist>
                         <datalist id="detail-suggestions"></datalist>
+                        <div class="ac-clear-row">
+                            <a class="ac-clear-link" href="#" onclick="clearAutocomplete(); return false;">清除建議記錄</a>
+                        </div>
                     </div>
 
                     <div class="field-group">
