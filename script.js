@@ -123,6 +123,7 @@ function clearEntryFields() {
 
 function OnReset() {
     document.getElementById('fdate').value = todayString();
+    changeDate();
     document.getElementById('balance-list').selectedIndex = 0;
     document.getElementById('topclass-list').innerHTML = '';
     document.getElementById('subclass-list').innerHTML = '';

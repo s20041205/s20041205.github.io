@@ -1,31 +1,13 @@
-name: Deploy to GitHub Pages
+# Disabled: publish_branch: main would push config.js (with real URLs) back to
+# the repo, defeating the purpose of keeping URLs out of git history.
+# To re-enable properly, configure GitHub Pages to serve from a gh-pages branch.
+name: Deploy to GitHub Pages (disabled)
 
 on:
-  push:
-    branches: [main]
-
-permissions:
-  contents: write
+  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Inject secrets into config.js
-        run: |
-          cat > config.js << 'EOF'
-          const APP_CONFIG = {
-              scriptWriteUrl: '${{ secrets.SCRIPT_WRITE_URL }}',
-              scriptReadUrl:  '${{ secrets.SCRIPT_READ_URL }}'
-          };
-          EOF
-
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./
-          publish_branch: main
-          keep_files: true
+      - run: echo "Workflow is disabled. See comments at top of file."
