@@ -1,8 +1,8 @@
 'use strict';
 
-// ── Google Apps Script endpoints ──────────────────────────────────────────────
-const scriptWriteUrl = 'https://script.google.com/macros/s/AKfycbz1C9SHtWHpbBHGLx2h-Lj8PYPPnDkdj7DhdnOdW0Kj2p6hQhQbJM5cznexZi9p3NEC/exec';
-const scriptReadUrl  = 'https://script.google.com/macros/s/AKfycbyv-aCa1E1m4cSoJx_1eM-H_tN2Lo1Lt1JGv-3o5Qlpa-uE6OiwAVwRUzKNGLZ1CoTs/exec';
+// ── Google Apps Script endpoints (injected from config.js) ───────────────────
+const scriptWriteUrl = APP_CONFIG.scriptWriteUrl;
+const scriptReadUrl  = APP_CONFIG.scriptReadUrl;
 
 // ── Category data ─────────────────────────────────────────────────────────────
 const topclass = [
