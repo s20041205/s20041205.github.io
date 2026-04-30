@@ -1,90 +1,100 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-TW">
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-	<link rel="stylesheet" href="css/style.css">
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-		integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Bootstrap 4.3.1 (kept for .alert utility classes) -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
 
-	<!--INCLUDE REQUIRED EXTERNAL JAVASCRIPT AND CSS LIBRARIES-->
-	<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-	<script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
-	<script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
-	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css">
-	
-	<title>Home Sweet Home</title>
-	<script src="config.js" defer></script>
-	<script src="script.js" defer></script>
-	
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <title>Home Sweet Home</title>
+    <script src="config.js" defer></script>
+    <script src="script.js" defer></script>
 </head>
 
 <body>
-	<header></header>
-	<section id="form">
-		<div class="container">
-			<div class="row">
-				<div class="col-6 text-left">
-					<a
-					href="https://docs.google.com/spreadsheets/d/1ZNPbB2IAaM23TGnwfXr4bTbijXXBPwMMNTZa_O5ERhE/edit?usp=sharing"
-					target="_self">記帳</a> / 
-					<a>v2.3.0</a>
-				</div>
-				<div class="col-6 text-right">
-					<i>STLin &copy;
-					<script type="text/javascript">document.write(new Date().getFullYear());</script></i>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-12 text-center">
-					<div class="row">
-						<form name="submit-to-google-sheet">
-							<input name="Date" type="date" id="fdate" onchange="changeDate()" required>
-							<input name="Month" type="hidden" id="month" value="-1">
-							<p></p>
-							<select name="Balance" id="balance-list"
-								onchange="changeBalance(this.selectedIndex)"></select>
-							<select name="Topclass" id="topclass-list" onchange="changeTopclass()"></select>
-							<select name="Subclass" id="subclass-list"></select>
-							<label name="Budget" type="text" id="budget"></label>
-							<input name="Price" type="number" id="price" placeholder="Price *" required>
-							<input name="Store" type="text" id="store" placeholder="Store (*)">
-							<input name="Detail" type="text" id="detail" placeholder="Detail (*)">
-							<select name="Recommendation" id="star-list"></select>
-							<input name="Remark" type="text" placeholder="Remark (i.e. name of activity)">
-							
-							<div >
-								<input type="radio" name="Name" id="Jerry_Hu" value="Jerry_Hu" checked>
-								<label for="Jerry_Hu">Jerry_Hu</label>
-							
-								<input type="radio" name="Name" id="Alice_Lin" value="Alice_Lin">
-								<label for="Alice_Lin">Alice_Lin</label>
-							</div>
-							<p></p>
-							<button type="submit" id="btn-submit">Send</button> <button type="reset" onclick="OnReset()">Reset</button>
-							<div id="msg-alert" class="alert d-none" role="alert" style="margin-top:10px;"></div>
-						</form>
-					</div>
-				</div>
-			</div>
-			
-			<!-- TODO: -->
-			<!-- Remark this div when release-->
-			<!--
-			<div class="container">
-				<br>
-				<div class="row">
-					<table id="data-table" class="table table-striped table-sm table-hover table-bordered">
-					<!-- TABLE DATA IS ADDED BY THE showData() JAVASCRIPT FUNCTION ABOVE >
-					</table>
-				</div>
-			</div>  
-			-->
+    <main id="form">
+        <div class="form-card">
 
-		</div>
-	</section>
+            <div class="form-card__header">
+                <div class="form-card__title">
+                    家用記帳
+                    <span class="form-card__version">v2.3.0</span>
+                </div>
+                <div class="form-card__meta">
+                    <a href="https://docs.google.com/spreadsheets/d/1ZNPbB2IAaM23TGnwfXr4bTbijXXBPwMMNTZa_O5ERhE/edit?usp=sharing"
+                        target="_blank">試算表</a>
+                    <span>STLin &copy; <span id="year"></span></span>
+                </div>
+            </div>
+
+            <div class="form-card__body">
+                <form name="submit-to-google-sheet">
+                    <input name="Month" type="hidden" id="month" value="-1">
+
+                    <div class="field-group">
+                        <label class="field-label" for="fdate">日期</label>
+                        <input name="Date" type="date" id="fdate" onchange="changeDate()" required>
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label">分類</label>
+                        <select name="Balance" id="balance-list" onchange="changeBalance(this.selectedIndex)"></select>
+                        <select name="Topclass" id="topclass-list" onchange="changeTopclass()"></select>
+                        <select name="Subclass" id="subclass-list"></select>
+                        <label id="budget"></label>
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label" for="price">金額 <span class="required">*</span></label>
+                        <input name="Price" type="number" id="price" placeholder="0" required>
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label">店家 / 項目</label>
+                        <input name="Store" type="text" id="store" placeholder="Store (*)">
+                        <input name="Detail" type="text" id="detail" placeholder="Detail (*)">
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label" for="star-list">推薦評分</label>
+                        <select name="Recommendation" id="star-list"></select>
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label">備註</label>
+                        <input name="Remark" type="text" placeholder="Remark (i.e. name of activity)">
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label">使用者</label>
+                        <div class="radio-group">
+                            <label class="radio-pill">
+                                <input type="radio" name="Name" id="Jerry_Hu" value="Jerry_Hu" checked>
+                                <span>Jerry_Hu</span>
+                            </label>
+                            <label class="radio-pill">
+                                <input type="radio" name="Name" id="Alice_Lin" value="Alice_Lin">
+                                <span>Alice_Lin</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="btn-row">
+                        <button type="submit" id="btn-submit">Send</button>
+                        <button type="reset" onclick="OnReset()">Reset</button>
+                    </div>
+                    <div id="msg-alert" class="alert d-none" role="alert"></div>
+                </form>
+            </div>
+
+        </div>
+    </main>
 </body>
 </html>

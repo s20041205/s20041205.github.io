@@ -108,6 +108,7 @@ function OnReset() {
 }
 
 // ── Initialization (script has defer, so DOM is ready here) ───────────────────
+document.getElementById('year').textContent = new Date().getFullYear();
 document.getElementById('fdate').valueAsDate = new Date();
 changeDate();
 
