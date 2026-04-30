@@ -196,7 +196,7 @@ textarea:focus {
 }
 
 button[type=submit],
-button[type=reset] {
+button[type=button] {
     flex: 1;
     padding: 11px 0;
     border-radius: 24px;
@@ -226,12 +226,12 @@ button[type=submit]:disabled {
     transform: none;
 }
 
-button[type=reset] { background-color: var(--danger); }
-button[type=reset]:hover {
+button[type=button] { background-color: var(--danger); }
+button[type=button]:hover {
     background-color: var(--danger-hover);
     transform: translateY(-1px);
 }
-button[type=reset]:active { transform: translateY(0); }
+button[type=button]:active { transform: translateY(0); }
 
 /* ── Alert message ────────────────────────────────────────────────────────── */
 #msg-alert {

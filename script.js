@@ -35,6 +35,24 @@ function buildOptions(arr) {
     return arr.map(item => '<option>' + item + '</option>').join('');
 }
 
+// ── Autocomplete (localStorage) ───────────────────────────────────────────────
+const AC_KEY = 'bookkeeping_ac';
+const AC_MAX = 50;
+
+function loadAutocomplete() {
+    var data = JSON.parse(localStorage.getItem(AC_KEY) || '{"stores":[],"details":[]}');
+    document.getElementById('store-suggestions').innerHTML  = data.stores.map(v => '<option value="' + v + '">').join('');
+    document.getElementById('detail-suggestions').innerHTML = data.details.map(v => '<option value="' + v + '">').join('');
+}
+
+function saveAutocomplete(store, detail) {
+    var data = JSON.parse(localStorage.getItem(AC_KEY) || '{"stores":[],"details":[]}');
+    if (store  && !data.stores.includes(store))   { data.stores.unshift(store);   data.stores  = data.stores.slice(0, AC_MAX); }
+    if (detail && !data.details.includes(detail)) { data.details.unshift(detail); data.details = data.details.slice(0, AC_MAX); }
+    localStorage.setItem(AC_KEY, JSON.stringify(data));
+    loadAutocomplete();
+}
+
 function showMessage(msg, type) {
     var el = document.getElementById('msg-alert');
     el.className = 'alert alert-' + type;
@@ -60,9 +78,16 @@ function changeTopclass() {
     document.getElementById('budget').innerHTML = bindex === 2 ? DisplayBudgetRemain(index) : '';
 }
 
+function todayString() {
+    var d = new Date();
+    return d.getFullYear() + '-'
+        + String(d.getMonth() + 1).padStart(2, '0') + '-'
+        + String(d.getDate()).padStart(2, '0');
+}
+
 function changeDate() {
-    var month = document.getElementById('fdate').valueAsDate.getMonth() + 1;
-    document.getElementById('month').value = month;
+    var val = document.getElementById('fdate').value; // "YYYY-MM-DD"
+    document.getElementById('month').value = parseInt(val.split('-')[1], 10);
 }
 
 function DisplayBudgetRemain(idx) {
@@ -93,10 +118,12 @@ function clearEntryFields() {
     document.getElementById('detail').value = '';
     document.getElementById('star-list').selectedIndex = 0;
     form.querySelector('[name=Remark]').value = '';
+    document.getElementById('price').focus();
 }
 
 function OnReset() {
-    document.getElementById('fdate').valueAsDate = new Date();
+    document.getElementById('fdate').value = todayString();
+    document.getElementById('balance-list').selectedIndex = 0;
     document.getElementById('topclass-list').innerHTML = '';
     document.getElementById('subclass-list').innerHTML = '';
     document.getElementById('budget').innerHTML = '';
@@ -109,11 +136,12 @@ function OnReset() {
 
 // ── Initialization (script has defer, so DOM is ready here) ───────────────────
 document.getElementById('year').textContent = new Date().getFullYear();
-document.getElementById('fdate').valueAsDate = new Date();
+document.getElementById('fdate').value = todayString();
 changeDate();
 
 document.getElementById('balance-list').innerHTML = buildOptions(['請選擇', '收入', '支出']);
 document.getElementById('star-list').innerHTML    = buildOptions(stars);
+loadAutocomplete();
 
 // Form submission
 var form = document.forms['submit-to-google-sheet'];
@@ -134,6 +162,10 @@ form.addEventListener('submit', e => {
     // reading that response would throw a CORS error even though the write succeeded.
     fetch(scriptWriteUrl, { method: 'POST', body: new FormData(form), mode: 'no-cors' })
         .then(() => {
+            saveAutocomplete(
+                document.getElementById('store').value,
+                document.getElementById('detail').value
+            );
             showMessage('送出成功！', 'success');
             clearEntryFields();
         })
