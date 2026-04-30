@@ -34,6 +34,14 @@ function buildOptions(arr) {
     return arr.map(item => '<option>' + item + '</option>').join('');
 }
 
+function showMessage(msg, type) {
+    var el = document.getElementById('msg-alert');
+    el.className = 'alert alert-' + type;
+    el.textContent = msg;
+    clearTimeout(el._timer);
+    el._timer = setTimeout(() => { el.className = 'alert d-none'; }, 4000);
+}
+
 // ── Event handlers (called from inline HTML onchange / onclick) ───────────────
 function changeBalance(index) {
     document.getElementById('topclass-list').innerHTML = buildOptions(topclass[index]);
@@ -65,10 +73,24 @@ function DisplayBudgetRemain(idx) {
     return '剩餘: ' + money.format(remain) + ' (預算: ' + money.format(yearBudget) + ', 已使用: ' + money.format(curUsage) + ')';
 }
 
+function clearEntryFields() {
+    document.getElementById('price').value = '';
+    document.getElementById('store').value = '';
+    document.getElementById('detail').value = '';
+    document.getElementById('star-list').selectedIndex = 0;
+    form.querySelector('[name=Remark]').value = '';
+}
+
 function OnReset() {
     document.getElementById('fdate').valueAsDate = new Date();
     document.getElementById('topclass-list').innerHTML = '';
     document.getElementById('subclass-list').innerHTML = '';
+    document.getElementById('budget').innerHTML = '';
+    document.getElementById('price').value = '';
+    document.getElementById('store').value = '';
+    document.getElementById('detail').value = '';
+    document.getElementById('star-list').selectedIndex = 0;
+    form.querySelector('[name=Remark]').value = '';
 }
 
 // ── Initialization (script has defer, so DOM is ready here) ───────────────────
@@ -85,12 +107,29 @@ form.addEventListener('submit', e => {
     var txtStore  = document.getElementById('store').value;
     var txtDetail = document.getElementById('detail').value;
     if (!txtStore && !txtDetail) {
-        alert('請輸入店家/項目內容');
+        showMessage('請輸入店家/項目內容', 'warning');
         return;
     }
-    fetch(scriptWriteUrl, { method: 'POST', body: new FormData(form) })
-        .then(() => alert('Success!'))
-        .catch(error => alert('Error! ' + error.message));
+
+    var btn = document.getElementById('btn-submit');
+    btn.disabled = true;
+    btn.textContent = '傳送中...';
+
+    // no-cors: Google Apps Script returns a cross-origin redirect after writing;
+    // reading that response would throw a CORS error even though the write succeeded.
+    fetch(scriptWriteUrl, { method: 'POST', body: new FormData(form), mode: 'no-cors' })
+        .then(() => {
+            showMessage('送出成功！', 'success');
+            clearEntryFields();
+        })
+        .catch(() => {
+            var msg = navigator.onLine ? '送出失敗，請稍後再試' : '網路連線已中斷，請確認後重試';
+            showMessage(msg, 'danger');
+        })
+        .finally(() => {
+            btn.disabled = false;
+            btn.textContent = 'Send';
+        });
 });
 
 // Fetch budget data from Google Sheets
