@@ -28,6 +28,7 @@ const stars = ['', '☆☆☆☆☆', '☆☆☆☆★', '☆☆☆★★', '☆
 // ── Budget data (fetched from Google Sheets) ──────────────────────────────────
 var arrBudget = [];
 var arrUsed = [];
+var budgetReady = false;
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function buildOptions(arr) {
@@ -65,12 +66,25 @@ function changeDate() {
 }
 
 function DisplayBudgetRemain(idx) {
+    var el = document.getElementById('budget');
+    if (!budgetReady) {
+        el.style.color = 'gray';
+        return '預算載入中...';
+    }
     const money = new Intl.NumberFormat('tw-TW', { style: 'currency', currency: 'NTD', minimumFractionDigits: 0 });
     var curUsage   = arrUsed[idx]   ? arrUsed[idx][1]   : 0;
     var yearBudget = arrBudget[idx] ? arrBudget[idx][1] : 0;
     var remain = yearBudget - curUsage;
-    document.getElementById('budget').style.color = remain <= 0 ? 'red' : 'green';
+    el.style.color = remain <= 0 ? 'red' : 'green';
     return '剩餘: ' + money.format(remain) + ' (預算: ' + money.format(yearBudget) + ', 已使用: ' + money.format(curUsage) + ')';
+}
+
+function refreshBudgetDisplay() {
+    var bindex = document.getElementById('balance-list').selectedIndex;
+    if (bindex === 2) {
+        var tindex = document.getElementById('topclass-list').selectedIndex;
+        document.getElementById('budget').innerHTML = DisplayBudgetRemain(tindex);
+    }
 }
 
 function clearEntryFields() {
@@ -139,7 +153,7 @@ $(function () {
         sheetTag: 'annualBudget',
         row: 1, col: 1, endRow: 9, endCol: 2
     };
-    $.get(scriptReadUrl, budgets, function (data) {
+    var req1 = $.get(scriptReadUrl, budgets, function (data) {
         var d = data.split(',');
         for (var i = 0; i < (budgets.endRow - budgets.row + 1); i++) {
             arrBudget[i] = d.splice(0, budgets.endCol - budgets.col + 1);
@@ -151,10 +165,21 @@ $(function () {
         sheetTag: new Date().getFullYear(),
         row: 11, col: 2, endRow: 19, endCol: 3
     };
-    $.get(scriptReadUrl, nowusing, function (data) {
+    var req2 = $.get(scriptReadUrl, nowusing, function (data) {
         var d = data.split(',');
         for (var i = 0; i < (nowusing.endRow - nowusing.row + 1); i++) {
             arrUsed[i] = d.splice(0, nowusing.endCol - nowusing.col + 1);
         }
     });
+
+    $.when(req1, req2)
+        .then(function () {
+            budgetReady = true;
+            refreshBudgetDisplay();
+        })
+        .fail(function () {
+            var el = document.getElementById('budget');
+            el.style.color = 'gray';
+            el.innerHTML = '預算資料載入失敗';
+        });
 });
