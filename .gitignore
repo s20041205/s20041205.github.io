@@ -127,3 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Local config with real API URLs — use config.example.js as template
+config.js

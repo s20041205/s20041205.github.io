@@ -1,73 +1,267 @@
-body {font-family: Arial, Helvetica, sans-serif;}
-* {box-sizing: border-box;}
-#header .container {
-    position: relative;
-    width: 60vw;
-    border-radius: 10px;
-    background-color: #be5f5f;
-    
-    padding: 10px 10px;
+:root {
+    --primary:       #4a7c4e;
+    --primary-dark:  #2d5a32;
+    --primary-light: #e8f5e9;
+    --danger:        #8d4c44;
+    --danger-hover:  #c0392b;
+    --bg-from:       #d6e8d8;
+    --bg-to:         #eef2ee;
+    --card:          #ffffff;
+    --border:        #cdd8ce;
+    --text:          #2c3e2d;
+    --text-muted:    #6b8070;
+    --shadow:        0 8px 32px rgba(45, 90, 50, 0.13);
+    --radius:        14px;
+    --ease:          0.2s ease;
 }
-#form .container {
-    position: relative;
-    top: 10vh;
-    width: 80vw;
-    border-radius: 10px;
-    background-color: #eceaea;
-    
-    padding: 10px 10px;
-}
-input[type=text], input[type=date], input[type=number], select, textarea {
-    width: 70vw;
-    padding: 15px 15px;
-    border: 2px solid #ccc;
-    border-radius: 4px;
+
+* {
     box-sizing: border-box;
-    margin-top: 0px;
-    margin-bottom: 0px;
-    resize: vertical;
+    margin: 0;
+    padding: 0;
 }
 
-input[type=submit] {
-    background-color: #04AA6D;
-    color: white;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 4px;
+body {
+    min-height: 100vh;
+    background: linear-gradient(150deg, var(--bg-from) 0%, var(--bg-to) 60%, var(--bg-from) 100%);
+    font-family: 'Noto Sans TC', Arial, Helvetica, sans-serif;
+    color: var(--text);
+    display: flex;
+    justify-content: center;
+    padding: 32px 16px 48px;
+}
+
+/* ── Card ─────────────────────────────────────────────────────────────────── */
+#form {
+    width: 100%;
+    max-width: 460px;
+}
+
+.form-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+/* ── Card header ──────────────────────────────────────────────────────────── */
+.form-card__header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: #fff;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.form-card__title {
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.form-card__version {
+    font-size: 0.72rem;
+    font-weight: 400;
+    background: rgba(255, 255, 255, 0.22);
+    padding: 2px 9px;
+    border-radius: 10px;
+    letter-spacing: 0;
+}
+
+.form-card__meta {
+    font-size: 0.78rem;
+    opacity: 0.85;
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.form-card__meta a {
+    color: #fff;
+    text-decoration: underline;
+}
+
+/* ── Card body ────────────────────────────────────────────────────────────── */
+.form-card__body {
+    padding: 20px 24px 28px;
+}
+
+/* ── Field groups ─────────────────────────────────────────────────────────── */
+.field-group {
+    margin-bottom: 16px;
+}
+
+.field-label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.required {
+    color: var(--danger);
+}
+
+/* ── Autocomplete clear ───────────────────────────────────────────────────── */
+.ac-clear-row {
+    text-align: right;
+    margin-top: 2px;
+}
+
+.ac-clear-link {
+    font-size: 0.7rem;
+    color: var(--border);
+    text-decoration: none;
+    transition: color var(--ease);
+}
+
+.ac-clear-link:hover {
+    color: var(--text-muted);
+    text-decoration: none;
+}
+
+/* ── Inputs & selects ─────────────────────────────────────────────────────── */
+input[type=text],
+input[type=date],
+input[type=number],
+select,
+textarea {
+    width: 100%;
+    padding: 10px 14px;
+    margin-bottom: 6px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    background: #f8faf8;
+    font-size: 0.95rem;
+    font-family: inherit;
+    color: var(--text);
+    transition: border-color var(--ease), box-shadow var(--ease), background var(--ease);
+}
+
+input[type=text]:focus,
+input[type=date]:focus,
+input[type=number]:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(74, 124, 78, 0.15);
+}
+
+/* Budget remain label */
+#budget {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-top: 2px;
+    margin-bottom: 0;
+    min-height: 1.4em;
+    padding-left: 2px;
+}
+
+/* ── Radio pills ──────────────────────────────────────────────────────────── */
+.radio-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.radio-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
     cursor: pointer;
+    padding: 7px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
+    background: #f8faf8;
+    font-size: 0.92rem;
+    transition: border-color var(--ease), background var(--ease), color var(--ease);
+    user-select: none;
 }
 
-input[type=submit]:hover {
-    background-color: #52a056;
-    padding: 7px 28px;
-    border-radius: 20px;
+.radio-pill input[type=radio] {
+    accent-color: var(--primary);
+    width: auto;
+    margin: 0;
+    padding: 0;
     border: none;
+    box-shadow: none;
+    flex-shrink: 0;
 }
-button[type=submit]{
-    background-color: #639263;
-    padding: 7px 28px;
-    border-radius: 20px;
-    border: none;
-    color: rgb(255, 255, 255);
+
+.radio-pill:has(input:checked) {
+    border-color: var(--primary);
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    font-weight: 500;
 }
-button[type=submit]:hover{
-    background-color: #45a049;
-    padding: 7px 28px;
-    border-radius: 20px;
-    border: none;
-    color: rgb(255, 255, 255);
+
+/* ── Buttons ──────────────────────────────────────────────────────────────── */
+.btn-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
 }
-button[type=reset]{
-    background-color: #8d4c44;
-    padding: 7px 28px;
-    border-radius: 20px;
+
+button[type=submit],
+button[type=button] {
+    flex: 1;
+    padding: 11px 0;
+    border-radius: 24px;
     border: none;
-    color: rgb(255, 255, 255);
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background-color var(--ease), transform var(--ease), box-shadow var(--ease);
 }
-button[type=reset]:hover{
-    background-color: #d44860;
-    padding: 7px 28px;
-    border-radius: 20px;
-    border: none;
-    color: rgb(255, 255, 255);
+
+button[type=submit] {
+    background-color: var(--primary);
+    box-shadow: 0 3px 10px rgba(74, 124, 78, 0.3);
+}
+button[type=submit]:hover {
+    background-color: var(--primary-dark);
+    box-shadow: 0 5px 14px rgba(74, 124, 78, 0.4);
+    transform: translateY(-1px);
+}
+button[type=submit]:active  { transform: translateY(0); }
+button[type=submit]:disabled {
+    background-color: #b0bdb0;
+    box-shadow: none;
+    cursor: not-allowed;
+    transform: none;
+}
+
+button[type=button] { background-color: var(--danger); }
+button[type=button]:hover {
+    background-color: var(--danger-hover);
+    transform: translateY(-1px);
+}
+button[type=button]:active { transform: translateY(0); }
+
+/* ── Alert utilities (replaces Bootstrap) ────────────────────────────────── */
+.d-none        { display: none !important; }
+.alert         { border: 1px solid transparent; }
+.alert-success { color: #155724; background: #d4edda; border-color: #c3e6cb; }
+.alert-warning { color: #856404; background: #fff3cd; border-color: #ffc107; }
+.alert-danger  { color: #721c24; background: #f8d7da; border-color: #f5c6cb; }
+
+/* ── Alert message ────────────────────────────────────────────────────────── */
+#msg-alert {
+    margin-top: 14px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    padding: 10px 14px;
 }

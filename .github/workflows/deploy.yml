@@ -1,0 +1,29 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate config.js from secrets
+        run: |
+          echo "const APP_CONFIG = {"                                    > config.js
+          echo "    scriptWriteUrl: '${{ secrets.SCRIPT_WRITE_URL }}'," >> config.js
+          echo "    scriptReadUrl:  '${{ secrets.SCRIPT_READ_URL }}'"   >> config.js
+          echo "};"                                                      >> config.js
+
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
+          publish_branch: gh-pages
+          exclude_assets: '.github,TODO.md,config.example.js,.gitignore,README.md'
