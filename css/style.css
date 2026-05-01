@@ -144,6 +144,8 @@ textarea {
     font-family: inherit;
     color: var(--text);
     transition: border-color var(--ease), box-shadow var(--ease), background var(--ease);
+    -webkit-appearance: none;
+    appearance: none;
 }
 
 input[type=text]:focus,
