@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4a7c4e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="記帳">
+    <link rel="apple-touch-icon" href="icons/icon.svg">
+
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+
+    <title>Home Sweet Home</title>
+    <script src="config.js" defer></script>
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+    <main id="form">
+        <div class="form-card">
+
+            <div class="form-card__header">
+                <div class="form-card__title">
+                    家用記帳
+                    <span class="form-card__version">v2.3.0</span>
+                </div>
+                <div class="form-card__meta">
+                    <a href="https://docs.google.com/spreadsheets/d/1ZNPbB2IAaM23TGnwfXr4bTbijXXBPwMMNTZa_O5ERhE/edit?usp=sharing"
+                        target="_blank">試算表</a>
+                    <span>STLin &copy; <span id="year"></span></span>
+                </div>
+            </div>
+
+            <div class="form-card__body">
+                <form name="submit-to-google-sheet">
+                    <input name="Month" type="hidden" id="month" value="-1">
+
+                    <div class="field-group">
+                        <label class="field-label" for="fdate">日期</label>
+                        <input name="Date" type="date" id="fdate" onchange="changeDate()" required>
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label">分類</label>
+                        <select name="Balance" id="balance-list" onchange="changeBalance(this.selectedIndex)"></select>
+                        <select name="Topclass" id="topclass-list" onchange="changeTopclass()"></select>
+                        <select name="Subclass" id="subclass-list"></select>
+                        <label id="budget"></label>
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label" for="price">金額 <span class="required">*</span></label>
+                        <input name="Price" type="text" inputmode="decimal" pattern="\d+\.?\d*" id="price" placeholder="0" required>
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label">店家 / 項目 <span class="required">*</span></label>
+                        <input name="Store" type="text" id="store" placeholder="Store (*)" list="store-suggestions" autocomplete="off">
+                        <input name="Detail" type="text" id="detail" placeholder="Detail (*)" list="detail-suggestions" autocomplete="off">
+                        <datalist id="store-suggestions"></datalist>
+                        <datalist id="detail-suggestions"></datalist>
+                        <div class="ac-clear-row">
+                            <a class="ac-clear-link" href="#" onclick="clearAutocomplete(); return false;">清除建議記錄</a>
+                        </div>
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label" for="star-list">推薦評分</label>
+                        <select name="Recommendation" id="star-list"></select>
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label">備註</label>
+                        <input name="Remark" type="text" placeholder="Remark (i.e. name of activity)">
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label">使用者</label>
+                        <div class="radio-group">
+                            <label class="radio-pill">
+                                <input type="radio" name="Name" id="Jerry_Hu" value="Jerry_Hu" checked>
+                                <span>Jerry_Hu</span>
+                            </label>
+                            <label class="radio-pill">
+                                <input type="radio" name="Name" id="Alice_Lin" value="Alice_Lin">
+                                <span>Alice_Lin</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="btn-row">
+                        <button type="submit" id="btn-submit">Send</button>
+                        <button type="button" onclick="OnReset()">Reset</button>
+                    </div>
+                    <div id="msg-alert" class="alert d-none" role="alert"></div>
+                </form>
+            </div>
+
+        </div>
+    </main>
+</body>
+</html>
