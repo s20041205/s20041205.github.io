@@ -23,7 +23,7 @@ const subclass = [
     ['貸款', '稅務', '罰單', '保險', '手續費', '其他']
 ];
 
-const stars = ['', '☆☆☆☆☆', '☆☆☆☆★', '☆☆☆★★', '☆☆★★★', '☆★★★★', '★★★★★'];
+const stars = ['不評分', '☆☆☆☆☆', '☆☆☆☆★', '☆☆☆★★', '☆☆★★★', '☆★★★★', '★★★★★'];
 
 // ── Budget data (fetched from Google Sheets) ──────────────────────────────────
 var arrBudget = [];
@@ -69,18 +69,25 @@ function showMessage(msg, type) {
 
 // ── Event handlers (called from inline HTML onchange / onclick) ───────────────
 function changeBalance(index) {
-    document.getElementById('topclass-list').innerHTML = buildOptions(topclass[index]);
+    const topEl = document.getElementById('topclass-list');
+    const subEl = document.getElementById('subclass-list');
 
-    var tindex = document.getElementById('topclass-list').selectedIndex;
-    var bindex = document.getElementById('balance-list').selectedIndex;
-    document.getElementById('subclass-list').innerHTML = bindex < 2 ? '' : buildOptions(subclass[tindex]);
-    document.getElementById('budget').innerHTML = bindex === 2 ? DisplayBudgetRemain(tindex) : '';
+    topEl.innerHTML = buildOptions(topclass[index]);
+    topEl.hidden = topclass[index].length === 0;
+
+    const tindex = topEl.selectedIndex;
+    subEl.innerHTML = index < 2 ? '' : buildOptions(subclass[tindex]);
+    subEl.hidden = index < 2;
+
+    document.getElementById('budget').innerHTML = index === 2 ? DisplayBudgetRemain(tindex) : '';
 }
 
 function changeTopclass() {
-    var index  = document.getElementById('topclass-list').selectedIndex;
-    var bindex = document.getElementById('balance-list').selectedIndex;
-    document.getElementById('subclass-list').innerHTML = bindex < 2 ? '' : buildOptions(subclass[index]);
+    const index  = document.getElementById('topclass-list').selectedIndex;
+    const bindex = document.getElementById('balance-list').selectedIndex;
+    const subEl  = document.getElementById('subclass-list');
+    subEl.innerHTML = bindex < 2 ? '' : buildOptions(subclass[index]);
+    subEl.hidden = bindex < 2;
     document.getElementById('budget').innerHTML = bindex === 2 ? DisplayBudgetRemain(index) : '';
 }
 
@@ -131,8 +138,10 @@ function OnReset() {
     document.getElementById('fdate').value = todayString();
     changeDate();
     document.getElementById('balance-list').selectedIndex = 0;
-    document.getElementById('topclass-list').innerHTML = '';
-    document.getElementById('subclass-list').innerHTML = '';
+    const topEl = document.getElementById('topclass-list');
+    const subEl = document.getElementById('subclass-list');
+    topEl.innerHTML = ''; topEl.hidden = true;
+    subEl.innerHTML = ''; subEl.hidden = true;
     document.getElementById('budget').innerHTML = '';
     document.getElementById('price').value = '';
     document.getElementById('store').value = '';
@@ -148,6 +157,8 @@ changeDate();
 
 document.getElementById('balance-list').innerHTML = buildOptions(['請選擇', '收入', '支出']);
 document.getElementById('star-list').innerHTML    = buildOptions(stars);
+document.getElementById('topclass-list').hidden   = true;
+document.getElementById('subclass-list').hidden   = true;
 loadAutocomplete();
 
 // Form submission
