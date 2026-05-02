@@ -1,15 +1,63 @@
-# 家用記帳
+# Home Sweet Home — Household Bookkeeping
 
-A lightweight household bookkeeping PWA that submits entries to Google Sheets via Google Apps Script.
+A lightweight household bookkeeping PWA for two users. Entries are submitted to Google Sheets via Google Apps Script, with no server required.
+
+## Features
+
+- Income / expense entry with category hierarchy (大類 / 小類)
+- Real-time budget remaining display per expense category
+- Activity tagging — link entries to a trip or event for cross-category aggregation
+- Store / item autocomplete via localStorage
+- Star rating for restaurants and stores
+- Two-user support (Jerry_Hu / Alice_Lin)
+- Offline-capable PWA (manifest, iOS meta tags, SVG icon)
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Frontend | Vanilla JS + custom CSS (no frameworks) |
+| Backend | Google Apps Script (GAS) |
+| Database | Google Sheets |
+| Deployment | GitHub Actions → GitHub Pages |
+| Cache | localStorage (autocomplete, max 50 entries each) |
+
+---
 
 ## Setup
 
-1. Copy `config.example.js` to `config.js` and fill in your GAS endpoints.
-2. Set `SCRIPT_WRITE_URL` and `SCRIPT_READ_URL` as GitHub Actions secrets for CI deployment.
+1. Copy `config.example.js` to `config.js` and fill in your URLs:
+   - `scriptWriteUrl` — GAS write endpoint
+   - `scriptReadUrl` — GAS read endpoint
+   - `sheetUrl` — Google Sheets URL
+
+2. Add the following as GitHub Actions secrets for CI deployment:
+   - `SCRIPT_WRITE_URL`
+   - `SCRIPT_READ_URL`
+   - `SHEET_URL`
+
+---
+
+## Activity List Management
+
+The activity list is maintained in the Google Sheets **`config` tab, column E** (E1 = header, E2 onwards = activity names).
+
+- **Add an activity**: insert a new row below the last entry in column E
+- **Remove an activity**: delete or clear that row
+- Changes sync to both users on next app refresh
+- Maximum 50 entries (E2:E51); increase `activityParams.endRow` in [script.js](script.js) if more are needed
 
 ---
 
 ## Release History
+
+- May 02, 2026  **v3.2.0**
+    - Feature: Remark field replaced with activity dropdown, populated from Google Sheets `config` tab column E
+    - Feature: `config` sheet replaces `annualBudget`, consolidating budget and activity list management
+    - Security: Google Sheets URL moved out of source code into `config.js` (gitignored) and `SHEET_URL` Actions secret
+    - Fix: Budget data now reads from row 2 (skipping header row), resolving NaN display
+    - Fix: GAS `doGet` boundary check for `row > lastRow` to prevent CORS exception
+    - Fix: PWA meta tag updated from `apple-mobile-web-app-capable` to `mobile-web-app-capable`
 
 - May 02, 2026  **v3.1.1**
     - Category overhaul: added 育兒 top-level category with 10 subcategories
@@ -17,24 +65,23 @@ A lightweight household bookkeeping PWA that submits entries to Google Sheets vi
     - Removed jQuery and Bootstrap dependencies (replaced with native fetch and custom CSS)
     - CI/CD: GitHub Actions deployment with secret-based config.js generation
     - Security: rotated GAS endpoints; config.js excluded from git history
-    - UX: star rating first option now shows ""-""
+    - UX: star rating first option now shows "-"
     - UX: topclass/subclass dropdowns hidden until relevant balance is selected
-    - UX: required indicator added to 店家/項目 field
+    - UX: required indicator added to store/item field
     - Fix: iOS date input appearance
     - Refactored all inline scripts to `script.js`
-    - Security: GAS endpoints moved to gitignored `config.js`; `config.example.js` added
-    - Error handling: `alert()` replaced with in-page alerts; `no-cors` mode to fix CORS false-failure; submit button disabled during request
+    - Error handling: `alert()` replaced with in-page alerts; `no-cors` mode to fix CORS false-failure
     - UX: keep category selection after send; auto-focus price field for consecutive entry
     - UX: budget loading indicator and error state
-    - UX: Store/Detail autocomplete via `localStorage`; clear history link
+    - UX: store/detail autocomplete via localStorage; clear history link
     - UI: card layout, Noto Sans TC, field labels, radio pill selectors
     - Mobile: price field `inputmode="decimal"`
-    - PWA: `manifest.json`, SVG app icon, iOS meta tags, favicon
+    - PWA: `manifest.json`, SVG icon, iOS meta tags, favicon
     - Fix: date timezone bug (local date instead of UTC)
-    - Fix: Reset restores today's date; balance-list and month field reset correctly
+    - Fix: Reset restores today's date and resets all fields correctly
     - Cleanup: removed DataTables, duplicate Bootstrap import, `projects/` folder
-    
-- Jan 19, 2025 **v2.3.0**
+
+- Jan 19, 2025  **v2.3.0**
     - Items added
 
 - Mar 15, 2023  **v2.2.5**
@@ -86,4 +133,8 @@ A lightweight household bookkeeping PWA that submits entries to Google Sheets vi
 
 ## TODO
 
-- Activity tag feature: tag entries with a trip or event name to aggregate cross-category spending (see [TODO.md](TODO.md))
+- **B2**: Add activities directly from the app (currently requires editing Google Sheets)
+- **Analytics dashboard**: Password-protected web dashboard for yearly statistics and activity summaries
+- **Sheets migration**: Copy spreadsheet to get a new URL, update GAS and GitHub Secrets, clean git history
+
+See [TODO.md](TODO.md) for details.

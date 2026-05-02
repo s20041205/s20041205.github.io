@@ -30,6 +30,7 @@ const stars = ['-', '☆☆☆☆☆', '★☆☆☆☆', '★★☆☆☆', '�
 var arrBudget = [];
 var arrUsed = [];
 var budgetReady = false;
+var arrActivities = [];
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function buildOptions(arr) {
@@ -153,6 +154,7 @@ function OnReset() {
 
 // ── Initialization (script has defer, so DOM is ready here) ───────────────────
 document.getElementById('year').textContent = new Date().getFullYear();
+document.getElementById('sheet-link').href  = APP_CONFIG.sheetUrl;
 document.getElementById('fdate').value = todayString();
 changeDate();
 
@@ -200,20 +202,31 @@ form.addEventListener('submit', e => {
 
 // Fetch budget data from Google Sheets
 const budgets = {
-    sheetUrl: 'https://docs.google.com/spreadsheets/d/1ZNPbB2IAaM23TGnwfXr4bTbijXXBPwMMNTZa_O5ERhE/edit?pli=1#gid=1968068763',
-    sheetTag: 'annualBudget',
-    row: 1, col: 1, endRow: 10, endCol: 2
+    sheetUrl: APP_CONFIG.sheetUrl,
+    sheetTag: 'config',
+    row: 2, col: 1, endRow: 11, endCol: 2
 };
 const nowusing = {
-    sheetUrl: 'https://docs.google.com/spreadsheets/d/1ZNPbB2IAaM23TGnwfXr4bTbijXXBPwMMNTZa_O5ERhE/edit?pli=1#gid=1968068763',
+    sheetUrl: APP_CONFIG.sheetUrl,
     sheetTag: new Date().getFullYear(),
     row: 11, col: 2, endRow: 20, endCol: 3
+};
+const activityParams = {
+    sheetUrl: APP_CONFIG.sheetUrl,
+    sheetTag: 'config',
+    row: 2, col: 5, endRow: 51, endCol: 5
 };
 
 function fetchSheet(params) {
     const url = new URL(scriptReadUrl);
     Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
     return fetch(url).then(r => r.text());
+}
+
+function populateActivities() {
+    var el = document.getElementById('remark-list');
+    el.innerHTML = '<option value="">-</option>' +
+        arrActivities.map(a => '<option value="' + a + '">' + a + '</option>').join('');
 }
 
 (async () => {
@@ -234,4 +247,14 @@ function fetchSheet(params) {
         el.style.color = 'gray';
         el.innerHTML = '預算資料載入失敗';
     }
+})();
+
+(async () => {
+    try {
+        const d = await fetchSheet(activityParams);
+        arrActivities = d.split(',').map(s => s.trim()).filter(s => s.length > 0);
+    } catch {
+        arrActivities = [];
+    }
+    populateActivities();
 })();
