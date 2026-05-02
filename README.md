@@ -51,6 +51,11 @@ The activity list is maintained in the Google Sheets **`config` tab, column E** 
 
 ## Release History
 
+- May 03, 2026  **v3.2.1**
+    - Security: Google Sheets URL moved to `config.js` (gitignored) and `SHEET_URL` Actions secret
+    - CI: deploy.yml uses `printf` + env vars to safely handle URLs containing special characters
+    - CI: updated `actions/checkout` to v4.2.2 and `peaceiris/actions-gh-pages` to v4 (Node.js 24 support, required from June 2, 2026)
+
 - May 02, 2026  **v3.2.0**
     - Feature: Remark field replaced with activity dropdown, populated from Google Sheets `config` tab column E
     - Feature: `config` sheet replaces `annualBudget`, consolidating budget and activity list management
