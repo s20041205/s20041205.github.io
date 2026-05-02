@@ -11,18 +11,22 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.2.2
 
       - name: Generate config.js from secrets
+        env:
+          SCRIPT_WRITE_URL: ${{ secrets.SCRIPT_WRITE_URL }}
+          SCRIPT_READ_URL: ${{ secrets.SCRIPT_READ_URL }}
+          SHEET_URL: ${{ secrets.SHEET_URL }}
         run: |
-          echo "const APP_CONFIG = {"                                    > config.js
-          echo "    scriptWriteUrl: '${{ secrets.SCRIPT_WRITE_URL }}'," >> config.js
-          echo "    scriptReadUrl:  '${{ secrets.SCRIPT_READ_URL }}',"  >> config.js
-          echo "    sheetUrl:       '${{ secrets.SHEET_URL }}'"         >> config.js
-          echo "};"                                                      >> config.js
+          printf "const APP_CONFIG = {\n"                          > config.js
+          printf "    scriptWriteUrl: '%s',\n" "$SCRIPT_WRITE_URL" >> config.js
+          printf "    scriptReadUrl:  '%s',\n" "$SCRIPT_READ_URL"  >> config.js
+          printf "    sheetUrl:       '%s'\n"  "$SHEET_URL"        >> config.js
+          printf "};\n"                                            >> config.js
 
       - name: Deploy to gh-pages
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./
