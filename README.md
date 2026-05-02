@@ -6,7 +6,7 @@ A lightweight household bookkeeping PWA for two users. Entries are submitted to 
 
 - Income / expense entry with category hierarchy
 - Real-time budget remaining display per expense category
-- Activity tagging — link entries to a trip or event for cross-category aggregation
+- Tag field (標記) — link entries to a trip, project, or context for cross-category aggregation; add tags directly from the app
 - Store / item autocomplete via localStorage
 - Star rating for restaurants and stores
 - Two-user support
@@ -38,18 +38,26 @@ A lightweight household bookkeeping PWA for two users. Entries are submitted to 
 
 ---
 
-## Activity List Management
+## Tag Management
 
-The activity list is maintained in the Google Sheets **`config` tab, column E** (E1 = header, E2 onwards = activity names).
+Tags are maintained in the Google Sheets **`config` tab, column E** (E1 = header, E2 onwards = tag names).
 
-- **Add an activity**: insert a new row below the last entry in column E
-- **Remove an activity**: delete or clear that row
+- **Add a tag from the app**: tap the **＋** button next to the tag dropdown; the app auto-prefixes today's date (`YYMMDD_`)
+- **Add a tag in Sheets**: insert a name in the next empty cell in column E
+- **Disable a tag**: delete or clear that row in column E
+- **Date-prefixed tags** (`YYMMDD_name`) auto-hide from the dropdown 30 days after the event date; unprefixed tags are permanent
 - Changes sync to both users on next app refresh
 - Maximum 50 entries (E2:E51); increase `activityParams.endRow` in [script.js](script.js) if more are needed
 
 ---
 
 ## Release History
+
+- May 04, 2026  **v3.3.0**
+    - Feature: Tag field (標記) — add tags directly from the app via "＋" button; writes to Google Sheets `config` column E via GAS `action=addActivity`
+    - Feature: Date-prefixed tags (`YYMMDD_name`) auto-expire 30 days after event date; unprefixed tags are permanent
+    - Category: Removed 育兒 top-level category; child-related tracking now done via 標記 field; 疫苗 moved to 健康, 玩具 moved to 娛樂
+    - GAS: `doPost` extended with `action=addActivity` branch to append new tags to `config` sheet column E
 
 - May 03, 2026  **v3.2.1**
     - Security: Google Sheets URL moved to `config.js` (gitignored) and `SHEET_URL` Actions secret
@@ -138,8 +146,7 @@ The activity list is maintained in the Google Sheets **`config` tab, column E** 
 
 ## TODO
 
-- **B2**: Add activities directly from the app (currently requires editing Google Sheets)
-- **Analytics dashboard**: Password-protected web dashboard for yearly statistics and activity summaries
+- **Analytics dashboard**: Password-protected web dashboard for yearly statistics and tag summaries
 - **Sheets migration**: Copy spreadsheet to get a new URL, update GAS and GitHub Secrets, clean git history
 
 See [TODO.md](TODO.md) for details.
