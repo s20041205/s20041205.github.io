@@ -4,12 +4,12 @@ A lightweight household bookkeeping PWA for two users. Entries are submitted to 
 
 ## Features
 
-- Income / expense entry with category hierarchy (大類 / 小類)
+- Income / expense entry with category hierarchy
 - Real-time budget remaining display per expense category
 - Activity tagging — link entries to a trip or event for cross-category aggregation
 - Store / item autocomplete via localStorage
 - Star rating for restaurants and stores
-- Two-user support (Jerry_Hu / Alice_Lin)
+- Two-user support
 - Offline-capable PWA (manifest, iOS meta tags, SVG icon)
 
 ## Tech Stack
