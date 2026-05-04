@@ -8,7 +8,7 @@ const scriptReadUrl  = APP_CONFIG.scriptReadUrl;
 const topclass = [
     [],
     ['薪資', '利息', '獎金', '投資', '販賣', '租金', '還款', '副業/兼職', '退稅/補助', '其他'],
-    ['飲食', '衣裝', '居住', '交通', '教育', '娛樂', '健康', '社交', '育兒', '其他']
+    ['飲食', '衣裝', '居住', '交通', '教育', '娛樂', '健康', '社交', '其他']
 ];
 
 const subclass = [
@@ -17,10 +17,9 @@ const subclass = [
     ['房租', '水費', '電費', '瓦斯費', '網路費', '手機費', '日用品', '家電', '家具', '維修費', '管理費'],
     ['汽油燃料', '維修保養', '火車高鐵', '捷運', '公車/客運', '計程車', '飛機', '公共租借', '停車費', '過路費', '汽車用品', '交通卡'],
     ['文具', '書籍', '耗材/材料', '課程學費', '教具'],
-    ['3C產品', '旅宿', '門票', '遊戲', '電影', '數位服務', '國外旅遊', '模型/收藏品'],
-    ['門診', '手術', '藥品', '醫療用品', '運動', '保健食品'],
+    ['3C產品', '旅宿', '門票', '遊戲', '電影', '數位服務', '國外旅遊', '模型/收藏品', '玩具'],
+    ['門診', '手術', '藥品', '醫療用品', '運動', '保健食品', '疫苗'],
     ['捐款', '孝親費', '交際', '貸出', '禮金/禮物'],
-    ['奶粉/副食品', '尿布/衛生用品', '童裝/童鞋', '玩具/繪本', '嬰幼兒用品', '保母費', '托育/幼兒園', '才藝課', '兒科/疫苗', '其他'],
     ['貸款', '稅務', '罰單', '保險', '手續費', '其他']
 ];
 
@@ -137,6 +136,7 @@ function clearEntryFields() {
 }
 
 function OnReset() {
+    cancelAddActivity();
     document.getElementById('fdate').value = todayString();
     changeDate();
     document.getElementById('balance-list').selectedIndex = 0;
@@ -204,12 +204,12 @@ form.addEventListener('submit', e => {
 const budgets = {
     sheetUrl: APP_CONFIG.sheetUrl,
     sheetTag: 'config',
-    row: 2, col: 1, endRow: 11, endCol: 2
+    row: 2, col: 1, endRow: 10, endCol: 2
 };
 const nowusing = {
     sheetUrl: APP_CONFIG.sheetUrl,
     sheetTag: new Date().getFullYear(),
-    row: 11, col: 2, endRow: 20, endCol: 3
+    row: 11, col: 2, endRow: 19, endCol: 3
 };
 const activityParams = {
     sheetUrl: APP_CONFIG.sheetUrl,
@@ -223,10 +223,75 @@ function fetchSheet(params) {
     return fetch(url).then(r => r.text());
 }
 
+// Activities with YYMMDD_ prefix expire after this many days
+var ACTIVITY_EXPIRE_DAYS = 30;
+
+function activityEventDate(raw) {
+    var m = raw.match(/^(\d{2})(\d{2})(\d{2})_/);
+    if (!m) return null;
+    return new Date(2000 + parseInt(m[1], 10), parseInt(m[2], 10) - 1, parseInt(m[3], 10));
+}
+
+function isActivityExpired(raw) {
+    var d = activityEventDate(raw);
+    if (!d) return false;
+    return Date.now() - d.getTime() > ACTIVITY_EXPIRE_DAYS * 86400000;
+}
+
 function populateActivities() {
     var el = document.getElementById('remark-list');
     el.innerHTML = '<option value="">-</option>' +
-        arrActivities.map(a => '<option value="' + a + '">' + a + '</option>').join('');
+        arrActivities
+            .filter(a => !isActivityExpired(a))
+            .map(a => '<option value="' + a + '">' + a + '</option>')
+            .join('');
+}
+
+function toggleAddActivity() {
+    var row = document.getElementById('add-activity-row');
+    if (row.style.display !== 'none') {
+        cancelAddActivity();
+    } else {
+        row.style.display = 'flex';
+        var d = new Date();
+        var prefix = String(d.getFullYear()).slice(-2)
+            + String(d.getMonth() + 1).padStart(2, '0')
+            + String(d.getDate()).padStart(2, '0') + '_';
+        var input = document.getElementById('new-activity-input');
+        input.value = prefix;
+        input.focus();
+        input.setSelectionRange(prefix.length, prefix.length);
+    }
+}
+
+function cancelAddActivity() {
+    document.getElementById('add-activity-row').style.display = 'none';
+}
+
+function confirmAddActivity() {
+    var name = document.getElementById('new-activity-input').value.trim();
+    if (!name) { showMessage('請輸入標記名稱', 'warning'); return; }
+    if (name.includes(',')) { showMessage('標記名稱不可包含逗號', 'warning'); return; }
+    if (arrActivities.includes(name)) { showMessage('標記已存在', 'warning'); return; }
+
+    var btn = document.getElementById('btn-confirm-activity');
+    btn.disabled = true;
+
+    var fd = new FormData();
+    fd.append('action', 'addActivity');
+    fd.append('name', name);
+    fetch(scriptWriteUrl, { method: 'POST', body: fd, mode: 'no-cors' })
+        .then(() => {
+            arrActivities.push(name);
+            populateActivities();
+            document.getElementById('remark-list').value = name;
+            cancelAddActivity();
+            showMessage('標記「' + name + '」已新增', 'success');
+        })
+        .catch(() => {
+            showMessage('網路錯誤，活動新增失敗', 'danger');
+        })
+        .finally(() => { btn.disabled = false; });
 }
 
 (async () => {

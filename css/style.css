@@ -260,6 +260,94 @@ button[type=button]:active { transform: translateY(0); }
 .alert-warning { color: #856404; background: #fff3cd; border-color: #ffc107; }
 .alert-danger  { color: #721c24; background: #f8d7da; border-color: #f5c6cb; }
 
+/* ── Activity row ─────────────────────────────────────────────────────────── */
+.activity-row {
+    display: flex;
+    gap: 8px;
+}
+
+.activity-row select {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.activity-row .btn-add-activity {
+    flex: 0 0 40px;
+    padding: 10px 0;
+    border-radius: 8px;
+    border: 1.5px solid var(--primary);
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    font-size: 1.15rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: none;
+    transform: none;
+    line-height: 1;
+    transition: background var(--ease), color var(--ease);
+}
+
+.activity-row .btn-add-activity:hover {
+    background: var(--primary);
+    color: #fff;
+    transform: none;
+    box-shadow: none;
+}
+
+.add-activity-row {
+    margin-top: 6px;
+    gap: 6px;
+    align-items: center;
+}
+
+.add-activity-row input[type=text] {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.add-activity-row .btn-confirm,
+.add-activity-row .btn-cancel {
+    flex: 0 0 auto;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: none;
+    transform: none;
+}
+
+.add-activity-row .btn-confirm {
+    border: none;
+    background: var(--primary);
+    color: #fff;
+}
+
+.add-activity-row .btn-confirm:hover {
+    background: var(--primary-dark);
+    transform: none;
+    box-shadow: none;
+}
+
+.add-activity-row .btn-confirm:disabled {
+    background: #b0bdb0;
+    cursor: not-allowed;
+}
+
+.add-activity-row .btn-cancel {
+    border: 1.5px solid var(--border);
+    background: #fff;
+    color: var(--text-muted);
+}
+
+.add-activity-row .btn-cancel:hover {
+    border-color: var(--text-muted);
+    color: var(--text);
+    background: #f8faf8;
+    transform: none;
+    box-shadow: none;
+}
+
 /* ── Alert message ────────────────────────────────────────────────────────── */
 #msg-alert {
     margin-top: 14px;

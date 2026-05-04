@@ -28,7 +28,7 @@
             <div class="form-card__header">
                 <div class="form-card__title">
                     家用記帳
-                    <span class="form-card__version">v3.2.1</span>
+                    <span class="form-card__version">v3.3.0</span>
                 </div>
                 <div class="form-card__meta">
                     <a href="#" id="sheet-link" target="_blank">試算表</a>
@@ -75,10 +75,19 @@
                     </div>
 
                     <div class="field-group">
-                        <label class="field-label">活動</label>
-                        <select name="Remark" id="remark-list">
-                            <option value="">載入中...</option>
-                        </select>
+                        <label class="field-label">標記</label>
+                        <div class="activity-row">
+                            <select name="Remark" id="remark-list">
+                                <option value="">載入中...</option>
+                            </select>
+                            <button type="button" class="btn-add-activity" onclick="toggleAddActivity()" title="新增標記">＋</button>
+                        </div>
+                        <div id="add-activity-row" class="add-activity-row" style="display:none">
+                            <input type="text" id="new-activity-input" placeholder="YYMMDD_標記名稱" maxlength="30"
+                                   onkeydown="if(event.key==='Enter'){event.preventDefault();confirmAddActivity();}else if(event.key==='Escape'){cancelAddActivity();}">
+                            <button type="button" id="btn-confirm-activity" class="btn-confirm" onclick="confirmAddActivity()">確認</button>
+                            <button type="button" class="btn-cancel" onclick="cancelAddActivity()">取消</button>
+                        </div>
                     </div>
 
                     <div class="field-group">
