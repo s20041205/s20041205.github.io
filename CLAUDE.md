@@ -5,7 +5,7 @@
 家用記帳 PWA，使用者為 Jerry_Hu 與 Alice_Lin 兩人家庭。
 前端純 Vanilla JS，後端為 Google Apps Script + Google Sheets，透過 GitHub Actions 部署。
 
-- **目前版本**：v3.3.0
+- **目前版本**：v3.3.1
 - **Sheets URL**：存於 `config.js`（gitignored），不在原始碼中
 
 ---
@@ -141,7 +141,7 @@ if (e.parameter.action === 'addActivity') {
 | Store | Store | 店家 |
 | Detail | Detail | 項目 |
 | Recommendation | Recommendation | 推薦星評 |
-| Remark | Remark | **標記名稱**（config E 欄下拉） |
+| Tag | Tag | **標記名稱**（config E 欄下拉） |
 | Name | Name | 使用者（Jerry_Hu / Alice_Lin） |
 
 ---
