@@ -53,6 +53,10 @@ Tags are maintained in the Google Sheets **`config` tab, column E** (E1 = header
 
 ## Release History
 
+- May 07, 2026  **v3.3.1**
+    - Fix: renamed form field `Remark` → `Tag` to match intended Sheets column header
+    - UX: success/warning toast is now a fixed overlay at the top of the screen — no longer hidden by the mobile keyboard after submission
+
 - May 04, 2026  **v3.3.0**
     - Feature: Tag field (標記) — add tags directly from the app via "＋" button; writes to Google Sheets `config` column E via GAS `action=addActivity`
     - Feature: Date-prefixed tags (`YYMMDD_name`) auto-expire 30 days after event date; unprefixed tags are permanent

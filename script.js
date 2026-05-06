@@ -65,7 +65,7 @@ function showMessage(msg, type) {
     el.className = 'alert alert-' + type;
     el.textContent = msg;
     clearTimeout(el._timer);
-    el._timer = setTimeout(() => { el.className = 'alert d-none'; }, 4000);
+    el._timer = setTimeout(() => { el.className = 'alert d-none'; }, 3000);
 }
 
 // ── Event handlers (called from inline HTML onchange / onclick) ───────────────
@@ -131,7 +131,7 @@ function clearEntryFields() {
     document.getElementById('store').value = '';
     document.getElementById('detail').value = '';
     document.getElementById('star-list').selectedIndex = 0;
-    form.querySelector('[name=Remark]').value = '';
+    form.querySelector('[name=Tag]').value = '';
     document.getElementById('price').focus();
 }
 
@@ -149,7 +149,7 @@ function OnReset() {
     document.getElementById('store').value = '';
     document.getElementById('detail').value = '';
     document.getElementById('star-list').selectedIndex = 0;
-    form.querySelector('[name=Remark]').value = '';
+    form.querySelector('[name=Tag]').value = '';
 }
 
 // ── Initialization (script has defer, so DOM is ready here) ───────────────────
