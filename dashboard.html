@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+    <meta name="theme-color" content="#4a7c4e">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <title>後台 — 家用記帳</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+    <script src="config.js" defer></script>
+    <script src="dashboard.js" defer></script>
+</head>
+
+<body>
+    <div id="msg-alert" class="alert d-none" role="alert"></div>
+
+    <!-- ── Login ────────────────────────────────────────────────────────────── -->
+    <div id="login-screen">
+        <div class="form-card login-card">
+            <div class="form-card__header">
+                <div class="form-card__title">家用記帳 後台</div>
+            </div>
+            <div class="form-card__body">
+                <div class="field-group">
+                    <label class="field-label" for="login-pw">密碼</label>
+                    <input type="password" id="login-pw" placeholder="請輸入密碼">
+                </div>
+                <div class="btn-row">
+                    <button type="button" id="btn-login">進入後台</button>
+                </div>
+                <p id="login-error" style="color:var(--danger);font-size:0.85rem;margin-top:10px;text-align:center;min-height:1.2em;"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Dashboard ────────────────────────────────────────────────────────── -->
+    <div id="dashboard" style="display:none">
+
+        <!-- Global header -->
+        <div class="dash-header">
+            <div class="dash-title">家用記帳 後台</div>
+            <div class="dash-controls">
+                <select id="year-select" aria-label="年份"></select>
+                <div class="person-toggle">
+                    <button class="person-btn active" data-person="">全部</button>
+                    <button class="person-btn" data-person="Jerry_Hu">Jerry</button>
+                    <button class="person-btn" data-person="Alice_Lin">Alice</button>
+                </div>
+                <button id="btn-logout">登出</button>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="dash-tabs">
+            <button class="tab-btn active" data-tab="tab-overview">年度總覽</button>
+            <button class="tab-btn" data-tab="tab-monthly">月份詳細</button>
+            <button class="tab-btn" data-tab="tab-tags">標記彙整</button>
+            <button class="tab-btn" data-tab="tab-edit">近期修改</button>
+        </div>
+
+        <div id="dashboard-body">
+
+            <!-- ── Tab 1: 年度總覽 ──────────────────────────────────────────── -->
+            <div id="tab-overview" class="tab-content active">
+                <p id="overview-person-note" class="person-note" style="display:none">
+                    年度統計來自彙整分頁，為兩人合計，不支援個人篩選。
+                </p>
+                <div class="summary-cards">
+                    <div class="summary-card income">
+                        <div class="summary-label">年度收入</div>
+                        <div class="summary-value" id="card-income">—</div>
+                    </div>
+                    <div class="summary-card expense">
+                        <div class="summary-label">年度支出</div>
+                        <div class="summary-value" id="card-expense">—</div>
+                    </div>
+                    <div class="summary-card net">
+                        <div class="summary-label">淨利</div>
+                        <div class="summary-value" id="card-net">—</div>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-card__title">月份收支趨勢</div>
+                    <div class="chart-wrap">
+                        <div id="overview-loading" class="loading-text">載入中...</div>
+                        <canvas id="chart-monthly-trend" style="display:none"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-card__title">收入類別分析</div>
+                    <div class="chart-wrap--doughnut">
+                        <canvas id="chart-income-donut" width="200" height="200" style="display:none"></canvas>
+                        <div id="income-donut-legend" class="donut-legend"></div>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-card__title">支出類別分析 <span class="chart-hint">（點擊扇形或文字查看細項）</span></div>
+                    <div class="chart-wrap--doughnut">
+                        <canvas id="chart-expense-donut" width="200" height="200" style="display:none"></canvas>
+                        <div id="donut-legend" class="donut-legend"></div>
+                    </div>
+                </div>
+                <div class="chart-card drill-card" id="drill-overview-card" style="display:none">
+                    <div class="drill-card-header">
+                        <span class="chart-card__title" id="drill-overview-title">細項分析</span>
+                        <button class="drill-close-btn" data-drill="drill-overview">✕</button>
+                    </div>
+                    <div class="drill-layout">
+                        <canvas id="drill-overview-canvas" width="200" height="200"></canvas>
+                        <div class="drill-legend" id="drill-overview-legend"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── Tab 2: 月份詳細 ──────────────────────────────────────────── -->
+            <div id="tab-monthly" class="tab-content">
+                <p id="monthly-person-note" class="person-note" style="display:none">
+                    年度統計來自彙整分頁，為兩人合計，不支援個人篩選。
+                </p>
+                <div class="month-nav">
+                    <button id="btn-prev-month">← 上月</button>
+                    <span class="month-nav-label" id="month-label">—</span>
+                    <button id="btn-next-month">下月 →</button>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-card__title">支出各類別（對比預算）</div>
+                    <div id="monthly-expense-wrap">
+                        <div class="loading-text">載入中...</div>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-card__title">收入各細項</div>
+                    <div class="chart-wrap--doughnut">
+                        <canvas id="chart-monthly-income-donut" width="200" height="200" style="display:none"></canvas>
+                        <div id="monthly-income-donut-legend" class="donut-legend"></div>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-card__title">支出類別分布 <span class="chart-hint">（點擊扇形或文字查看細項）</span></div>
+                    <div class="chart-wrap--doughnut">
+                        <canvas id="chart-monthly-donut" width="200" height="200" style="display:none"></canvas>
+                        <div id="monthly-donut-legend" class="donut-legend"></div>
+                    </div>
+                </div>
+                <div class="chart-card drill-card" id="drill-monthly-card" style="display:none">
+                    <div class="drill-card-header">
+                        <span class="chart-card__title" id="drill-monthly-title">細項分析</span>
+                        <button class="drill-close-btn" data-drill="drill-monthly">✕</button>
+                    </div>
+                    <div class="drill-layout">
+                        <canvas id="drill-monthly-canvas" width="200" height="200"></canvas>
+                        <div class="drill-legend" id="drill-monthly-legend"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── Tab 3: 標記彙整 ──────────────────────────────────────────── -->
+            <div id="tab-tags" class="tab-content">
+                <div class="tag-filter-row">
+                    <label class="radio-pill">
+                        <input type="radio" name="tag-year-mode" id="tag-mode-current" value="current" checked>
+                        <span id="tag-year-label">本年 (2026)</span>
+                    </label>
+                    <label class="radio-pill">
+                        <input type="radio" name="tag-year-mode" id="tag-mode-all" value="all">
+                        <span>全部年份</span>
+                    </label>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-card__title">標記金額排行</div>
+                    <div id="tag-chart-wrap">
+                        <div class="loading-text">載入中...</div>
+                    </div>
+                </div>
+                <div class="table-card">
+                    <table class="data-table">
+                        <thead>
+                            <tr><th>標記</th><th>總金額</th><th>類別分布</th></tr>
+                        </thead>
+                        <tbody id="tag-tbody">
+                            <tr><td colspan="3" class="loading-text">載入中...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ── Tab 4: 近期修改 ──────────────────────────────────────────── -->
+            <div id="tab-edit" class="tab-content">
+                <div class="edit-controls">
+                    <span class="field-label">顯示筆數</span>
+                    <select id="record-count-select">
+                        <option value="10">10</option>
+                        <option value="20" selected>20</option>
+                        <option value="50">50</option>
+                    </select>
+                    <button type="button" id="btn-refresh-records" class="btn-edit" style="padding:7px 14px">重新整理</button>
+                </div>
+                <div class="table-card">
+                    <table class="data-table edit-table">
+                        <thead>
+                            <tr>
+                                <th>日期</th>
+                                <th>收支</th>
+                                <th>大類</th>
+                                <th>小類</th>
+                                <th>金額</th>
+                                <th>店家</th>
+                                <th>項目</th>
+                                <th>標記</th>
+                                <th>使用者</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="edit-tbody">
+                            <tr><td colspan="10" class="loading-text">請切換至此頁載入資料</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div><!-- /dashboard-body -->
+    </div><!-- /dashboard -->
+
+</body>
+</html>
