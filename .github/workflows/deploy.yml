@@ -17,15 +17,17 @@ jobs:
 
       - name: Generate config.js from secrets
         env:
-          SCRIPT_WRITE_URL: ${{ secrets.SCRIPT_WRITE_URL }}
-          SCRIPT_READ_URL: ${{ secrets.SCRIPT_READ_URL }}
-          SHEET_URL: ${{ secrets.SHEET_URL }}
+          SCRIPT_WRITE_URL:   ${{ secrets.SCRIPT_WRITE_URL }}
+          SCRIPT_READ_URL:    ${{ secrets.SCRIPT_READ_URL }}
+          SHEET_URL:          ${{ secrets.SHEET_URL }}
+          DASHBOARD_PASSWORD: ${{ secrets.DASHBOARD_PASSWORD }}
         run: |
-          printf "const APP_CONFIG = {\n"                          > config.js
-          printf "    scriptWriteUrl: '%s',\n" "$SCRIPT_WRITE_URL" >> config.js
-          printf "    scriptReadUrl:  '%s',\n" "$SCRIPT_READ_URL"  >> config.js
-          printf "    sheetUrl:       '%s'\n"  "$SHEET_URL"        >> config.js
-          printf "};\n"                                            >> config.js
+          printf "const APP_CONFIG = {\n"                                        > config.js
+          printf "    scriptWriteUrl:    '%s',\n" "$SCRIPT_WRITE_URL"           >> config.js
+          printf "    scriptReadUrl:     '%s',\n" "$SCRIPT_READ_URL"            >> config.js
+          printf "    sheetUrl:          '%s',\n" "$SHEET_URL"                  >> config.js
+          printf "    dashboardPassword: '%s'\n"  "$DASHBOARD_PASSWORD"         >> config.js
+          printf "};\n"                                                          >> config.js
 
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v4

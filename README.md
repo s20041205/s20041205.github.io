@@ -11,6 +11,7 @@ A lightweight household bookkeeping PWA for two users. Entries are submitted to 
 - Star rating for restaurants and stores
 - Two-user support
 - Offline-capable PWA (manifest, iOS meta tags, SVG icon)
+- Password-protected admin dashboard (`dashboard.html`) — yearly overview, monthly breakdown, tag summary, and recent-record editing
 
 ## Tech Stack
 
@@ -35,6 +36,7 @@ A lightweight household bookkeeping PWA for two users. Entries are submitted to 
    - `SCRIPT_WRITE_URL`
    - `SCRIPT_READ_URL`
    - `SHEET_URL`
+   - `DASHBOARD_PASSWORD` — password for the admin dashboard login screen
 
 ---
 
@@ -52,6 +54,19 @@ Tags are maintained in the Google Sheets **`config` tab, column E** (E1 = header
 ---
 
 ## Release History
+
+- May 10, 2026  **v3.4.0**
+    - Feature: password-protected admin dashboard (`dashboard.html`)
+    - Dashboard Tab 1 — yearly income/expense summary cards, monthly trend bar chart, income & expense doughnut charts with subcategory drill-down (click segment or legend text)
+    - Dashboard Tab 2 — monthly expense vs. budget bar chart, income doughnut, expense doughnut with drill-down; display order: budget → income → expense
+    - Dashboard Tab 3 — tag spend ranking bar chart + summary table; year and person filter
+    - Dashboard Tab 4 — recent records with inline edit (all fields) and delete; person filter
+    - GAS: `doGet` extended with 5 new action branches (`recentRecords`, `subSummary`, `tagSummary`, `updateRecord`, `deleteRecord`); see `GAS_doGet_additions.js`
+    - CI: `DASHBOARD_PASSWORD` Actions secret injected into `config.js`
+
+- May 10, 2026  **v3.3.2**
+    - Feature: added `住院/療養` to 健康 subcategory (for postpartum care, hospitalization)
+    - Feature: added `相片/相冊` to 娛樂 subcategory (for photo printing, ID photos)
 
 - May 07, 2026  **v3.3.1**
     - Fix: renamed form field `Remark` → `Tag` to match intended Sheets column header
@@ -150,7 +165,6 @@ Tags are maintained in the Google Sheets **`config` tab, column E** (E1 = header
 
 ## TODO
 
-- **Analytics dashboard**: Password-protected web dashboard for yearly statistics and tag summaries
 - **Sheets migration**: Copy spreadsheet to get a new URL, update GAS and GitHub Secrets, clean git history
 
 See [TODO.md](TODO.md) for details.
