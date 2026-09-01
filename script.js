@@ -104,6 +104,16 @@ function changeDate() {
     document.getElementById('month').value = parseInt(val.split('-')[1], 10);
 }
 
+// Quick date shortcuts (昨天 / 明天) — relative to today
+function setRelativeDate(deltaDays) {
+    var d = new Date();
+    d.setDate(d.getDate() + deltaDays);
+    document.getElementById('fdate').value = d.getFullYear() + '-'
+        + String(d.getMonth() + 1).padStart(2, '0') + '-'
+        + String(d.getDate()).padStart(2, '0');
+    changeDate();
+}
+
 function DisplayBudgetRemain(idx) {
     var el = document.getElementById('budget');
     if (!budgetReady) {

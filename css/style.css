@@ -159,6 +159,36 @@ textarea:focus {
     box-shadow: 0 0 0 3px rgba(74, 124, 78, 0.15);
 }
 
+/* ── Date shortcuts (昨天 / 明天) ─────────────────────────────────────────── */
+.date-shortcuts {
+    display: flex;
+    gap: 8px;
+    margin-top: 2px;
+}
+
+.date-shortcuts .btn-date-shortcut {
+    flex: 0 0 auto;
+    padding: 6px 16px;
+    border-radius: 16px;
+    border: 1.5px solid var(--border);
+    background: #f8faf8;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
+    box-shadow: none;
+    transform: none;
+    transition: border-color var(--ease), color var(--ease), background var(--ease);
+}
+
+.date-shortcuts .btn-date-shortcut:hover {
+    border-color: var(--primary);
+    color: var(--primary-dark);
+    background: var(--primary-light);
+    transform: none;
+    box-shadow: none;
+}
+
 /* Budget remain label */
 #budget {
     display: block;

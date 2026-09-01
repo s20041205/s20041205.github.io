@@ -44,6 +44,10 @@
                     <div class="field-group">
                         <label class="field-label" for="fdate">日期</label>
                         <input name="Date" type="date" id="fdate" onchange="changeDate()" required>
+                        <div class="date-shortcuts">
+                            <button type="button" class="btn-date-shortcut" onclick="setRelativeDate(-1)">昨天</button>
+                            <button type="button" class="btn-date-shortcut" onclick="setRelativeDate(1)">明天</button>
+                        </div>
                     </div>
 
                     <div class="field-group">
