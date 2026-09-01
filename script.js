@@ -40,10 +40,16 @@ function buildOptions(arr) {
 const AC_KEY = 'bookkeeping_ac';
 const AC_MAX = 50;
 
+function escAttr(s) {
+    return String(s)
+        .replace(/&/g, '&amp;').replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
 function loadAutocomplete() {
     var data = JSON.parse(localStorage.getItem(AC_KEY) || '{"stores":[],"details":[]}');
-    document.getElementById('store-suggestions').innerHTML  = data.stores.map(v => '<option value="' + v + '">').join('');
-    document.getElementById('detail-suggestions').innerHTML = data.details.map(v => '<option value="' + v + '">').join('');
+    document.getElementById('store-suggestions').innerHTML  = data.stores.map(v => '<option value="' + escAttr(v) + '">').join('');
+    document.getElementById('detail-suggestions').innerHTML = data.details.map(v => '<option value="' + escAttr(v) + '">').join('');
 }
 
 function saveAutocomplete(store, detail) {
@@ -120,7 +126,7 @@ function DisplayBudgetRemain(idx) {
         el.style.color = 'gray';
         return '預算載入中...';
     }
-    const money = new Intl.NumberFormat('tw-TW', { style: 'currency', currency: 'NTD', minimumFractionDigits: 0 });
+    const money = new Intl.NumberFormat('zh-TW', { style: 'currency', currency: 'TWD', minimumFractionDigits: 0 });
     var curUsage   = arrUsed[idx]   ? arrUsed[idx][1]   : 0;
     var yearBudget = arrBudget[idx] ? arrBudget[idx][1] : 0;
     var remain = yearBudget - curUsage;
