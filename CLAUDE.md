@@ -5,7 +5,7 @@
 家用記帳 PWA，使用者為 Jerry_Hu 與 Alice_Lin 兩人家庭。
 前端純 Vanilla JS，後端為 Google Apps Script + Google Sheets，透過 GitHub Actions 部署。
 
-- **目前版本**：v3.4.0
+- **目前版本**：v3.5.0
 - **Sheets URL**：存於 `config.js`（gitignored），不在原始碼中
 
 ---
@@ -266,13 +266,33 @@ fetchSheet({ sheetTag: 'config', row: 2, col: 5, endRow: 51, endCol: 5 })
 | `runRecurringExpenses` | 手動補跑今天以前的週期記帳 | `{result, posted, skipped, capped}` |
 
 > ⚠️ GAS 修改後須重新部署（Deploy → Manage deployments → New version）才會生效。
-> 週期性花費（`recurringExpenses` 分頁 + 每日觸發器）後端已完成，前端 `recurring.html` 待建。
+
+---
+
+## 週期性花費（recurring.html，v3.5.0）
+
+訂閱 / 定期支出管理頁，獨立入口、沿用後台密碼（`sessionStorage` `dash_auth`）。
+
+| 檔案 | 說明 |
+|------|------|
+| `recurring.html` | 登入畫面 + 卡片列表 + 新增/編輯表單 |
+| `recurring.js` | 列表、CRUD、啟用切換、手動補跑；透過 `scriptReadUrl` 呼叫 GAS action |
+| `css/recurring.css` | 卡片列表樣式（沿用 `style.css` / `dashboard.css` 變數） |
+| `gas/RecurringExpenses.gs` | 後端：`recurringExpenses` 分頁 CRUD + 每日觸發器 `processRecurringExpenses()` |
+
+- **資料表**：Google Sheets `recurringExpenses` 分頁（`setupRecurringExpenses()` 建立），
+  欄位見 `RECURRING_HEADERS_`。`active` 分頁第 13 欄 `RecurringKey` 為去重鍵。
+- **自動記帳**：每日 03:15 觸發器掃描到期項目，補記 `NextDate` ≤ 今天的每個週期
+  （單項單次上限 120 期），寫入 `active` 並前進 `NextDate`。
+- **手動補跑**：頁面「手動補跑」按鈕 = `runRecurringExpenses` action。
+- **啟用一次性設定**：Apps Script 編輯器執行 `setupRecurringExpenses()`；未安裝觸發器時
+  頁面頂端會顯示提醒（`automationEnabled: false`）。
 
 ---
 
 ## 待辦事項（詳見 TODO.md）
 
 1. **Sheets 重整**：複製新試算表取得全新 URL → 更新 GAS 與 GitHub Secrets → 清除 git history 舊 URL
-2. **收斂 GAS 權限**：`gas/Records.gs` 查詢 / 編輯 action 仍信任前端傳入的 `sheetUrl`，改用 `getBookkeepingSpreadsheet_()`
-3. **週期性花費前端**：`recurring.html`（獨立頁，沿用後台密碼）
-4. **記帳頁 UX**：日期「昨天 / 明天」快捷、連續記帳開關（保留店家＋項目、focus 金額）
+2. **收斂 GAS 權限**：`gas/Records.gs`、`RecurringExpenses.gs` 的 action 仍信任前端傳入的 `sheetUrl`，改用 `getBookkeepingSpreadsheet_()`
+3. **PWA offline**：補 service worker，或把「離線可用」文案改為「可安裝」
+4. **dashboard.js bug**：`onYearChange` 切換年份後未重繪 Tab 1 / Tab 2

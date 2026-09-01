@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+    <meta name="theme-color" content="#4a7c4e">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/recurring.css">
+    <title>週期性花費 — 家用記帳</title>
+    <script src="config.js" defer></script>
+    <script src="recurring.js" defer></script>
+</head>
+
+<body>
+    <div id="msg-alert" class="alert d-none" role="alert"></div>
+
+    <!-- ── Login ────────────────────────────────────────────────────────────── -->
+    <div id="login-screen">
+        <div class="form-card login-card">
+            <div class="form-card__header">
+                <div class="form-card__title">週期性花費</div>
+            </div>
+            <div class="form-card__body">
+                <div class="field-group">
+                    <label class="field-label" for="login-pw">密碼</label>
+                    <input type="password" id="login-pw" placeholder="請輸入密碼">
+                </div>
+                <div class="btn-row">
+                    <button type="button" id="btn-login">進入</button>
+                </div>
+                <p id="login-error" style="color:var(--danger);font-size:0.85rem;margin-top:10px;text-align:center;min-height:1.2em;"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── App ──────────────────────────────────────────────────────────────── -->
+    <div id="recurring-app" style="display:none">
+        <div class="dash-header">
+            <div class="dash-title">週期性花費</div>
+            <div class="dash-controls">
+                <a href="index.html" class="rec-link">記帳</a>
+                <a href="dashboard.html" class="rec-link">後台</a>
+                <button id="btn-logout">登出</button>
+            </div>
+        </div>
+
+        <div class="app-wrap">
+            <div id="automation-note" class="person-note" style="display:none"></div>
+
+            <div class="rec-toolbar">
+                <button type="button" id="btn-add" class="btn-primary">＋ 新增訂閱</button>
+                <button type="button" id="btn-run" class="btn-secondary" title="立即補記今天（含）以前到期的週期記帳">手動補跑</button>
+            </div>
+
+            <div id="rec-list" class="rec-list">
+                <div class="loading-text">載入中...</div>
+            </div>
+
+            <!-- Add / edit form -->
+            <div id="rec-form-card" class="form-card rec-form-card" style="display:none">
+                <div class="form-card__header">
+                    <div class="form-card__title" id="rec-form-title">新增訂閱</div>
+                </div>
+                <div class="form-card__body">
+                    <form id="rec-form">
+                        <input type="hidden" name="Id">
+
+                        <div class="field-group">
+                            <label class="field-label" for="f-service">訂閱名稱 <span class="required">*</span></label>
+                            <input type="text" id="f-service" name="Service" maxlength="80" placeholder="Netflix、房租、健身房…" required>
+                        </div>
+
+                        <div class="field-group">
+                            <label class="field-label" for="f-website">網址</label>
+                            <input type="text" id="f-website" name="Website" maxlength="500" placeholder="https://…">
+                        </div>
+
+                        <div class="field-group">
+                            <label class="field-label" for="f-price">金額 <span class="required">*</span></label>
+                            <input type="text" id="f-price" name="Price" inputmode="decimal" pattern="\d+\.?\d*" placeholder="0" required>
+                        </div>
+
+                        <div class="field-group">
+                            <label class="field-label">分類 <span class="required">*</span></label>
+                            <select id="f-topclass" name="Topclass"></select>
+                            <select id="f-subclass" name="Subclass"></select>
+                        </div>
+
+                        <div class="field-row">
+                            <div class="field-group">
+                                <label class="field-label" for="f-frequency">週期 <span class="required">*</span></label>
+                                <select id="f-frequency" name="Frequency">
+                                    <option value="weekly">每週</option>
+                                    <option value="monthly" selected>每月</option>
+                                    <option value="yearly">每年</option>
+                                </select>
+                            </div>
+                            <div class="field-group">
+                                <label class="field-label" for="f-interval">間隔</label>
+                                <input type="number" id="f-interval" name="Interval" min="1" max="60" value="1">
+                            </div>
+                        </div>
+
+                        <div class="field-row">
+                            <div class="field-group">
+                                <label class="field-label" for="f-start">起始日 <span class="required">*</span></label>
+                                <input type="date" id="f-start" name="StartDate" required>
+                            </div>
+                            <div class="field-group">
+                                <label class="field-label" for="f-next">下次記帳日 <span class="required">*</span></label>
+                                <input type="date" id="f-next" name="NextDate" required>
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            <label class="field-label" for="f-end">結束日（可留空）</label>
+                            <input type="date" id="f-end" name="EndDate">
+                        </div>
+
+                        <div class="field-row">
+                            <div class="field-group">
+                                <label class="field-label" for="f-store">店家</label>
+                                <input type="text" id="f-store" name="Store" maxlength="100">
+                            </div>
+                            <div class="field-group">
+                                <label class="field-label" for="f-detail">項目</label>
+                                <input type="text" id="f-detail" name="Detail" maxlength="200">
+                            </div>
+                        </div>
+
+                        <div class="field-row">
+                            <div class="field-group">
+                                <label class="field-label" for="f-recommendation">推薦評分</label>
+                                <select id="f-recommendation" name="Recommendation"></select>
+                            </div>
+                            <div class="field-group">
+                                <label class="field-label" for="f-tag">標記</label>
+                                <input type="text" id="f-tag" name="Tag" maxlength="30">
+                            </div>
+                        </div>
+
+                        <div class="field-group">
+                            <label class="field-label">記帳人</label>
+                            <div class="radio-group">
+                                <label class="radio-pill">
+                                    <input type="radio" name="Name" value="Jerry_Hu" checked><span>Jerry_Hu</span>
+                                </label>
+                                <label class="radio-pill">
+                                    <input type="radio" name="Name" value="Alice_Lin"><span>Alice_Lin</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <label class="continuous-row">
+                            <input type="checkbox" id="f-active" name="Active" checked>
+                            <span>啟用（自動記帳）</span>
+                        </label>
+
+                        <div class="btn-row">
+                            <button type="submit" id="btn-save">儲存</button>
+                            <button type="button" id="btn-delete" class="btn-danger" style="display:none">刪除</button>
+                            <button type="button" id="btn-cancel">取消</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

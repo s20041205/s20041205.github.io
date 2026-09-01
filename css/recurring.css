@@ -1,0 +1,163 @@
+/* recurring.css — 週期性花費管理頁（沿用 style.css / dashboard.css 變數與元件） */
+
+.app-wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 20px 16px 56px;
+}
+
+/* Header links */
+.dash-controls .rec-link {
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.85rem;
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    transition: background var(--ease);
+}
+.dash-controls .rec-link:hover { background: rgba(255, 255, 255, 0.18); }
+
+/* Toolbar */
+.rec-toolbar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+}
+
+.rec-toolbar button {
+    flex: 0 0 auto;
+    padding: 9px 18px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+}
+
+.btn-primary {
+    background-color: var(--primary) !important;
+    box-shadow: 0 3px 10px rgba(74, 124, 78, 0.3);
+}
+.btn-primary:hover { background-color: var(--primary-dark) !important; }
+
+.btn-secondary {
+    background-color: #fff !important;
+    color: var(--text-muted) !important;
+    border: 1.5px solid var(--border) !important;
+}
+.btn-secondary:hover {
+    border-color: var(--primary) !important;
+    color: var(--primary-dark) !important;
+    background: var(--primary-light) !important;
+}
+
+/* Neutral cancel button inside the form */
+#btn-cancel {
+    background-color: #fff !important;
+    color: var(--text-muted) !important;
+    border: 1.5px solid var(--border) !important;
+}
+#btn-cancel:hover {
+    border-color: var(--text-muted) !important;
+    color: var(--text) !important;
+    background: #f8faf8 !important;
+}
+
+.btn-danger { background-color: var(--danger) !important; }
+.btn-danger:hover { background-color: var(--danger-hover) !important; }
+
+/* ── Card list ───────────────────────────────────────────────────────────── */
+.rec-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.rec-card {
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    box-shadow: 0 2px 10px rgba(45, 90, 50, 0.06);
+}
+
+.rec-card.inactive { opacity: 0.6; }
+
+.rec-card-main { min-width: 0; flex: 1; }
+
+.rec-card-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 3px;
+}
+
+.rec-badge {
+    font-size: 0.68rem;
+    font-weight: 500;
+    background: #eceff0;
+    color: var(--text-muted);
+    padding: 1px 7px;
+    border-radius: 8px;
+    vertical-align: middle;
+}
+
+.rec-card-meta {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.45;
+}
+
+.rec-card-sub {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    opacity: 0.8;
+    margin-top: 2px;
+}
+
+.rec-card-side {
+    text-align: right;
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+.rec-card-price {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--primary-dark);
+    white-space: nowrap;
+}
+
+.rec-card-actions {
+    display: flex;
+    gap: 6px;
+}
+
+.rec-card-actions .btn-edit {
+    flex: 0 0 auto;
+    padding: 5px 12px;
+    font-size: 0.8rem;
+}
+
+/* ── Form ────────────────────────────────────────────────────────────────── */
+.rec-form-card {
+    margin-top: 18px;
+}
+
+.field-row {
+    display: flex;
+    gap: 12px;
+}
+.field-row .field-group { flex: 1; }
+
+@media (max-width: 460px) {
+    .field-row { flex-direction: column; gap: 0; }
+    .rec-card { flex-direction: column; }
+    .rec-card-side { align-items: flex-start; text-align: left; flex-direction: row; width: 100%; justify-content: space-between; }
+}
