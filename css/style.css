@@ -238,6 +238,40 @@ textarea:focus {
     font-weight: 500;
 }
 
+/* ── Continuous entry toggle ─────────────────────────────────────────────── */
+.continuous-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 18px;
+    padding: 9px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    background: #f8faf8;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    user-select: none;
+    transition: border-color var(--ease), background var(--ease), color var(--ease);
+}
+
+.continuous-row input[type=checkbox] {
+    accent-color: var(--primary);
+    width: auto;
+    margin: 0;
+    padding: 0;
+    border: none;
+    box-shadow: none;
+    flex-shrink: 0;
+}
+
+.continuous-row:has(input:checked) {
+    border-color: var(--primary);
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    font-weight: 500;
+}
+
 /* ── Buttons ──────────────────────────────────────────────────────────────── */
 .btn-row {
     display: flex;

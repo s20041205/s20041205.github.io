@@ -136,10 +136,19 @@ function refreshBudgetDisplay() {
     }
 }
 
+// ── Continuous entry mode (persisted in localStorage) ────────────────────────
+const CONTINUOUS_KEY = 'bookkeeping_continuous';
+
+function isContinuousMode() {
+    return document.getElementById('continuous-toggle').checked;
+}
+
 function clearEntryFields() {
     document.getElementById('price').value = '';
-    document.getElementById('store').value = '';
-    document.getElementById('detail').value = '';
+    if (!isContinuousMode()) {
+        document.getElementById('store').value = '';
+        document.getElementById('detail').value = '';
+    }
     document.getElementById('star-list').selectedIndex = 0;
     form.querySelector('[name=Tag]').value = '';
     document.getElementById('price').focus();
@@ -173,6 +182,13 @@ document.getElementById('star-list').innerHTML    = buildOptions(stars);
 document.getElementById('topclass-list').hidden   = true;
 document.getElementById('subclass-list').hidden   = true;
 loadAutocomplete();
+
+// Restore + persist continuous-entry preference
+var continuousToggle = document.getElementById('continuous-toggle');
+continuousToggle.checked = localStorage.getItem(CONTINUOUS_KEY) === '1';
+continuousToggle.addEventListener('change', () => {
+    localStorage.setItem(CONTINUOUS_KEY, continuousToggle.checked ? '1' : '0');
+});
 
 // Form submission
 var form = document.forms['submit-to-google-sheet'];
