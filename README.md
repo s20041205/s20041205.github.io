@@ -61,7 +61,7 @@ Tags are maintained in the Google Sheets **`config` tab, column E** (E1 = header
     - Dashboard Tab 2 — monthly expense vs. budget bar chart, income doughnut, expense doughnut with drill-down; display order: budget → income → expense
     - Dashboard Tab 3 — tag spend ranking bar chart + summary table; year and person filter
     - Dashboard Tab 4 — recent records with inline edit (all fields) and delete; person filter
-    - GAS: `doGet` extended with 5 new action branches (`recentRecords`, `subSummary`, `tagSummary`, `updateRecord`, `deleteRecord`); see `GAS_doGet_additions.js`
+    - GAS: `doGet` extended with 5 new action branches (`recentRecords`, `subSummary`, `tagSummary`, `updateRecord`, `deleteRecord`); see `gas/Records.gs`
     - CI: `DASHBOARD_PASSWORD` Actions secret injected into `config.js`
 
 - May 10, 2026  **v3.3.2**

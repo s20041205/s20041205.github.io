@@ -22,7 +22,7 @@
 
 ### 敏感設定（gitignored）
 
-`config.js` 包含以下三個欄位，部署時由 GitHub Actions Secrets 自動產生：
+`config.js` 包含以下四個欄位，部署時由 GitHub Actions Secrets 自動產生：
 
 | 欄位 | Secret 名稱 | 說明 |
 |------|------------|------|
@@ -70,6 +70,7 @@ GAS `doPost` 寫入目標，依 header 欄位名稱對應 `e.parameter`。
 | J | Name | 使用者（Jerry_Hu / Alice_Lin） |
 | K | Update | 寫入時間戳（GAS 自動填入） |
 | L | Tag | 標記名稱（config E 欄下拉） |
+| M | RecurringKey | 週期性花費去重鍵（`setupRecurringExpenses()` 建立，一般記帳留空） |
 
 ### 年度統計 sheet（如 `2026`）
 
@@ -128,50 +129,39 @@ const activityParams = { sheetUrl: APP_CONFIG.sheetUrl, sheetTag: 'config',     
 
 ---
 
-## GAS 函式說明
+## GAS 後端（`gas/` 資料夾）
+
+原始碼已納入版控，詳見 [`gas/README.md`](gas/README.md)。所有 `.gs` 共用同一個
+GAS 全域命名空間，檔案切分僅為整理。
+
+| 檔案 | 內容 |
+|------|------|
+| `Common.gs` | `getBookkeepingSpreadsheet_()`、`jsonResponse_()`、`sanitizeCell_()`、`parsePositiveInteger_()`、常數 |
+| `WebApp.gs` | `doGet`（action 分派 + 範圍讀取 `handleRangeRead_`）、`doPost`（寫入 + `addActivity_`） |
+| `Records.gs` | `recentRecords` / `subSummary` / `tagSummary` / `updateRecord` / `deleteRecord` handler |
+| `RecurringExpenses.gs` | 週期性花費 CRUD + 每日觸發器 `processRecurringExpenses()` |
+| `Setup.gs` | `initialSetup()` / `setSpreadsheetId()` / `testRangeRead()`（僅編輯器手動執行） |
+
+### 試算表 ID 來源
+
+寫入端點（`doPost`、週期性花費）不接受外部 `sheetUrl`，改讀 Script Property
+**`BOOKKEEPING_SPREADSHEET_ID`**（相容舊的 `'key'`）。部署後執行一次 `initialSetup()`
+或 `setSpreadsheetId('<ID>')` 設定。**任何 `.gs` 都不得寫入真實試算表 ID / URL。**
 
 ### `doGet(e)`（scriptReadUrl）
 
-讀取任意 sheet 指定範圍，回傳逗號分隔字串。
+無 `action` → `handleRangeRead_` 讀取指定範圍，回傳逗號分隔字串；已含 `row > lastRow`
+邊界處理與 `parsePositiveInteger_` 參數驗證。其餘 `action` 見 `gas/README.md` 端點一覽。
 
-**已套用修正**（`row > lastRow` 邊界處理）：
-```js
-if (row > lastRow || col > lastCol) {
-    return ContentService.createTextOutput('');
-}
-rowRange = Math.min(rowRange, lastRow - row + 1);
-colRange = Math.min(colRange, lastCol - col + 1);
-```
+### `doPost(e)`（scriptWriteUrl）
 
-### `doPost(e)`（scriptWriteUrl）— `AddValues.gs`
+前端一律 `no-cors`，`.then()` 不論成敗都觸發、讀不到回應屬正常。
+- 無 `action`：依 `active` header 對應 `e.parameter` 附加一列，`Update` 欄填時間戳，
+  自由文字欄（Store/Detail/Tag）經 `sanitizeCell_` 防公式注入。
+- `action=addActivity` + `name`：寫入 `config!E2:E51` 第一個空列。
 
-前端一律以 `no-cors` 模式送出，`.then()` 不論成功失敗都會觸發，無法讀取 GAS 回應屬正常行為。
-
-**分支一：寫入記帳資料**（預設，無 `action` 參數）
-
-寫入 `active` sheet，依 header 欄位名稱對應 `e.parameter`。
-
-**分支二：新增標記**（`action=addActivity`，v3.3.0）
-
-```js
-if (e.parameter.action === 'addActivity') {
-    var configSheet = doc.getSheetByName('config')
-    var eRange = configSheet.getRange('E2:E51').getValues()
-    var insertRow = -1
-    for (var i = 0; i < eRange.length; i++) {
-        if (!eRange[i][0]) { insertRow = i + 2; break }
-    }
-    if (insertRow !== -1) {
-        configSheet.getRange(insertRow, 5).setValue(e.parameter.name)
-    }
-    return ContentService
-        .createTextOutput(JSON.stringify({ 'result': 'success' }))
-        .setMimeType(ContentService.MimeType.JSON)
-}
-```
-
-> ⚠️ GAS 修改後須重新部署（Deploy → Manage deployments → New version），否則 endpoint 不更新。
-> ⚠️ `GetRecentValue.gs` 若在頂層（function 外）使用 `$`，會導致整個 GAS 專案崩潰，所有函式都無法執行。
+> ⚠️ GAS 改動後須重新部署（Deploy → Manage deployments → New version），否則 endpoint 不更新。
+> ⚠️ 頂層（function 外）使用 `$` 會導致整個 GAS 專案崩潰。
 
 ---
 
@@ -226,7 +216,7 @@ if (e.parameter.action === 'addActivity') {
 | `dashboard.html` | 後台入口，含登入畫面與四個 Tab 結構 |
 | `dashboard.js` | 所有儀表板邏輯（Chart.js 4.x） |
 | `css/dashboard.css` | 後台樣式（沿用 `style.css` CSS 變數） |
-| `GAS_doGet_additions.js` | 完整 doGet（含新增 action），貼入 GAS 取代原函式 |
+| `gas/Records.gs` | 後台用的 doGet action（`recentRecords` / `subSummary` / `tagSummary` / `updateRecord` / `deleteRecord`） |
 
 ### Tab 結構
 
@@ -269,11 +259,20 @@ fetchSheet({ sheetTag: 'config', row: 2, col: 5, endRow: 51, endCol: 5 })
 | `tagSummary` | 標記彙整（year + name 可選篩選） | `{tag: {total, cats: {topclass: amt}}}` |
 | `updateRecord` | 以 rowNum 更新 `active` 指定列 | `{result: 'ok'}` |
 | `deleteRecord` | 以 rowNum 刪除 `active` 指定列 | `{result: 'ok'}` |
+| `recurringExpenses` | 週期性花費列表 | `{items: [...], automationEnabled: bool}` |
+| `saveRecurringExpense` | 新增 / 更新訂閱項目（`Id` 空為新增） | `{result: 'ok', id}` |
+| `setRecurringExpenseActive` | 啟用 / 停用（`Id` + `Active`） | `{result: 'ok'}` |
+| `deleteRecurringExpense` | 刪除（`Id`） | `{result: 'ok'}` |
+| `runRecurringExpenses` | 手動補跑今天以前的週期記帳 | `{result, posted, skipped, capped}` |
 
 > ⚠️ GAS 修改後須重新部署（Deploy → Manage deployments → New version）才會生效。
+> 週期性花費（`recurringExpenses` 分頁 + 每日觸發器）後端已完成，前端 `recurring.html` 待建。
 
 ---
 
 ## 待辦事項（詳見 TODO.md）
 
 1. **Sheets 重整**：複製新試算表取得全新 URL → 更新 GAS 與 GitHub Secrets → 清除 git history 舊 URL
+2. **收斂 GAS 權限**：`gas/Records.gs` 查詢 / 編輯 action 仍信任前端傳入的 `sheetUrl`，改用 `getBookkeepingSpreadsheet_()`
+3. **週期性花費前端**：`recurring.html`（獨立頁，沿用後台密碼）
+4. **記帳頁 UX**：日期「昨天 / 明天」快捷、連續記帳開關（保留店家＋項目、focus 金額）
