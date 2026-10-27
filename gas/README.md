@@ -28,7 +28,8 @@ Google Apps Script Web App，家用記帳 PWA 的後端。前端透過 `config.j
    - 在 `active` 分頁補上 `RecurringKey` 欄（第 13 欄 / M）
    - 安裝每日 03:15 觸發器 `processRecurringExpenses()`
 4. **Deploy → New deployment → Web app**，Execute as = *Me*，Who has access = *Anyone*。
-5. 把兩個 `/exec` URL 分別填入 GitHub Secrets `SCRIPT_WRITE_URL`、`SCRIPT_READ_URL`。
+5. 把 `/exec` URL 同時填入 GitHub Secrets `SCRIPT_WRITE_URL`、`SCRIPT_READ_URL`
+   （讀寫共用同一個部署）。更換部署的完整流程見 [docs/deployment.md](../docs/deployment.md)。
 
 ## 每次改 `.gs` 後
 

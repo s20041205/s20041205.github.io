@@ -35,4 +35,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./
           publish_branch: gh-pages
-          exclude_assets: '.github,gas,TODO.md,CLAUDE.md,config.example.js,.gitignore,README.md'
+          exclude_assets: '.github,gas,docs,CLAUDE.md,config.example.js,.gitignore,README.md'
