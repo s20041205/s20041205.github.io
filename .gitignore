@@ -1,6 +1,9 @@
 # Local config with real API URLs / secrets — copy from config.example.js
 config.js
 
+# Snapshot of the live Apps Script project (contains real sheet IDs)
+gas/gas_backup/
+
 # Apps Script local tooling (clasp)
 .clasp.json
 .clasprc.json

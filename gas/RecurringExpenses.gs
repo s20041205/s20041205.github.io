@@ -9,7 +9,7 @@
  * doGet action：recurringExpenses / saveRecurringExpense /
  *               setRecurringExpenseActive / deleteRecurringExpense / runRecurringExpenses
  *
- * 前端 UI：recurring.html（待建）。
+ * 前端 UI：recurring.html。
  */
 
 'use strict';
@@ -35,20 +35,8 @@ var RECURRING_SUBCLASSES_ = {
 };
 var RECURRING_RECOMMENDATIONS_ = ['-', '☆☆☆☆☆', '★☆☆☆☆', '★★☆☆☆', '★★★☆☆', '★★★★☆', '★★★★★'];
 
-function resolveRecurringSpreadsheet_(sheetUrl) {
-  var properties = PropertiesService.getScriptProperties();
-  var spreadsheetId = String(properties.getProperty(SPREADSHEET_ID_PROP)
-    || properties.getProperty('key') || '').trim();
-  if (spreadsheetId) return SpreadsheetApp.openById(spreadsheetId);
-  if (sheetUrl) return SpreadsheetApp.openByUrl(sheetUrl);
-
-  var active = SpreadsheetApp.getActiveSpreadsheet();
-  if (active) return active;
-  throw new Error('Missing Script Property ' + SPREADSHEET_ID_PROP);
-}
-
 function setupRecurringExpenses() {
-  var doc = resolveRecurringSpreadsheet_('');
+  var doc = getBookkeepingSpreadsheet_();
   PropertiesService.getScriptProperties()
     .setProperty(SPREADSHEET_ID_PROP, doc.getId());
   ensureRecurringSheet_(doc);
@@ -405,11 +393,11 @@ function appendRecurringEntry_(activeSheet, recurring, dueDate, recurringKey, no
 }
 
 function processRecurringExpenses() {
-  return processRecurringExpensesForDate_(new Date(), '');
+  return processRecurringExpensesForDate_(new Date());
 }
 
-function processRecurringExpensesForDate_(todayValue, sheetUrl) {
-  var doc = resolveRecurringSpreadsheet_(sheetUrl);
+function processRecurringExpensesForDate_(todayValue) {
+  var doc = getBookkeepingSpreadsheet_();
   var lock = LockService.getScriptLock();
   lock.waitLock(30000);
   try {

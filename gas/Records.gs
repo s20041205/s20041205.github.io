@@ -1,9 +1,8 @@
 /**
  * 後台儀表板用的查詢與編輯 action（透過 scriptReadUrl / doGet）。
  *
- * 這些 handler 目前以 params.sheetUrl 開啟試算表（前端傳入），與範圍讀取一致。
- * ⚠️ 安全備註：Web App 為 ANYONE_ANONYMOUS，任何知道 endpoint 的人可對任意
- *    試算表讀 / 寫 / 刪列。若要收斂，改用 getBookkeepingSpreadsheet_() 並停止信任 sheetUrl。
+ * 試算表一律由 getBookkeepingSpreadsheet_()（Script Property）取得，
+ * 前端傳入的 sheetUrl 參數會被忽略，避免被拿來操作其他試算表。
  *
  * active 分頁欄位（1-indexed）：
  *   1 Date  2 Month  3 Balance  4 Topclass  5 Subclass  6 Price
@@ -15,7 +14,7 @@
 // ── 近期記錄（倒序）─────────────────────────────────────────────────────────
 function handleRecentRecords_(params) {
   var count   = parseInt(params.count, 10) || 20;
-  var doc     = SpreadsheetApp.openByUrl(params.sheetUrl);
+  var doc     = getBookkeepingSpreadsheet_();
   var sheet   = doc.getSheetByName('active');
   var lastRow = sheet.getLastRow();
   if (lastRow < 2) {
@@ -58,7 +57,7 @@ function handleRecentRecords_(params) {
 function handleSubSummary_(params) {
   var filterYear = params.year || '';
   var filterName = params.name || '';
-  var doc    = SpreadsheetApp.openByUrl(params.sheetUrl);
+  var doc    = getBookkeepingSpreadsheet_();
   var sheet  = doc.getSheetByName('active');
   var rows   = sheet.getDataRange().getValues();
   var result = {};
@@ -99,7 +98,7 @@ function handleSubSummary_(params) {
 function handleTagSummary_(params) {
   var filterYear = params.year || '';
   var filterName = params.name || '';
-  var doc    = SpreadsheetApp.openByUrl(params.sheetUrl);
+  var doc    = getBookkeepingSpreadsheet_();
   var sheet  = doc.getSheetByName('active');
   var rows   = sheet.getDataRange().getValues();
   var result = {};
@@ -135,7 +134,7 @@ function handleUpdateRecord_(params) {
   if (!rowNum || rowNum < 2) {
     return jsonResponse_({ result: 'error', msg: 'invalid rowNum' });
   }
-  var doc   = SpreadsheetApp.openByUrl(params.sheetUrl);
+  var doc   = getBookkeepingSpreadsheet_();
   var sheet = doc.getSheetByName('active');
 
   if (params.Date) {
@@ -164,7 +163,7 @@ function handleDeleteRecord_(params) {
   if (!rowNum || rowNum < 2) {
     return jsonResponse_({ result: 'error', msg: 'invalid rowNum' });
   }
-  var doc   = SpreadsheetApp.openByUrl(params.sheetUrl);
+  var doc   = getBookkeepingSpreadsheet_();
   var sheet = doc.getSheetByName('active');
   sheet.deleteRow(rowNum);
   return jsonResponse_({ result: 'ok' });

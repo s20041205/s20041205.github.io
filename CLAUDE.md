@@ -124,8 +124,7 @@ const nowusing     = { sheetUrl: APP_CONFIG.sheetUrl, sheetTag: new Date().getFu
 const activityParams = { sheetUrl: APP_CONFIG.sheetUrl, sheetTag: 'config',                  row: 2,  col: 5, endRow: 51, endCol: 5 };
 ```
 
-> ⚠️ 三個 fetch 物件都必須帶 `sheetUrl`（`APP_CONFIG.sheetUrl`）。
-> 若缺少，GAS `openByUrl(undefined)` 拋例外 → CORS 錯誤（HTTP 200 無 CORS header）。
+> `sheetUrl` 參數目前仍會送出，但 GAS 已忽略它，一律讀 Script Property 指定的試算表。
 
 ---
 
@@ -144,7 +143,7 @@ GAS 全域命名空間，檔案切分僅為整理。
 
 ### 試算表 ID 來源
 
-寫入端點（`doPost`、週期性花費）不接受外部 `sheetUrl`，改讀 Script Property
+所有端點（`doPost`、`doGet` 各 action 與範圍讀取）都不接受外部 `sheetUrl`，改讀 Script Property
 **`BOOKKEEPING_SPREADSHEET_ID`**（相容舊的 `'key'`）。部署後執行一次 `initialSetup()`
 或 `setSpreadsheetId('<ID>')` 設定。**任何 `.gs` 都不得寫入真實試算表 ID / URL。**
 
@@ -293,6 +292,4 @@ fetchSheet({ sheetTag: 'config', row: 2, col: 5, endRow: 51, endCol: 5 })
 ## 待辦事項（詳見 TODO.md）
 
 1. **Sheets 重整**：複製新試算表取得全新 URL → 更新 GAS 與 GitHub Secrets → 清除 git history 舊 URL
-2. **收斂 GAS 權限**：`gas/Records.gs`、`RecurringExpenses.gs` 的 action 仍信任前端傳入的 `sheetUrl`，改用 `getBookkeepingSpreadsheet_()`
-3. **PWA offline**：補 service worker，或把「離線可用」文案改為「可安裝」
-4. **dashboard.js bug**：`onYearChange` 切換年份後未重繪 Tab 1 / Tab 2
+2. **PWA offline**：補 service worker，或把「離線可用」文案改為「可安裝」

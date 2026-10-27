@@ -36,12 +36,8 @@ function showConfiguredSpreadsheet() {
 
 /** 煙霧測試：透過 doGet 讀取 config 分頁 A1:C1，結果寫入執行紀錄。 */
 function testRangeRead() {
-  var id = PropertiesService.getScriptProperties().getProperty(SPREADSHEET_ID_PROP)
-    || PropertiesService.getScriptProperties().getProperty('key');
-  if (!id) throw new Error('先執行 initialSetup() 或 setSpreadsheetId()');
-  var url = SpreadsheetApp.openById(id).getUrl();
   var out = doGet({ parameter: {
-    sheetUrl: url, sheetTag: 'config', row: 1, col: 1, endRow: 1, endCol: 3
+    sheetTag: 'config', row: 1, col: 1, endRow: 1, endCol: 3
   } });
   Logger.log(out.getContent());
 }

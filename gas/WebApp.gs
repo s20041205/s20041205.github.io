@@ -17,15 +17,15 @@ function doGet(e) {
     switch (params.action) {
       // 週期性花費（RecurringExpenses.gs）
       case 'recurringExpenses':
-        return jsonResponse_(listRecurringExpenses_(resolveRecurringSpreadsheet_(params.sheetUrl)));
+        return jsonResponse_(listRecurringExpenses_(getBookkeepingSpreadsheet_()));
       case 'saveRecurringExpense':
-        return jsonResponse_(saveRecurringExpense_(resolveRecurringSpreadsheet_(params.sheetUrl), params));
+        return jsonResponse_(saveRecurringExpense_(getBookkeepingSpreadsheet_(), params));
       case 'setRecurringExpenseActive':
-        return jsonResponse_(setRecurringExpenseActive_(resolveRecurringSpreadsheet_(params.sheetUrl), params));
+        return jsonResponse_(setRecurringExpenseActive_(getBookkeepingSpreadsheet_(), params));
       case 'deleteRecurringExpense':
-        return jsonResponse_(deleteRecurringExpense_(resolveRecurringSpreadsheet_(params.sheetUrl), params));
+        return jsonResponse_(deleteRecurringExpense_(getBookkeepingSpreadsheet_(), params));
       case 'runRecurringExpenses':
-        return jsonResponse_(processRecurringExpensesForDate_(new Date(), params.sheetUrl));
+        return jsonResponse_(processRecurringExpensesForDate_(new Date()));
 
       // 後台查詢 / 編輯（Records.gs）
       case 'recentRecords':
@@ -48,21 +48,21 @@ function doGet(e) {
 }
 
 // ── doGet：範圍讀取（回傳逗號分隔字串）─────────────────────────────────────
+// 前端仍會帶 sheetUrl，但一律忽略，只讀 Script Property 指定的記帳試算表。
 function handleRangeRead_(params) {
-  var sheetUrl = params.sheetUrl;
   var sheetTag = params.sheetTag;
   var row    = parsePositiveInteger_(params.row);
   var col    = parsePositiveInteger_(params.col);
   var endRow = parsePositiveInteger_(params.endRow);
   var endCol = parsePositiveInteger_(params.endCol);
 
-  if (!sheetUrl || !sheetTag ||
+  if (!sheetTag ||
       !row || !col || !endRow || !endCol ||
       endRow < row || endCol < col) {
     return ContentService.createTextOutput('');
   }
 
-  var ss = SpreadsheetApp.openByUrl(sheetUrl);
+  var ss = getBookkeepingSpreadsheet_();
   var sheet = ss.getSheetByName(sheetTag);
   if (!sheet) return ContentService.createTextOutput('');
 

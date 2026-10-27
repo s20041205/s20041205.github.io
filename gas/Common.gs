@@ -15,7 +15,7 @@ var ACTIVE_SHEET_NAME = 'active';
 var SPREADSHEET_ID_PROP = 'BOOKKEEPING_SPREADSHEET_ID';
 
 /**
- * 取得記帳試算表（寫入端點使用）。
+ * 取得記帳試算表（所有端點共用，不信任前端傳入的 sheetUrl）。
  * ID 來源優先序：Script Property BOOKKEEPING_SPREADSHEET_ID → 舊版 'key' → 綁定的試算表。
  */
 function getBookkeepingSpreadsheet_() {

@@ -48,7 +48,7 @@ Google Apps Script Web App，家用記帳 PWA 的後端。前端透過 `config.j
 
 | action | 回傳 | 用途 |
 |--------|------|------|
-| （無） | 逗號分隔字串 | 範圍讀取（`sheetUrl,sheetTag,row,col,endRow,endCol`） |
+| （無） | 逗號分隔字串 | 範圍讀取（`sheetTag,row,col,endRow,endCol`；`sheetUrl` 忽略） |
 | `recentRecords` | JSON array | 後台「近期修改」 |
 | `subSummary` | JSON object | 後台支出細項下鑽 |
 | `tagSummary` | JSON object | 後台標記彙整 |
@@ -59,11 +59,12 @@ Google Apps Script Web App，家用記帳 PWA 的後端。前端透過 `config.j
 | `deleteRecurringExpense` + `Id` | `{result}` | 刪除 |
 | `runRecurringExpenses` | 統計 | 手動補跑今天以前的週期記帳 |
 
-## 安全備註（尚未處理，見專案 TODO）
+## 安全備註
 
-- Web App 為 **Anyone (anonymous)**，`Records.gs` 的查詢 / 編輯 action 以前端傳入的
-  `sheetUrl` 開啟試算表 → 任何知道 `/exec` 網址的人可對任意試算表讀 / 寫 / 刪列。
-  收斂方式：這些 handler 改用 `getBookkeepingSpreadsheet_()`，不再信任 `sheetUrl` 參數。
+- Web App 為 **Anyone (anonymous)**。所有 action（含範圍讀取）一律以
+  `getBookkeepingSpreadsheet_()` 開啟 Script Property 指定的試算表，前端傳入的
+  `sheetUrl` 參數會被忽略，無法被拿來操作其他試算表。
+- 知道 `/exec` 網址的人仍可讀寫**記帳試算表本身**，網址請視同密碼保管。
 - `updateRecord` / `deleteRecord` / 週期性花費以 **GET** 觸發寫入，非冪等。維持現狀是為了
   與既有前端一致並避開 GAS 的 CORS 限制。
 - **切勿把真實試算表 ID / URL 寫進任何 `.gs`**（本資料夾會進版控並公開部署）。
