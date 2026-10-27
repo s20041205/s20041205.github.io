@@ -29,10 +29,10 @@
             <div class="form-card__header">
                 <div class="form-card__title">
                     家用記帳
-                    <span class="form-card__version">v3.4.0</span>
+                    <span class="form-card__version">v3.5.0</span>
                 </div>
                 <div class="form-card__meta">
-                    <span><a href="#" id="sheet-link" target="_blank">試算表</a> · <a href="dashboard.html">後台</a></span>
+                    <span><a href="#" id="sheet-link" target="_blank">試算表</a> · <a href="dashboard.html">後台</a> · <a href="recurring.html">週期</a></span>
                     <span>STLin &copy; <span id="year"></span></span>
                 </div>
             </div>
@@ -44,6 +44,10 @@
                     <div class="field-group">
                         <label class="field-label" for="fdate">日期</label>
                         <input name="Date" type="date" id="fdate" onchange="changeDate()" required>
+                        <div class="date-shortcuts">
+                            <button type="button" class="btn-date-shortcut" onclick="setRelativeDate(-1)">昨天</button>
+                            <button type="button" class="btn-date-shortcut" onclick="setRelativeDate(1)">明天</button>
+                        </div>
                     </div>
 
                     <div class="field-group">
@@ -104,6 +108,11 @@
                             </label>
                         </div>
                     </div>
+
+                    <label class="continuous-row" title="送出後保留店家／項目，游標回到金額，方便連續輸入">
+                        <input type="checkbox" id="continuous-toggle">
+                        <span>連續記帳（保留店家／項目）</span>
+                    </label>
 
                     <div class="btn-row">
                         <button type="submit" id="btn-submit">Send</button>

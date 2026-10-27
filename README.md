@@ -10,8 +10,10 @@ A lightweight household bookkeeping PWA for two users. Entries are submitted to 
 - Store / item autocomplete via localStorage
 - Star rating for restaurants and stores
 - Two-user support
-- Offline-capable PWA (manifest, iOS meta tags, SVG icon)
+- Continuous-entry toggle (keep store/item, refocus price) and 昨天/明天 date shortcuts
+- Installable PWA (manifest, iOS meta tags, SVG icon)
 - Password-protected admin dashboard (`dashboard.html`) — yearly overview, monthly breakdown, tag summary, and recent-record editing
+- Recurring expenses (`recurring.html`) — subscriptions and fixed costs auto-posted each cycle by a daily Apps Script trigger, with add/edit/disable management
 
 ## Tech Stack
 
@@ -55,13 +57,21 @@ Tags are maintained in the Google Sheets **`config` tab, column E** (E1 = header
 
 ## Release History
 
+- **v3.5.0**
+    - Feature: recurring expenses page (`recurring.html` / `recurring.js` / `css/recurring.css`) — list, add/edit, enable/disable, manual catch-up run; backend `gas/RecurringExpenses.gs` (daily trigger `processRecurringExpenses`, `recurringExpenses` sheet, `RecurringKey` dedupe column on `active`)
+    - Feature: entry form 昨天 / 明天 date shortcut buttons
+    - Feature: continuous-entry toggle — after send, keep store/item, clear price/star/tag, refocus price; preference stored in `localStorage`
+    - Refactor: GAS backend reorganized into `gas/` (`Common`/`WebApp`/`Records`/`RecurringExpenses`/`Setup.gs` + `gas/README.md`), all hardcoded sheet IDs removed, spreadsheet resolved via Script Property `BOOKKEEPING_SPREADSHEET_ID`
+    - Security: formula-injection guard (`sanitizeCell_`) on the write path and `addActivity`
+    - CI: `gas/` and `CLAUDE.md` excluded from the gh-pages publish
+
 - May 10, 2026  **v3.4.0**
     - Feature: password-protected admin dashboard (`dashboard.html`)
     - Dashboard Tab 1 — yearly income/expense summary cards, monthly trend bar chart, income & expense doughnut charts with subcategory drill-down (click segment or legend text)
     - Dashboard Tab 2 — monthly expense vs. budget bar chart, income doughnut, expense doughnut with drill-down; display order: budget → income → expense
     - Dashboard Tab 3 — tag spend ranking bar chart + summary table; year and person filter
     - Dashboard Tab 4 — recent records with inline edit (all fields) and delete; person filter
-    - GAS: `doGet` extended with 5 new action branches (`recentRecords`, `subSummary`, `tagSummary`, `updateRecord`, `deleteRecord`); see `GAS_doGet_additions.js`
+    - GAS: `doGet` extended with 5 new action branches (`recentRecords`, `subSummary`, `tagSummary`, `updateRecord`, `deleteRecord`); see `gas/Records.gs`
     - CI: `DASHBOARD_PASSWORD` Actions secret injected into `config.js`
 
 - May 10, 2026  **v3.3.2**

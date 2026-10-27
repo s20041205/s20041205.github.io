@@ -107,6 +107,18 @@ body {
 .person-btn:hover    { background: rgba(255,255,255,0.15); color: #fff; }
 .person-btn.active   { background: rgba(255,255,255,0.28); color: #fff; font-weight: 500; }
 
+/* ── Header link ──────────────────────────────────────────────────────────── */
+.dash-link {
+    padding: 4px 12px;
+    border: 1.5px solid rgba(255,255,255,0.4);
+    border-radius: 20px;
+    color: rgba(255,255,255,0.85);
+    font-size: 0.82rem;
+    text-decoration: none;
+    transition: background var(--ease), color var(--ease);
+}
+.dash-link:hover { background: rgba(255,255,255,0.18); color: #fff; }
+
 /* ── Logout button ────────────────────────────────────────────────────────── */
 #btn-logout {
     padding: 4px 12px;
