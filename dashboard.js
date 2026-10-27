@@ -173,8 +173,14 @@ function onYearChange() {
     subDataFor  = null;
     tagData     = null;
     tagDataFor  = null;
-    loadYearData();
-    loadSubData();
+
+    var loadingEl = document.getElementById('overview-loading');
+    if (loadingEl) loadingEl.style.display = '';
+
+    loadYearData()
+        .then(() => { renderOverview(); renderMonthly(); })
+        .catch(() => showMessage('年度資料載入失敗，請重新整理', 'danger'));
+    loadSubData().catch(() => {});
     if (currentTab === 'tab-tags') loadTagData();
 }
 

@@ -40,10 +40,16 @@ function buildOptions(arr) {
 const AC_KEY = 'bookkeeping_ac';
 const AC_MAX = 50;
 
+function escAttr(s) {
+    return String(s)
+        .replace(/&/g, '&amp;').replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
 function loadAutocomplete() {
     var data = JSON.parse(localStorage.getItem(AC_KEY) || '{"stores":[],"details":[]}');
-    document.getElementById('store-suggestions').innerHTML  = data.stores.map(v => '<option value="' + v + '">').join('');
-    document.getElementById('detail-suggestions').innerHTML = data.details.map(v => '<option value="' + v + '">').join('');
+    document.getElementById('store-suggestions').innerHTML  = data.stores.map(v => '<option value="' + escAttr(v) + '">').join('');
+    document.getElementById('detail-suggestions').innerHTML = data.details.map(v => '<option value="' + escAttr(v) + '">').join('');
 }
 
 function saveAutocomplete(store, detail) {
@@ -104,13 +110,23 @@ function changeDate() {
     document.getElementById('month').value = parseInt(val.split('-')[1], 10);
 }
 
+// Quick date shortcuts (昨天 / 明天) — relative to today
+function setRelativeDate(deltaDays) {
+    var d = new Date();
+    d.setDate(d.getDate() + deltaDays);
+    document.getElementById('fdate').value = d.getFullYear() + '-'
+        + String(d.getMonth() + 1).padStart(2, '0') + '-'
+        + String(d.getDate()).padStart(2, '0');
+    changeDate();
+}
+
 function DisplayBudgetRemain(idx) {
     var el = document.getElementById('budget');
     if (!budgetReady) {
         el.style.color = 'gray';
         return '預算載入中...';
     }
-    const money = new Intl.NumberFormat('tw-TW', { style: 'currency', currency: 'NTD', minimumFractionDigits: 0 });
+    const money = new Intl.NumberFormat('zh-TW', { style: 'currency', currency: 'TWD', minimumFractionDigits: 0 });
     var curUsage   = arrUsed[idx]   ? arrUsed[idx][1]   : 0;
     var yearBudget = arrBudget[idx] ? arrBudget[idx][1] : 0;
     var remain = yearBudget - curUsage;
@@ -126,10 +142,19 @@ function refreshBudgetDisplay() {
     }
 }
 
+// ── Continuous entry mode (persisted in localStorage) ────────────────────────
+const CONTINUOUS_KEY = 'bookkeeping_continuous';
+
+function isContinuousMode() {
+    return document.getElementById('continuous-toggle').checked;
+}
+
 function clearEntryFields() {
     document.getElementById('price').value = '';
-    document.getElementById('store').value = '';
-    document.getElementById('detail').value = '';
+    if (!isContinuousMode()) {
+        document.getElementById('store').value = '';
+        document.getElementById('detail').value = '';
+    }
     document.getElementById('star-list').selectedIndex = 0;
     form.querySelector('[name=Tag]').value = '';
     document.getElementById('price').focus();
@@ -163,6 +188,13 @@ document.getElementById('star-list').innerHTML    = buildOptions(stars);
 document.getElementById('topclass-list').hidden   = true;
 document.getElementById('subclass-list').hidden   = true;
 loadAutocomplete();
+
+// Restore + persist continuous-entry preference
+var continuousToggle = document.getElementById('continuous-toggle');
+continuousToggle.checked = localStorage.getItem(CONTINUOUS_KEY) === '1';
+continuousToggle.addEventListener('change', () => {
+    localStorage.setItem(CONTINUOUS_KEY, continuousToggle.checked ? '1' : '0');
+});
 
 // Form submission
 var form = document.forms['submit-to-google-sheet'];
