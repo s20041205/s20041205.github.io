@@ -317,6 +317,51 @@ button[type=button]:hover {
 }
 button[type=button]:active { transform: translateY(0); }
 
+/* ── Access-code screen (js/api.js requireToken) ─────────────────────────── */
+.auth-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 32px 16px;
+    background: linear-gradient(150deg, var(--bg-from) 0%, var(--bg-to) 60%, var(--bg-from) 100%);
+}
+
+body.auth-locked { overflow: hidden; }
+
+.auth-card {
+    width: 100%;
+    max-width: 360px;
+}
+
+.auth-card .form-card__body { padding: 24px 24px 28px; }
+
+.auth-hint {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    margin-top: 12px;
+    text-align: center;
+}
+
+.auth-error {
+    color: var(--danger);
+    font-size: 0.85rem;
+    margin-top: 6px;
+    text-align: center;
+    min-height: 1.2em;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%       { transform: translateX(-8px); }
+    40%       { transform: translateX(8px); }
+    60%       { transform: translateX(-6px); }
+    80%       { transform: translateX(6px); }
+}
+.shake { animation: shake 0.4s ease; }
+
 /* ── Alert utilities (replaces Bootstrap) ────────────────────────────────── */
 .d-none        { display: none !important; }
 .alert         { border: 1px solid transparent; }

@@ -1,9 +1,5 @@
 'use strict';
 
-// ── Google Apps Script endpoints (injected from config.js) ───────────────────
-const scriptWriteUrl = APP_CONFIG.scriptWriteUrl;
-const scriptReadUrl  = APP_CONFIG.scriptReadUrl;
-
 // ── Category data ─────────────────────────────────────────────────────────────
 const topclass = [
     [],
@@ -211,10 +207,10 @@ form.addEventListener('submit', e => {
     btn.disabled = true;
     btn.textContent = '傳送中...';
 
-    // no-cors: Google Apps Script returns a cross-origin redirect after writing;
-    // reading that response would throw a CORS error even though the write succeeded.
-    fetch(scriptWriteUrl, { method: 'POST', body: new FormData(form), mode: 'no-cors' })
-        .then(() => {
+    // GET action：可讀到 GAS 回應，確認真的寫入成功
+    Api.action('addRecord', Object.fromEntries(new FormData(form)))
+        .then(res => {
+            if (!res || res.result !== 'success') throw new Error((res && res.error) || 'write failed');
             saveAutocomplete(
                 document.getElementById('store').value,
                 document.getElementById('detail').value
@@ -234,26 +230,19 @@ form.addEventListener('submit', e => {
 
 // Fetch budget data from Google Sheets
 const budgets = {
-    sheetUrl: APP_CONFIG.sheetUrl,
     sheetTag: 'config',
     row: 2, col: 1, endRow: 10, endCol: 2
 };
 const nowusing = {
-    sheetUrl: APP_CONFIG.sheetUrl,
     sheetTag: new Date().getFullYear(),
     row: 11, col: 2, endRow: 19, endCol: 3
 };
 const activityParams = {
-    sheetUrl: APP_CONFIG.sheetUrl,
     sheetTag: 'config',
     row: 2, col: 5, endRow: 51, endCol: 5
 };
 
-function fetchSheet(params) {
-    const url = new URL(scriptReadUrl);
-    Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
-    return fetch(url).then(r => r.text());
-}
+const fetchSheet = Api.fetchSheet;   // js/api.js
 
 // Activities with YYMMDD_ prefix expire after this many days
 var ACTIVITY_EXPIRE_DAYS = 30;
@@ -275,7 +264,7 @@ function populateActivities() {
     el.innerHTML = '<option value="">-</option>' +
         arrActivities
             .filter(a => !isActivityExpired(a))
-            .map(a => '<option value="' + a + '">' + a + '</option>')
+            .map(a => '<option value="' + escAttr(a) + '">' + escAttr(a) + '</option>')
             .join('');
 }
 
@@ -309,11 +298,9 @@ function confirmAddActivity() {
     var btn = document.getElementById('btn-confirm-activity');
     btn.disabled = true;
 
-    var fd = new FormData();
-    fd.append('action', 'addActivity');
-    fd.append('name', name);
-    fetch(scriptWriteUrl, { method: 'POST', body: fd, mode: 'no-cors' })
-        .then(() => {
+    Api.action('addActivity', { name })
+        .then(res => {
+            if (!res || res.result !== 'success') throw new Error((res && res.error) || 'add failed');
             arrActivities.push(name);
             populateActivities();
             document.getElementById('remark-list').value = name;
@@ -326,7 +313,7 @@ function confirmAddActivity() {
         .finally(() => { btn.disabled = false; });
 }
 
-(async () => {
+async function loadBudgets() {
     try {
         const [d1, d2] = await Promise.all([fetchSheet(budgets), fetchSheet(nowusing)]);
         const a1 = d1.split(',');
@@ -344,9 +331,9 @@ function confirmAddActivity() {
         el.style.color = 'gray';
         el.innerHTML = '預算資料載入失敗';
     }
-})();
+}
 
-(async () => {
+async function loadActivities() {
     try {
         const d = await fetchSheet(activityParams);
         arrActivities = d.split(',').map(s => s.trim()).filter(s => s.length > 0);
@@ -354,4 +341,9 @@ function confirmAddActivity() {
         arrActivities = [];
     }
     populateActivities();
-})();
+}
+
+Api.requireToken('家用記帳', () => {
+    loadBudgets();
+    loadActivities();
+});
