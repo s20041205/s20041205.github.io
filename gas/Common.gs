@@ -44,6 +44,31 @@ function getBookkeepingSpreadsheet_() {
   throw new Error('缺少 Script Property ' + SPREADSHEET_ID_PROP + '，請先執行 initialSetup()');
 }
 
+// ── 日期 ────────────────────────────────────────────────────────────────────
+// 試算表時區可能與腳本時區（Asia/Taipei）不同。寫入日期一律用 'yyyy-MM-dd' 字串，
+// 讓試算表依自己的時區解讀成純日期；切勿 setValue(new Date(...))，否則會被換算成
+// 前一天中午之類的時間。讀取儲存格的 Date 時，用試算表時區格式化。
+
+var sheetTimeZoneCache_ = null;
+
+function spreadsheetTimeZone_() {
+  if (!sheetTimeZoneCache_) {
+    sheetTimeZoneCache_ = getBookkeepingSpreadsheet_().getSpreadsheetTimeZone();
+  }
+  return sheetTimeZoneCache_;
+}
+
+/** 儲存格的日期值 → 'yyyy-MM-dd'（空值回傳 ''）。 */
+function cellDateString_(value) {
+  if (value instanceof Date) return Utilities.formatDate(value, spreadsheetTimeZone_(), 'yyyy-MM-dd');
+  return String(value == null ? '' : value).substring(0, 10);
+}
+
+/** 目前時間 'yyyy-MM-dd HH:mm:ss'（腳本時區），用於 Update / CreatedAt 等時間戳。 */
+function nowStamp_() {
+  return Utilities.formatDate(new Date(), Session.getScriptTimeZone() || 'GMT+8', 'yyyy-MM-dd HH:mm:ss');
+}
+
 /** 以 JSON 回應。 */
 function jsonResponse_(value) {
   return ContentService.createTextOutput(JSON.stringify(value))

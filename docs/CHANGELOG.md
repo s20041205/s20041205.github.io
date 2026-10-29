@@ -1,5 +1,11 @@
 # Changelog
 
+- Oct 29, 2026  **v3.6.1**
+    - Fix: recurring entries were written as Date objects, so a spreadsheet in a different time zone showed e.g. 9/18 as「9/17/2026 12:00:00」and the Update column as「10/29/2026 9:56:35」. All GAS date writes are now `yyyy-MM-dd` strings and timestamps `yyyy-MM-dd HH:mm:ss`; date cells are read in the spreadsheet's own time zone. Dashboard date edits had the same bug and are fixed too
+    - GAS: `findShiftedDates()` / `fixShiftedDates()` in `Setup.gs` list and repair previously shifted dates and timestamps
+    - UX: recurring form reorganized — 首次扣款日 / 多久扣一次（每 N 週·個月·年）/ 下一次記帳日 with plain-language hints; 下一次記帳日 follows 首次扣款日 for new items; live summary shows the schedule, overdue periods that will be back-filled, and the next date
+    - UX: recurring list shows the actual day (每月 18 日、每週三、每年 9/18)
+
 - Oct 29, 2026  **v3.6.0**
     - Security: GAS requires an access code (`token`, Script Property `API_TOKEN`) on every request; without it nothing can be read or written. `setApiToken()` creates one
     - Security: access-code screen shared by all three pages (`js/api.js`); each device enters it once (stored in `localStorage`), 登出 clears it. `dashboardPassword` removed from `config.js`, `DASHBOARD_PASSWORD` / `SCRIPT_WRITE_URL` secrets no longer used

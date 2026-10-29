@@ -3,7 +3,7 @@
 家用記帳 PWA，使用者為 Jerry_Hu 與 Alice_Lin 兩人家庭。
 前端 Vanilla JS（GitHub Pages），後端 Google Apps Script + Google Sheets。
 
-- **目前版本**：v3.6.0
+- **目前版本**：v3.6.1
 - **開發分支**：`Claude` → PR → `main`（push `main` 自動部署）
 
 ---
@@ -47,6 +47,8 @@
 - **所有 GAS 請求都要帶存取碼 `token`**（Script Property `API_TOKEN`）。前端一律經 `js/api.js`
   以 GET 呼叫，才讀得到回應；新增 action 時不要繞過 `Api`。存取碼不可寫進任何檔案。
 - 後台編輯 / 刪除以 `rowNum` + `key`（記錄指紋）定位，不可只靠列號。
+- **GAS 寫入日期一律用 `'yyyy-MM-dd'` 字串、時間戳用 `nowStamp_()`**，不可 `setValue(new Date())`：
+  試算表時區與腳本時區（Asia/Taipei）不同，Date 會被換算成前一天中午。讀儲存格日期用 `cellDateString_()`。
 - `config.js`、`gas/gas_backup/` 含真實網址 / ID，**不可 commit**。
 
 ## 慣例

@@ -72,45 +72,52 @@
                             <select id="f-subclass" name="Subclass"></select>
                         </div>
 
-                        <div class="field-row">
-                            <div class="field-group">
-                                <label class="field-label" for="f-frequency">週期 <span class="required">*</span></label>
-                                <select id="f-frequency" name="Frequency">
-                                    <option value="weekly">每週</option>
-                                    <option value="monthly" selected>每月</option>
-                                    <option value="yearly">每年</option>
-                                </select>
-                            </div>
-                            <div class="field-group">
-                                <label class="field-label" for="f-interval">間隔</label>
-                                <input type="number" id="f-interval" name="Interval" min="1" max="60" value="1">
-                            </div>
+                        <div class="rec-section-title">扣款排程</div>
+
+                        <div class="field-group">
+                            <label class="field-label" for="f-start">首次扣款日 <span class="required">*</span></label>
+                            <input type="date" id="f-start" name="StartDate" required>
+                            <div class="field-hint">之後每一期都以這天為準，例如 9/18 開始 → 每月 18 日記帳</div>
                         </div>
 
-                        <div class="field-row">
-                            <div class="field-group">
-                                <label class="field-label" for="f-start">起始日 <span class="required">*</span></label>
-                                <input type="date" id="f-start" name="StartDate" required>
+                        <div class="field-group">
+                            <label class="field-label" for="f-interval">多久扣一次 <span class="required">*</span></label>
+                            <div class="every-row">
+                                <span>每</span>
+                                <input type="number" id="f-interval" name="Interval" min="1" max="60" value="1" inputmode="numeric">
+                                <select id="f-frequency" name="Frequency">
+                                    <option value="weekly">週</option>
+                                    <option value="monthly" selected>個月</option>
+                                    <option value="yearly">年</option>
+                                </select>
                             </div>
-                            <div class="field-group">
-                                <label class="field-label" for="f-next">下次記帳日 <span class="required">*</span></label>
-                                <input type="date" id="f-next" name="NextDate" required>
-                            </div>
+                            <div class="field-hint">一般月費填「每 1 個月」；兩個月繳一次的水費填「每 2 個月」</div>
+                        </div>
+
+                        <div class="field-group">
+                            <label class="field-label" for="f-next">下一次記帳日 <span class="required">*</span></label>
+                            <input type="date" id="f-next" name="NextDate" required>
+                            <div class="field-hint">系統自動推算，通常不用改。想跳過某一期、或從某天才開始記，再手動調整</div>
                         </div>
 
                         <div class="field-group">
                             <label class="field-label" for="f-end">結束日（可留空）</label>
                             <input type="date" id="f-end" name="EndDate">
+                            <div class="field-hint">合約到期或已退訂時填寫，之後就不再記帳</div>
                         </div>
+
+                        <div id="schedule-summary" class="schedule-summary"></div>
+
+                        <div class="rec-section-title">記帳內容</div>
 
                         <div class="field-row">
                             <div class="field-group">
                                 <label class="field-label" for="f-store">店家</label>
-                                <input type="text" id="f-store" name="Store" maxlength="100">
+                                <input type="text" id="f-store" name="Store" maxlength="100" placeholder="留空＝訂閱名稱">
                             </div>
                             <div class="field-group">
                                 <label class="field-label" for="f-detail">項目</label>
-                                <input type="text" id="f-detail" name="Detail" maxlength="200">
+                                <input type="text" id="f-detail" name="Detail" maxlength="200" placeholder="留空＝訂閱名稱">
                             </div>
                         </div>
 

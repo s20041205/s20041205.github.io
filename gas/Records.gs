@@ -54,12 +54,7 @@ function handleRecentRecords_(params) {
   var result = [];
   for (var i = values.length - 1; i >= 0; i--) {
     var r   = values[i];
-    var raw = r[0];
-    var dateStr = raw instanceof Date
-      ? raw.getFullYear() + '-' +
-        String(raw.getMonth() + 1).padStart(2, '0') + '-' +
-        String(raw.getDate()).padStart(2, '0')
-      : String(raw).substring(0, 10);
+    var dateStr = cellDateString_(r[0]);
     result.push({
       rowNum:         firstRow + i,
       date:           dateStr,
@@ -101,14 +96,11 @@ function handleSubSummary_(params) {
     if (balance !== '支出') continue;
     if (filterName && name !== filterName) continue;
 
-    var rowYear = dateVal instanceof Date
-      ? String(dateVal.getFullYear())
-      : String(dateVal).substring(0, 4);
+    var dateStr = cellDateString_(dateVal);
+    var rowYear = dateStr.substring(0, 4);
     if (filterYear && rowYear !== filterYear) continue;
 
-    var month = dateVal instanceof Date
-      ? dateVal.getMonth()
-      : (parseInt(String(dateVal).substring(5, 7), 10) - 1);
+    var month = parseInt(dateStr.substring(5, 7), 10) - 1;
 
     if (!result[topclass]) result[topclass] = {};
     if (!result[topclass][subclass]) {
@@ -142,9 +134,8 @@ function handleTagSummary_(params) {
     if (!tag || balance !== '支出') continue;
     if (filterName && name !== filterName) continue;
 
-    var rowYear = dateVal instanceof Date
-      ? String(dateVal.getFullYear())
-      : String(dateVal).substring(0, 4);
+    var dateStr = cellDateString_(dateVal);
+    var rowYear = dateStr.substring(0, 4);
     if (filterYear && rowYear !== filterYear) continue;
 
     if (!result[tag]) result[tag] = { total: 0, cats: {} };
@@ -173,11 +164,10 @@ function handleUpdateRecord_(params) {
 }
 
 function writeRecordFields_(sheet, rowNum, params) {
-  if (params.Date) {
-    var parts   = params.Date.split('-');
-    var dateObj = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
-    sheet.getRange(rowNum, 1).setValue(dateObj);
-    sheet.getRange(rowNum, 2).setValue(parseInt(parts[1], 10));  // Month 自動同步
+  if (/^\d{4}-\d{2}-\d{2}$/.test(params.Date || '')) {
+    // 寫入字串而非 Date，避免試算表時區換算成前一天（見 Common.gs 日期說明）
+    sheet.getRange(rowNum, 1).setValue(params.Date);
+    sheet.getRange(rowNum, 2).setValue(parseInt(params.Date.substring(5, 7), 10));  // Month 自動同步
   }
   if (params.Balance)                sheet.getRange(rowNum,  3).setValue(params.Balance);
   if (params.Topclass)               sheet.getRange(rowNum,  4).setValue(params.Topclass);

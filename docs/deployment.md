@@ -92,3 +92,4 @@
 | 改了 GAS 沒生效 | 沒有部署 New version |
 | 週期頁顯示「尚未安裝每日觸發器」 | 在 Apps Script 執行一次 `setupRecurringExpenses()` |
 | GAS 整個專案無法執行 | 頂層（function 外）使用了 `$` |
+| 試算表日期變成前一天「12:00:00」、時間戳格式不同 | v3.6.1 以前以 Date 寫入造成。Apps Script 執行 `findShiftedDates()` 檢視，再 `fixShiftedDates()` 修正 |
