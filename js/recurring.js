@@ -15,7 +15,7 @@ const SUBCLASS = [
 ];
 const STARS = ['-', '☆☆☆☆☆', '★☆☆☆☆', '★★☆☆☆', '★★★☆☆', '★★★★☆', '★★★★★'];
 const FREQ_LABEL  = { weekly: '每週', monthly: '每月', yearly: '每年' };
-const FREQ_UNIT   = { weekly: '週', monthly: '月', yearly: '年' };
+const FREQ_UNIT   = { weekly: '週', monthly: '個月', yearly: '年' };
 
 var items = [];
 
@@ -85,10 +85,46 @@ function renderAutomationNote(enabled) {
     el.textContent = '⚠️ 尚未安裝每日觸發器。請在 Apps Script 執行 setupRecurringExpenses() 後，自動記帳才會運作（仍可用「手動補跑」）。';
 }
 
+// ── Schedule (mirrors gas/RecurringExpenses.gs nextRecurringDate_) ─────────
+const WEEKDAYS = ['日', '一', '二', '三', '四', '五', '六'];
+
+function parseYmd(s) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || '');
+    return m ? new Date(+m[1], +m[2] - 1, +m[3]) : null;
+}
+
+function toYmd(d) {
+    return d.getFullYear() + '-'
+        + String(d.getMonth() + 1).padStart(2, '0') + '-'
+        + String(d.getDate()).padStart(2, '0');
+}
+
+function daysInMonth(y, m) { return new Date(y, m + 1, 0).getDate(); }
+
+// 下一期日期：月 / 年以「首次扣款日」的日為準（遇到小月取月底）
+function nextDue(start, due, frequency, interval) {
+    if (frequency === 'weekly') {
+        return new Date(due.getFullYear(), due.getMonth(), due.getDate() + 7 * interval);
+    }
+    if (frequency === 'monthly') {
+        var first = new Date(due.getFullYear(), due.getMonth() + interval, 1);
+        return new Date(first.getFullYear(), first.getMonth(),
+            Math.min(start.getDate(), daysInMonth(first.getFullYear(), first.getMonth())));
+    }
+    var y = due.getFullYear() + interval;
+    return new Date(y, start.getMonth(), Math.min(start.getDate(), daysInMonth(y, start.getMonth())));
+}
+
+// 例：每月 18 日、每 2 個月 5 日、每週三、每年 9/18
 function everyLabel(it) {
-    return it.interval > 1
-        ? '每 ' + it.interval + ' ' + (FREQ_UNIT[it.frequency] || '')
-        : (FREQ_LABEL[it.frequency] || it.frequency);
+    var start = parseYmd(it.startDate);
+    var n     = Number(it.interval) || 1;
+    var head  = n > 1 ? '每 ' + n + ' ' + (FREQ_UNIT[it.frequency] || '') : (FREQ_LABEL[it.frequency] || it.frequency);
+    if (!start) return head;
+    if (it.frequency === 'weekly')  return head + (n > 1 ? ' 週' : '') + WEEKDAYS[start.getDay()];
+    if (it.frequency === 'monthly') return head + ' ' + start.getDate() + ' 日';
+    if (it.frequency === 'yearly')  return head + ' ' + (start.getMonth() + 1) + '/' + start.getDate();
+    return head;
 }
 
 function renderList() {
@@ -124,6 +160,50 @@ function renderList() {
 }
 
 // ── Add / edit form ─────────────────────────────────────────────────────────
+var nextTouched = false;   // 使用者手動改過「下一次記帳日」就不再自動同步
+
+function onScheduleChange(e) {
+    var form = document.getElementById('rec-form');
+    if (e && e.target === form.NextDate) nextTouched = true;
+    // 新增時，下一次記帳日跟著首次扣款日
+    if (!form.Id.value && !nextTouched && form.StartDate.value) {
+        form.NextDate.value = form.StartDate.value;
+    }
+    renderScheduleSummary();
+}
+
+function renderScheduleSummary() {
+    var form  = document.getElementById('rec-form');
+    var el    = document.getElementById('schedule-summary');
+    var start = parseYmd(form.StartDate.value);
+    var next  = parseYmd(form.NextDate.value);
+    var end   = parseYmd(form.EndDate.value);
+    var n     = Number(form.Interval.value);
+    if (!start || !next || !(n >= 1)) { el.innerHTML = ''; return; }
+
+    var label = everyLabel({ startDate: form.StartDate.value, frequency: form.Frequency.value, interval: n });
+    var price = parseFloat(form.Price.value) > 0 ? ' ' + fmtMoney(form.Price.value) : '';
+    var html  = '📅 <b>' + esc(label) + '</b> 記帳' + esc(price);
+
+    // 今天以前（含）已到期、尚未記帳的期數
+    var today = parseYmd(todayLocal());
+    var due = [], d = next;
+    while (d <= today && (!end || d <= end) && due.length < 120) {
+        due.push(toYmd(d));
+        d = nextDue(start, d, form.Frequency.value, n);
+    }
+    if (end && d > end && !due.length && next > end) {
+        html += '<br>⚠️ 下一次記帳日已超過結束日，不會再記帳';
+    } else if (due.length) {
+        var shown = due.slice(0, 3).join('、') + (due.length > 3 ? ' …' : '');
+        html += '<br>⏳ 已到期 ' + due.length + ' 期（' + esc(shown) + '），' +
+            '儲存後會在每日 03:15 自動補記，或按「手動補跑」立即補記';
+        if (!end || d <= end) html += '<br>之後下一次：' + esc(toYmd(d));
+    } else {
+        html += '<br>下一次：' + esc(toYmd(next));
+    }
+    el.innerHTML = html;
+}
 function setRadio(name, value) {
     var el = document.querySelector('#rec-form input[name=' + name + '][value="' + value + '"]');
     if (el) el.checked = true;
@@ -166,6 +246,9 @@ function openForm(item) {
         setRadio('Name', 'Jerry_Hu');
         document.getElementById('f-active').checked = true;
     }
+
+    nextTouched = false;
+    renderScheduleSummary();
 
     var card = document.getElementById('rec-form-card');
     card.style.display = '';
@@ -283,6 +366,8 @@ document.getElementById('f-recommendation').innerHTML = buildOptions(STARS);
 document.getElementById('f-topclass').addEventListener('change', function () {
     populateSubclass(this.value);
 });
+['f-start', 'f-next', 'f-end', 'f-interval', 'f-frequency', 'f-price'].forEach(id =>
+    document.getElementById(id).addEventListener('input', onScheduleChange));
 
 document.getElementById('btn-logout').addEventListener('click', Api.logout);
 document.getElementById('btn-add').addEventListener('click', () => openForm(null));
