@@ -47,38 +47,9 @@ function buildOptions(arr, selected) {
     return arr.map(v => '<option' + (v === selected ? ' selected' : '') + '>' + esc(v) + '</option>').join('');
 }
 
-function fetchAction(action, extra) {
-    var url = new URL(APP_CONFIG.scriptReadUrl);
-    url.searchParams.set('action', action);
-    url.searchParams.set('sheetUrl', APP_CONFIG.sheetUrl);
-    if (extra) Object.entries(extra).forEach(([k, v]) => url.searchParams.set(k, v));
-    return fetch(url).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); });
-}
-
-// ── Auth ────────────────────────────────────────────────────────────────────
-function doLogin() {
-    var pw    = document.getElementById('login-pw').value;
-    var errEl = document.getElementById('login-error');
-    if (pw === APP_CONFIG.dashboardPassword) {
-        sessionStorage.setItem('dash_auth', '1');
-        errEl.textContent = '';
-        enterApp();
-    } else {
-        errEl.textContent = '密碼錯誤';
-        var card = document.querySelector('.login-card');
-        card.classList.remove('shake');
-        void card.offsetWidth;
-        card.classList.add('shake');
-    }
-}
-
-function doLogout() {
-    sessionStorage.removeItem('dash_auth');
-    location.reload();
-}
+var fetchAction = Api.action;   // js/api.js
 
 function enterApp() {
-    document.getElementById('login-screen').style.display  = 'none';
     document.getElementById('recurring-app').style.display = 'block';
     loadList();
 }
@@ -313,9 +284,7 @@ document.getElementById('f-topclass').addEventListener('change', function () {
     populateSubclass(this.value);
 });
 
-document.getElementById('btn-login').addEventListener('click', doLogin);
-document.getElementById('login-pw').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
-document.getElementById('btn-logout').addEventListener('click', doLogout);
+document.getElementById('btn-logout').addEventListener('click', Api.logout);
 document.getElementById('btn-add').addEventListener('click', () => openForm(null));
 document.getElementById('btn-run').addEventListener('click', runNow);
 document.getElementById('btn-cancel').addEventListener('click', closeForm);
@@ -332,4 +301,4 @@ document.getElementById('rec-list').addEventListener('click', e => {
     if (tg) toggleActive(tg.dataset.toggle);
 });
 
-if (sessionStorage.getItem('dash_auth') === '1') enterApp();
+Api.requireToken('週期性花費', enterApp);

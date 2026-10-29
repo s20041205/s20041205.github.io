@@ -3,7 +3,7 @@
 家用記帳 PWA，使用者為 Jerry_Hu 與 Alice_Lin 兩人家庭。
 前端 Vanilla JS（GitHub Pages），後端 Google Apps Script + Google Sheets。
 
-- **目前版本**：v3.5.1
+- **目前版本**：v3.6.0
 - **開發分支**：`Claude` → PR → `main`（push `main` 自動部署）
 
 ---
@@ -24,7 +24,7 @@
 | 位置 | 內容 | 發布到 Pages |
 |------|------|:---:|
 | 根目錄 `*.html` | 頁面入口（網址固定，勿搬移） | ✅ |
-| `js/` | 各頁 JS（`script.js` / `dashboard.js` / `recurring.js`） | ✅ |
+| `js/` | `api.js`（共用 GAS client + 存取碼）、各頁 JS（`script.js` / `dashboard.js` / `recurring.js`） | ✅ |
 | `css/` | `style.css`（共用變數）、`dashboard.css`、`recurring.css` | ✅ |
 | `icons/`、`manifest.json` | PWA | ✅ |
 | `config.js` | 敏感設定（gitignored，CI 由 Secrets 產生） | ✅ |
@@ -44,7 +44,9 @@
   `BOOKKEEPING_SPREADSHEET_ID`）。**任何 `.gs` 不得寫入真實試算表 ID / URL。**
 - **GAS 改動後必須部署 New version**；只維持一個部署，讀寫共用同一個 `/exec`。
 - GAS 頂層（function 外）不可使用 `$`。
-- 前端寫入一律 `no-cors`，讀不到回應屬正常。
+- **所有 GAS 請求都要帶存取碼 `token`**（Script Property `API_TOKEN`）。前端一律經 `js/api.js`
+  以 GET 呼叫，才讀得到回應；新增 action 時不要繞過 `Api`。存取碼不可寫進任何檔案。
+- 後台編輯 / 刪除以 `rowNum` + `key`（記錄指紋）定位，不可只靠列號。
 - `config.js`、`gas/gas_backup/` 含真實網址 / ID，**不可 commit**。
 
 ## 慣例

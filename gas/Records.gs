@@ -1,5 +1,5 @@
 /**
- * 後台儀表板用的查詢與編輯 action（透過 scriptReadUrl / doGet）。
+ * 後台儀表板用的查詢與編輯 action（透過 doGet，已於 doGet 驗證 token）。
  *
  * 試算表一律由 getBookkeepingSpreadsheet_()（Script Property）取得，
  * 前端傳入的 sheetUrl 參數會被忽略，避免被拿來操作其他試算表。
@@ -11,9 +11,35 @@
 
 'use strict';
 
+var RECENT_RECORDS_MAX_ = 200;
+
+/**
+ * 一列記帳的指紋（日期、金額、店家、項目、使用者、寫入時間）。
+ * 編輯 / 刪除時前端帶回指紋，與該列目前內容比對；列號因刪除而位移時會對不上，
+ * 藉此避免改到或刪到錯的列。
+ */
+function recordKey_(row) {
+  var timezone = Session.getScriptTimeZone() || 'GMT+8';
+  return [row[0], row[5], row[6], row[7], row[9], row[10]].map(function (v) {
+    return v instanceof Date ? Utilities.formatDate(v, timezone, 'yyyy-MM-dd HH:mm:ss') : String(v);
+  }).join('|');
+}
+
+/** 檢查 rowNum 與指紋；不符回傳錯誤物件，相符回傳 null。 */
+function checkRecordKey_(sheet, rowNum, key) {
+  if (!rowNum || rowNum < 2 || rowNum > sheet.getLastRow()) {
+    return { result: 'error', error: 'invalid rowNum' };
+  }
+  var current = sheet.getRange(rowNum, 1, 1, 12).getValues()[0];
+  if (!key || recordKey_(current) !== key) {
+    return { result: 'error', error: 'stale' };
+  }
+  return null;
+}
+
 // ── 近期記錄（倒序）─────────────────────────────────────────────────────────
 function handleRecentRecords_(params) {
-  var count   = parseInt(params.count, 10) || 20;
+  var count   = Math.min(parseInt(params.count, 10) || 20, RECENT_RECORDS_MAX_);
   var doc     = getBookkeepingSpreadsheet_();
   var sheet   = doc.getSheetByName('active');
   var lastRow = sheet.getLastRow();
@@ -46,7 +72,8 @@ function handleRecentRecords_(params) {
       detail:         r[7],
       recommendation: r[8],
       name:           r[9],
-      tag:            r[11]
+      tag:            r[11],
+      key:            recordKey_(r)
     });
   }
   return ContentService.createTextOutput(JSON.stringify(result))
@@ -131,12 +158,21 @@ function handleTagSummary_(params) {
 // ── 更新記錄 ───────────────────────────────────────────────────────────────
 function handleUpdateRecord_(params) {
   var rowNum = parseInt(params.rowNum, 10);
-  if (!rowNum || rowNum < 2) {
-    return jsonResponse_({ result: 'error', msg: 'invalid rowNum' });
+  var doc    = getBookkeepingSpreadsheet_();
+  var sheet  = doc.getSheetByName('active');
+  var lock   = LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    var err = checkRecordKey_(sheet, rowNum, params.key);
+    if (err) return jsonResponse_(err);
+    writeRecordFields_(sheet, rowNum, params);
+  } finally {
+    lock.releaseLock();
   }
-  var doc   = getBookkeepingSpreadsheet_();
-  var sheet = doc.getSheetByName('active');
+  return jsonResponse_({ result: 'ok' });
+}
 
+function writeRecordFields_(sheet, rowNum, params) {
   if (params.Date) {
     var parts   = params.Date.split('-');
     var dateObj = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
@@ -153,18 +189,21 @@ function handleUpdateRecord_(params) {
   if (params.Name)                   sheet.getRange(rowNum, 10).setValue(params.Name);
   if (params.Tag !== undefined)      sheet.getRange(rowNum, 12).setValue(sanitizeCell_(params.Tag));
   // Update（col 11）不修改，保留原始寫入時間戳
-
-  return jsonResponse_({ result: 'ok' });
 }
 
 // ── 刪除記錄 ───────────────────────────────────────────────────────────────
 function handleDeleteRecord_(params) {
   var rowNum = parseInt(params.rowNum, 10);
-  if (!rowNum || rowNum < 2) {
-    return jsonResponse_({ result: 'error', msg: 'invalid rowNum' });
+  var doc    = getBookkeepingSpreadsheet_();
+  var sheet  = doc.getSheetByName('active');
+  var lock   = LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
+    var err = checkRecordKey_(sheet, rowNum, params.key);
+    if (err) return jsonResponse_(err);
+    sheet.deleteRow(rowNum);
+  } finally {
+    lock.releaseLock();
   }
-  var doc   = getBookkeepingSpreadsheet_();
-  var sheet = doc.getSheetByName('active');
-  sheet.deleteRow(rowNum);
   return jsonResponse_({ result: 'ok' });
 }

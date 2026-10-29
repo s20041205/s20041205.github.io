@@ -1,10 +1,10 @@
 /**
- * Web App 進入點：doGet（讀取 / 查詢）與 doPost（寫入）。
+ * Web App 進入點：doGet（所有前端請求）與 doPost（相容用寫入）。
  *
- * doGet  → scriptReadUrl：範圍讀取、近期記錄、彙整、更新 / 刪除、週期性花費
- * doPost → scriptWriteUrl：寫入 active 記帳資料、新增標記
+ * 每個請求都必須帶 token 參數（Script Property API_TOKEN），否則回傳
+ * { result: 'error', error: 'unauthorized' }。
  *
- * 前端一律以 no-cors 送出 POST，讀不到回應屬正常行為。
+ * 前端一律以 GET 呼叫，才能讀到回應、確認寫入是否成功。
  */
 
 'use strict';
@@ -12,9 +12,20 @@
 // ── doGet：依 action 分派 ────────────────────────────────────────────────────
 function doGet(e) {
   var params = (e && e.parameter) || {};
+  if (!isAuthorized_(params)) return unauthorizedResponse_();
 
   try {
     switch (params.action) {
+      // 存取碼驗證（前端輸入存取碼時呼叫）
+      case 'ping':
+        return jsonResponse_({ result: 'ok' });
+
+      // 記帳寫入
+      case 'addRecord':
+        return jsonResponse_(appendRecord_(getBookkeepingSpreadsheet_(), params));
+      case 'addActivity':
+        return jsonResponse_(addActivity_(getBookkeepingSpreadsheet_(), params.name));
+
       // 週期性花費（RecurringExpenses.gs）
       case 'recurringExpenses':
         return jsonResponse_(listRecurringExpenses_(getBookkeepingSpreadsheet_()));
@@ -77,21 +88,27 @@ function handleRangeRead_(params) {
   return ContentService.createTextOutput(data);
 }
 
-// ── doPost：寫入 ────────────────────────────────────────────────────────────
+// ── doPost：相容用寫入（前端已改用 doGet action=addRecord / addActivity）──────
 function doPost(e) {
-  var lock = LockService.getScriptLock();
-  lock.tryLock(10000);
+  var params = (e && e.parameter) || {};
+  if (!isAuthorized_(params)) return unauthorizedResponse_();
 
   try {
-    var params = (e && e.parameter) || {};
     var doc = getBookkeepingSpreadsheet_();
-
-    // 分支一：新增標記
     if (params.action === 'addActivity') {
-      return addActivity_(doc, params.name);
+      return jsonResponse_(addActivity_(doc, params.name));
     }
+    return jsonResponse_(appendRecord_(doc, params));
+  } catch (err) {
+    return jsonResponse_({ result: 'error', error: String(err) });
+  }
+}
 
-    // 分支二：寫入記帳資料
+/** 依 active 第 1 列 header 對應參數，附加一筆記帳。 */
+function appendRecord_(doc, params) {
+  var lock = LockService.getScriptLock();
+  lock.waitLock(10000);
+  try {
     var sheet   = doc.getSheetByName(ACTIVE_SHEET_NAME);
     var headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
     var nextRow = sheet.getLastRow() + 1;
@@ -102,15 +119,14 @@ function doPost(e) {
     var FREE_TEXT = { Store: true, Detail: true, Tag: true };
     var newRow = headers.map(function (header) {
       if (header === 'Update') return stamp;
+      if (header === 'RecurringKey') return '';
       var val = params[header];
       if (val == null) return '';
       return FREE_TEXT[header] ? sanitizeCell_(val) : val;
     });
     sheet.getRange(nextRow, 1, 1, newRow.length).setValues([newRow]);
 
-    return jsonResponse_({ result: 'success', row: nextRow });
-  } catch (err) {
-    return jsonResponse_({ result: 'error', error: String(err) });
+    return { result: 'success', row: nextRow };
   } finally {
     lock.releaseLock();
   }
@@ -119,15 +135,15 @@ function doPost(e) {
 /** 在 config 分頁 E 欄第一個空列寫入新標記。 */
 function addActivity_(doc, rawName) {
   var name = sanitizeCell_(String(rawName == null ? '' : rawName).trim());
-  if (!name) return jsonResponse_({ result: 'error', error: 'empty name' });
+  if (!name) return { result: 'error', error: 'empty name' };
 
   var configSheet = doc.getSheetByName('config');
   var eRange = configSheet.getRange('E2:E51').getValues();
   for (var i = 0; i < eRange.length; i++) {
     if (!eRange[i][0]) {
       configSheet.getRange(i + 2, 5).setValue(name);
-      return jsonResponse_({ result: 'success', row: i + 2 });
+      return { result: 'success', row: i + 2 };
     }
   }
-  return jsonResponse_({ result: 'error', error: 'activity list full (E2:E51)' });
+  return { result: 'error', error: 'activity list full (E2:E51)' };
 }

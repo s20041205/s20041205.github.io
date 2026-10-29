@@ -12,30 +12,12 @@
     <link rel="stylesheet" href="css/recurring.css">
     <title>週期性花費 — 家用記帳</title>
     <script src="config.js" defer></script>
+    <script src="js/api.js" defer></script>
     <script src="js/recurring.js" defer></script>
 </head>
 
 <body>
     <div id="msg-alert" class="alert d-none" role="alert"></div>
-
-    <!-- ── Login ────────────────────────────────────────────────────────────── -->
-    <div id="login-screen">
-        <div class="form-card login-card">
-            <div class="form-card__header">
-                <div class="form-card__title">週期性花費</div>
-            </div>
-            <div class="form-card__body">
-                <div class="field-group">
-                    <label class="field-label" for="login-pw">密碼</label>
-                    <input type="password" id="login-pw" placeholder="請輸入密碼">
-                </div>
-                <div class="btn-row">
-                    <button type="button" id="btn-login">進入</button>
-                </div>
-                <p id="login-error" style="color:var(--danger);font-size:0.85rem;margin-top:10px;text-align:center;min-height:1.2em;"></p>
-            </div>
-        </div>
-    </div>
 
     <!-- ── App ──────────────────────────────────────────────────────────────── -->
     <div id="recurring-app" style="display:none">

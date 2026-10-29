@@ -46,11 +46,11 @@ A lightweight household bookkeeping PWA for two users. Entries are submitted to 
 ## Setup
 
 1. Copy `config.example.js` to `config.js` and fill in:
-   - `scriptWriteUrl` / `scriptReadUrl` — GAS web app `/exec` URL (the same deployment serves both)
+   - `scriptReadUrl` — GAS web app `/exec` URL (serves all reads and writes)
    - `sheetUrl` — Google Sheets URL
-   - `dashboardPassword` — admin dashboard password
-2. Add the matching GitHub Actions secrets: `SCRIPT_WRITE_URL`, `SCRIPT_READ_URL`, `SHEET_URL`, `DASHBOARD_PASSWORD`.
-3. Deploy the backend as described in [gas/README.md](gas/README.md).
+2. Add the matching GitHub Actions secrets: `SCRIPT_READ_URL`, `SHEET_URL`.
+3. Deploy the backend as described in [gas/README.md](gas/README.md), including `setApiToken()` to create the access code.
+   Each device enters the access code once; it is never stored in the repo or `config.js`.
 4. Push to `main` — GitHub Actions publishes the site to `gh-pages`.
 
 ## Documentation

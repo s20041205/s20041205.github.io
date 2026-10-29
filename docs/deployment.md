@@ -4,9 +4,9 @@
 
 ```
 手機 / 瀏覽器 ── GitHub Pages（gh-pages 分支，靜態檔 + config.js）
-                     │  fetch
+                     │  fetch GET + token（存取碼，存於各裝置 localStorage）
                      ▼
-              GAS Web App（/exec，單一部署同時處理 doGet / doPost）
+              GAS Web App（/exec，單一部署；驗證 Script Property API_TOKEN）
                      │  Script Property BOOKKEEPING_SPREADSHEET_ID
                      ▼
               Google Sheets（限制存取）
@@ -19,13 +19,17 @@
 
 | `config.js` 欄位 | Actions Secret | 說明 |
 |------------------|----------------|------|
-| `scriptWriteUrl` | `SCRIPT_WRITE_URL` | GAS `/exec` 網址 |
-| `scriptReadUrl` | `SCRIPT_READ_URL` | 同上（讀寫共用同一個部署） |
+| `scriptReadUrl` | `SCRIPT_READ_URL` | GAS `/exec` 網址（所有讀寫共用） |
 | `sheetUrl` | `SHEET_URL` | 試算表網址（僅供首頁「試算表」連結；GAS 不使用） |
-| `dashboardPassword` | `DASHBOARD_PASSWORD` | 後台 / 週期頁登入密碼 |
 
-> ⚠️ `/exec` 網址與密碼都會出現在公開的 gh-pages `config.js` 中，屬於「知道才能用」等級的保護。
+**存取碼**不在 `config.js`，存於 GAS Script Property `API_TOKEN`（`setApiToken()` 設定）。
+每台裝置第一次開啟任一頁面時輸入一次，存於該裝置 `localStorage`；「登出」會清除。
+
+> `/exec` 網址會出現在公開的 gh-pages `config.js` 中，沒有存取碼也無法讀寫。
 > 試算表本身維持「限制存取」。
+>
+> **更換存取碼**：Apps Script 執行 `setApiToken()` 產生新碼 → 立即生效，所有裝置下次請求時
+> 會被要求重新輸入。存取碼外洩時照此處理。
 
 ---
 
@@ -50,7 +54,7 @@
 ### 更換部署（新網址）時
 
 1. 先 New deployment（執行身分：我；存取：所有人），取得新 `/exec`
-2. 更新 Secrets `SCRIPT_WRITE_URL`、`SCRIPT_READ_URL` 與本機 `config.js`
+2. 更新 Secret `SCRIPT_READ_URL` 與本機 `config.js`
 3. 重新部署前端，實測記帳 / 後台 / 週期頁
 4. 確認無誤後才封存舊部署（封存不可逆）
 
@@ -82,7 +86,9 @@
 |------|-------------|
 | 首頁預算顯示 NaN 或空白 | 年度分頁不存在（新年度未複製）或列結構錯位 |
 | 儀表板 Total 數字錯位 | 年度分頁 Row 20 空白分隔列被刪除 |
-| 讀取請求出現 CORS 錯誤 | GAS 拋例外時回傳 HTML 錯誤頁（無 CORS header）；直接在瀏覽器開 `/exec?...` 看錯誤訊息 |
+| 讀取請求出現 CORS 錯誤 | GAS 拋例外時回傳 HTML 錯誤頁（無 CORS header）；直接在瀏覽器開 `/exec?token=…&action=ping` 看錯誤訊息 |
+| 每次打開都要求輸入存取碼 | 瀏覽器封鎖 / 清除了網站資料（私密瀏覽、清除 Cookie），或存取碼已被更換 |
+| 輸入存取碼一直顯示錯誤 | GAS 尚未部署含驗證的新版本，或尚未執行 `setApiToken()` |
 | 改了 GAS 沒生效 | 沒有部署 New version |
 | 週期頁顯示「尚未安裝每日觸發器」 | 在 Apps Script 執行一次 `setupRecurringExpenses()` |
 | GAS 整個專案無法執行 | 頂層（function 外）使用了 `$` |

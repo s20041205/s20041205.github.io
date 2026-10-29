@@ -1,5 +1,13 @@
 # Changelog
 
+- Oct 29, 2026  **v3.6.0**
+    - Security: GAS requires an access code (`token`, Script Property `API_TOKEN`) on every request; without it nothing can be read or written. `setApiToken()` creates one
+    - Security: access-code screen shared by all three pages (`js/api.js`); each device enters it once (stored in `localStorage`), 登出 clears it. `dashboardPassword` removed from `config.js`, `DASHBOARD_PASSWORD` / `SCRIPT_WRITE_URL` secrets no longer used
+    - Fix: dashboard edit / delete could hit the wrong row after a delete shifted row numbers — records now carry a fingerprint (`key`) checked by GAS (`stale` → list reloads), and the list reloads after every save / delete
+    - Fix: entry form showed 送出成功 even when GAS failed — writes now go through GET `addRecord` / `addActivity` and success is shown only when GAS confirms
+    - Fix: tag dropdown escapes tag names
+    - GAS: `recentRecords` capped at 200 rows
+
 - Oct 28, 2026  **v3.5.1**
     - Chore: project files reorganized — page scripts moved to `js/`, detailed docs moved to `docs/` (`sheets-schema.md`, `frontend.md`, `deployment.md`, `TODO.md`, `CHANGELOG.md`)
     - Docs: README slimmed to an overview; CLAUDE.md rewritten as a handoff index

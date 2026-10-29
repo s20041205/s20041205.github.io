@@ -6,33 +6,6 @@ body {
     padding: 0;
 }
 
-/* ── Login screen ─────────────────────────────────────────────────────────── */
-#login-screen {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 32px 16px;
-}
-
-.login-card {
-    width: 100%;
-    max-width: 360px;
-}
-
-.login-card .form-card__body {
-    padding: 24px 24px 28px;
-}
-
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    20%       { transform: translateX(-8px); }
-    40%       { transform: translateX(8px); }
-    60%       { transform: translateX(-6px); }
-    80%       { transform: translateX(6px); }
-}
-.shake { animation: shake 0.4s ease; }
-
 /* ── Dashboard wrapper ────────────────────────────────────────────────────── */
 #dashboard {
     max-width: 960px;
