@@ -113,8 +113,7 @@ function appendRecord_(doc, params) {
     var headers = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
     var nextRow = sheet.getLastRow() + 1;
 
-    var timezone = Session.getScriptTimeZone() || 'GMT+8';
-    var stamp    = Utilities.formatDate(new Date(), timezone, 'yyyy-MM-dd HH:mm:ss');
+    var stamp   = nowStamp_();
 
     var FREE_TEXT = { Store: true, Detail: true, Tag: true };
     var newRow = headers.map(function (header) {

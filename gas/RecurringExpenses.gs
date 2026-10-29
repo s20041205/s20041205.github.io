@@ -127,6 +127,10 @@ function cleanRecurringText_(value, maxLength, required) {
   return text;
 }
 
+/**
+ * 解析日期。字串 'yyyy-MM-dd' 或「程式內建立」的 Date（腳本時區午夜）。
+ * 從試算表讀出的儲存格請先經 cellDateString_() 轉成字串，避免時區偏移。
+ */
 function parseDateOnly_(value) {
   if (value instanceof Date && !isNaN(value.getTime())) {
     return new Date(value.getFullYear(), value.getMonth(), value.getDate());
@@ -220,7 +224,7 @@ function saveRecurringExpense_(doc, params) {
     var rowNum = id ? findRecurringRowById_(sheet, id) : 0;
     if (id && !rowNum) throw new Error('Recurring expense not found');
 
-    var now = new Date();
+    var now = nowStamp_();
     var existing = rowNum
       ? sheet.getRange(rowNum, 1, 1, RECURRING_HEADERS_.length).getValues()[0]
       : null;
@@ -228,8 +232,10 @@ function saveRecurringExpense_(doc, params) {
     var row = [
       id, data.service, data.website, data.price, data.topclass, data.subclass,
       data.store, data.detail, data.recommendation, data.name, data.tag,
-      data.frequency, data.interval, data.startDate, data.nextDate,
-      data.endDate || '', data.active, existing ? existing[17] : '',
+      data.frequency, data.interval,
+      dateOnlyString_(data.startDate), dateOnlyString_(data.nextDate),
+      data.endDate ? dateOnlyString_(data.endDate) : '', data.active,
+      existing ? existing[17] : '',
       existing ? existing[18] : now, now
     ];
 
@@ -254,7 +260,7 @@ function setRecurringExpenseActive_(doc, params) {
     var rowNum = findRecurringRowById_(sheet, id);
     if (!rowNum) throw new Error('Recurring expense not found');
     sheet.getRange(rowNum, 17).setValue(parseBoolean_(params.Active));
-    sheet.getRange(rowNum, 20).setValue(new Date());
+    sheet.getRange(rowNum, 20).setValue(nowStamp_());
     return { result: 'ok' };
   } finally {
     lock.releaseLock();
@@ -308,11 +314,11 @@ function serializeRecurringRow_(row) {
     tag: String(row[10] || ''),
     frequency: String(row[11] || ''),
     interval: Number(row[12]) || 1,
-    startDate: dateOnlyString_(row[13]),
-    nextDate: dateOnlyString_(row[14]),
-    endDate: dateOnlyString_(row[15]),
+    startDate: dateOnlyString_(cellDateString_(row[13])),
+    nextDate: dateOnlyString_(cellDateString_(row[14])),
+    endDate: dateOnlyString_(cellDateString_(row[15])),
     active: parseBoolean_(row[16]),
-    lastRunDate: dateOnlyString_(row[17])
+    lastRunDate: dateOnlyString_(cellDateString_(row[17]))
   };
 }
 
@@ -376,7 +382,7 @@ function activeHeaderMap_(sheet) {
 function appendRecurringEntry_(activeSheet, recurring, dueDate, recurringKey, now) {
   var layout = activeHeaderMap_(activeSheet);
   var row = new Array(layout.headers.length).fill('');
-  row[layout.map.Date] = dueDate;
+  row[layout.map.Date] = dateOnlyString_(dueDate);
   row[layout.map.Month] = dueDate.getMonth() + 1;
   row[layout.map.Balance] = '支出';
   row[layout.map.Topclass] = String(recurring[4] || '');
@@ -414,15 +420,15 @@ function processRecurringExpensesForDate_(todayValue) {
       .getRange(2, 1, recurringSheet.getLastRow() - 1, RECURRING_HEADERS_.length)
       .getValues();
     var existingKeys = loadRecurringKeys_(activeSheet, keyColumn);
-    var now = new Date();
+    var now = nowStamp_();
 
     for (var i = 0; i < values.length; i++) {
       var recurring = values[i];
       if (!recurring[0] || !parseBoolean_(recurring[16])) continue;
 
-      var startDate = parseDateOnly_(recurring[13]);
-      var nextDate = parseDateOnly_(recurring[14]);
-      var endDate = recurring[15] ? parseDateOnly_(recurring[15]) : null;
+      var startDate = parseDateOnly_(cellDateString_(recurring[13]));
+      var nextDate = parseDateOnly_(cellDateString_(recurring[14]));
+      var endDate = recurring[15] ? parseDateOnly_(cellDateString_(recurring[15])) : null;
       if (!startDate || !nextDate) continue;
 
       var processed = 0;
@@ -449,9 +455,9 @@ function processRecurringExpensesForDate_(todayValue) {
       if (endDate && nextDate.getTime() > endDate.getTime()) active = false;
       if (processed || !active) {
         var rowNum = i + 2;
-        recurringSheet.getRange(rowNum, 15).setValue(nextDate);
+        recurringSheet.getRange(rowNum, 15).setValue(dateOnlyString_(nextDate));
         recurringSheet.getRange(rowNum, 17).setValue(active);
-        if (lastRunDate) recurringSheet.getRange(rowNum, 18).setValue(lastRunDate);
+        if (lastRunDate) recurringSheet.getRange(rowNum, 18).setValue(dateOnlyString_(lastRunDate));
         recurringSheet.getRange(rowNum, 20).setValue(now);
       }
     }
