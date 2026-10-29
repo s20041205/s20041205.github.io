@@ -79,20 +79,9 @@ function showMessage(msg, type) {
     el._timer = setTimeout(() => { el.className = 'alert d-none'; }, 4000);
 }
 
-// ── Network helpers ───────────────────────────────────────────────────────────
-function fetchSheet(params) {
-    var url = new URL(APP_CONFIG.scriptReadUrl);
-    Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
-    return fetch(url).then(r => { if (!r.ok) throw new Error(r.status); return r.text(); });
-}
-
-function fetchAction(action, extra) {
-    var url = new URL(APP_CONFIG.scriptReadUrl);
-    url.searchParams.set('action', action);
-    url.searchParams.set('sheetUrl', APP_CONFIG.sheetUrl);
-    if (extra) Object.entries(extra).forEach(([k, v]) => url.searchParams.set(k, v));
-    return fetch(url).then(r => { if (!r.ok) throw new Error(r.status); return r.json(); });
-}
+// ── Network helpers (js/api.js) ───────────────────────────────────────────────
+var fetchSheet  = Api.fetchSheet;
+var fetchAction = Api.action;
 
 function parseSheetCSV(text, numCols) {
     var vals = text.split(',');
@@ -124,30 +113,6 @@ function baseChartOpts() {
         maintainAspectRatio: false,
         plugins: { legend: { display: false } }
     };
-}
-
-// ── Auth ──────────────────────────────────────────────────────────────────────
-function doLogin() {
-    var pw    = document.getElementById('login-pw').value;
-    var errEl = document.getElementById('login-error');
-    if (pw === APP_CONFIG.dashboardPassword) {
-        sessionStorage.setItem('dash_auth', '1');
-        errEl.textContent = '';
-        document.getElementById('login-screen').style.display = 'none';
-        document.getElementById('dashboard').style.display   = 'block';
-        initDashboard();
-    } else {
-        errEl.textContent = '密碼錯誤';
-        var card = document.querySelector('.login-card');
-        card.classList.remove('shake');
-        void card.offsetWidth;
-        card.classList.add('shake');
-    }
-}
-
-function doLogout() {
-    sessionStorage.removeItem('dash_auth');
-    location.reload();
 }
 
 // ── Tabs ──────────────────────────────────────────────────────────────────────
@@ -220,7 +185,7 @@ function initDashboard() {
     buildYearSelect();
 
     document.getElementById('year-select').addEventListener('change', onYearChange);
-    document.getElementById('btn-logout').addEventListener('click', doLogout);
+    document.getElementById('btn-logout').addEventListener('click', Api.logout);
     document.querySelectorAll('.tab-btn').forEach(b =>
         b.addEventListener('click', () => switchTab(b.dataset.tab)));
     document.querySelectorAll('.person-btn').forEach(b =>
@@ -256,7 +221,6 @@ function initDashboard() {
 // ── Budget ────────────────────────────────────────────────────────────────────
 async function loadBudget() {
     var text = await fetchSheet({
-        sheetUrl: APP_CONFIG.sheetUrl,
         sheetTag: 'config',
         row: 2, col: 1, endRow: 10, endCol: 2
     });
@@ -273,7 +237,6 @@ async function loadYearData() {
     var el = document.getElementById('overview-loading');
     if (el) el.style.display = '';
     var text = await fetchSheet({
-        sheetUrl: APP_CONFIG.sheetUrl,
         sheetTag: currentYear,
         row: 3, col: 2, endRow: 23, endCol: 27
     });
@@ -724,7 +687,6 @@ async function loadRecentRecords() {
 
 async function loadActivities() {
     var text = await fetchSheet({
-        sheetUrl: APP_CONFIG.sheetUrl,
         sheetTag: 'config',
         row: 2, col: 5, endRow: 51, endCol: 5
     });
@@ -873,31 +835,33 @@ async function submitEdit(rowNum) {
         if (el.name) data[el.name] = el.value;
     });
     data.rowNum = rowNum;
+    data.key    = recordKeyOf(rowNum);
 
     try {
         var res = await fetchAction('updateRecord', data);
-        if (res && res.result === 'ok') {
-            // Update local cache
-            var idx = recentRecords.findIndex(r => r.rowNum === rowNum);
-            if (idx >= 0) {
-                Object.assign(recentRecords[idx], {
-                    date: data.Date, balance: data.Balance, topclass: data.Topclass,
-                    subclass: data.Subclass, price: data.Price, store: data.Store,
-                    detail: data.Detail, recommendation: data.Recommendation,
-                    tag: data.Tag, name: data.Name
-                });
-            }
-            cancelEdit();
-            renderRecords();
-            showMessage('已儲存', 'success');
-        } else {
-            throw new Error('GAS returned error');
-        }
+        if (handleStale(res)) return;
+        if (!res || res.result !== 'ok') throw new Error('GAS returned error');
+        showMessage('已儲存', 'success');
+        // 重新載入：指紋與排序都以試算表為準
+        loadRecentRecords();
     } catch {
         showMessage('儲存失敗，請重試', 'danger');
         saveBtn.disabled = false;
         saveBtn.textContent = '儲存';
     }
+}
+
+function recordKeyOf(rowNum) {
+    var record = recentRecords.find(r => r.rowNum === rowNum);
+    return record ? record.key : '';
+}
+
+// 列已被移動或修改（例如另一筆被刪除、或另一台裝置剛改過）→ 重新載入清單
+function handleStale(res) {
+    if (!res || res.error !== 'stale') return false;
+    showMessage('資料已變動，已重新載入清單，請再操作一次', 'warning');
+    loadRecentRecords();
+    return true;
 }
 
 function confirmDelete(rowNum) {
@@ -907,28 +871,19 @@ function confirmDelete(rowNum) {
 
 async function deleteRecord(rowNum) {
     try {
-        var res = await fetchAction('deleteRecord', { rowNum });
-        if (res && res.result === 'ok') {
-            recentRecords = recentRecords.filter(r => r.rowNum !== rowNum);
-            cancelEdit();
-            renderRecords();
-            showMessage('已刪除', 'success');
-        } else {
-            throw new Error('GAS returned error');
-        }
+        var res = await fetchAction('deleteRecord', { rowNum, key: recordKeyOf(rowNum) });
+        if (handleStale(res)) return;
+        if (!res || res.result !== 'ok') throw new Error('GAS returned error');
+        showMessage('已刪除', 'success');
+        // 刪除後下方列號全部上移，必須重新載入
+        loadRecentRecords();
     } catch {
         showMessage('刪除失敗，請重試', 'danger');
     }
 }
 
 // ── Page init ─────────────────────────────────────────────────────────────────
-document.getElementById('btn-login').addEventListener('click', doLogin);
-document.getElementById('login-pw').addEventListener('keydown', e => {
-    if (e.key === 'Enter') doLogin();
-});
-
-if (sessionStorage.getItem('dash_auth') === '1') {
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('dashboard').style.display   = 'block';
+Api.requireToken('家用記帳 後台', () => {
+    document.getElementById('dashboard').style.display = 'block';
     initDashboard();
-}
+});
