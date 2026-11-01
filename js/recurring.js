@@ -243,7 +243,7 @@ function openForm(item) {
         form.StartDate.value = today;
         form.NextDate.value  = today;
         form.Recommendation.value = '-';
-        setRadio('Name', 'Jerry_Hu');
+        setRadio('Name', localStorage.getItem('bookkeeping_name') || 'Jerry_Hu');   // 記帳頁記住的使用者
         document.getElementById('f-active').checked = true;
     }
 

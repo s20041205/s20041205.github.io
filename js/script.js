@@ -194,6 +194,15 @@ continuousToggle.addEventListener('change', () => {
 
 // Form submission
 var form = document.forms['submit-to-google-sheet'];
+
+// Remember the last selected user on this device
+const NAME_KEY = 'bookkeeping_name';
+var nameRadios = form.querySelectorAll('input[name=Name]');
+nameRadios.forEach(radio => {
+    radio.checked = radio.value === (localStorage.getItem(NAME_KEY) || 'Jerry_Hu');
+    radio.addEventListener('change', () => localStorage.setItem(NAME_KEY, radio.value));
+});
+
 form.addEventListener('submit', e => {
     e.preventDefault();
     var txtStore  = document.getElementById('store').value;

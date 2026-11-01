@@ -1,5 +1,8 @@
 # Changelog
 
+- Nov 01, 2026  **v3.6.2**
+    - UX: entry form remembers the last selected user per device; the recurring form uses it as the default for new items
+
 - Oct 29, 2026  **v3.6.1**
     - Fix: recurring entries were written as Date objects, so a spreadsheet in a different time zone showed e.g. 9/18 as「9/17/2026 12:00:00」and the Update column as「10/29/2026 9:56:35」. All GAS date writes are now `yyyy-MM-dd` strings and timestamps `yyyy-MM-dd HH:mm:ss`; date cells are read in the spreadsheet's own time zone. Dashboard date edits had the same bug and are fixed too
     - GAS: `findShiftedDates()` / `fixShiftedDates()` in `Setup.gs` list and repair previously shifted dates and timestamps

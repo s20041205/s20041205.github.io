@@ -3,7 +3,7 @@
 家用記帳 PWA，使用者為 Jerry_Hu 與 Alice_Lin 兩人家庭。
 前端 Vanilla JS（GitHub Pages），後端 Google Apps Script + Google Sheets。
 
-- **目前版本**：v3.6.1
+- **目前版本**：v3.6.2
 - **開發分支**：`Claude` → PR → `main`（push `main` 自動部署）
 
 ---
